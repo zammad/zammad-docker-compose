@@ -30,7 +30,6 @@ if [ "$1" = 'zammad' ]; then
 	rake db:seed
 	rake assets:precompile
 	rails r "Setting.set('es_url', 'http://elasticsearch:9200')"
-	rake searchindex:rebuild
     fi
 
     # delte logs & pids
