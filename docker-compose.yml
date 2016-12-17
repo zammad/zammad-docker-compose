@@ -1,0 +1,38 @@
+version: '2'
+services:
+  postgresql:
+    image: postgres
+  elasticsearch:
+    build:
+      context: .
+      dockerfile: Dockerfile.elasticsearch
+  zammad:
+    build:
+      context: .
+      dockerfile: Dockerfile.zammad
+    links:
+      - postgresql
+      - elasticsearch
+    depends_on:
+      - postgresql
+      - elasticsearch
+    volumes:
+      - data-zammad:/home/zammad
+      - data-ruby:/usr/local
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:80"
+    links:
+      - zammad
+    depends_on:
+      - zammad
+    volumes:
+      - data-zammad:/home/zammad
+volumes:
+  data-zammad:
+    driver: local
+  data-ruby:
+    driver: local

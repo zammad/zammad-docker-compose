@@ -1,0 +1,28 @@
+FROM ruby:2.3.1
+MAINTAINER André Bauer <monotek23@gmail.com>
+ARG BUILD_DATE
+
+LABEL org.label-schema.build-date="$BUILD_DATE" \
+      org.label-schema.name="Zammad" \
+      org.label-schema.license="AGPL-3.0" \
+      org.label-schema.description="Docker container for Zammad" \
+      org.label-schema.url="https://zammad.org" \
+      org.label-schema.vcs-url="https://github.com/zammad/zammad" \
+      org.label-schema.vcs-type="Git" \
+      org.label-schema.vendor="Zammad" \
+      org.label-schema.schema-version="1.0" \
+      org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up --build"
+
+# Expose ports
+EXPOSE 3000
+EXPOSE 6042
+
+# add zammad user
+RUN useradd -m -d /home/zammad -s /bin/bash zammad;chown -R zammad:zammad /home/zammad
+
+# docker init
+COPY docker-entrypoint.sh /
+RUN chown zammad:zammad /docker-entrypoint.sh;chmod +x /docker-entrypoint.sh
+USER zammad
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["zammad"]
