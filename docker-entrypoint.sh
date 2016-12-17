@@ -42,6 +42,8 @@ if [ "$1" = 'zammad' ]; then
     script/scheduler.rb start &
     rails s -p 3000 -b 0.0.0.0
 
+    echo "zammad ready! open http://localhost in your browser!"
+
     if [ "${DEBUG}" == "yes" ]; then
 	# keepalive if error
 	while true; do
