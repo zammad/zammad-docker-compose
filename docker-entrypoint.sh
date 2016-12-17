@@ -38,11 +38,10 @@ if [ "$1" = 'zammad' ]; then
 
     # run zammad
     echo "starting zammad..."
+    echo "zammad will be accessable on http://localhost in some seconds"
     script/websocket-server.rb -b 0.0.0.0 start &
     script/scheduler.rb start &
     rails s -p 3000 -b 0.0.0.0
-
-    echo "zammad ready! open http://localhost in your browser!"
 
     if [ "${DEBUG}" == "yes" ]; then
 	# keepalive if error
