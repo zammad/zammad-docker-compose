@@ -15,4 +15,4 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
 ADD nginx-zammad.conf /etc/nginx/conf.d/zammad.conf
 
 RUN rm /etc/nginx/conf.d/default.conf
-#sed -s 's#server localhost:#server zammad:#g' < /home/zammad/contrib/nginx/zammad.conf > /etc/nginx/conf.d/zammad.conf
+
