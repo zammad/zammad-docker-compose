@@ -1,11 +1,14 @@
 #!/bin/bash
 
-if [ ! -f entrypoint.config ]; then
-    echo "entrypoint.config not found! create it from entrypoint.config.dist before running this script!"
-    exit 1
-fi
-
-. entrypoint.config
+ZAMMAD_DIR="/home/zammad"
+GIT_URL="https://github.com/zammad/zammad.git"
+GIT_BRANCH="develop"
+#GIT_URL="https://github.com/monotek/zammad.git"
+#GIT_BRANCH="unicorn"
+FRESH_INSTALL="no"
+RAILS_SERVER="puma"
+DEBUG="no"
+RAILS_ENV="production"
 
 export RAILS_ENV=${RAILS_ENV}
 

@@ -1,9 +1,0 @@
-#!/bin/bash
-
-ZAMMAD_DIR="/home/zammad"
-GIT_URL="https://github.com/zammad/zammad.git"
-GIT_BRANCH="develop"
-FRESH_INSTALL="no"
-RAILS_SERVER="puma"
-DEBUG="no"
-RAILS_ENV="production"
