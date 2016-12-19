@@ -1,10 +1,10 @@
 #!/bin/bash
 
 ZAMMAD_DIR="/home/zammad"
-#GIT_URL="https://github.com/zammad/zammad.git"
-#GIT_BRANCH="develop"
-GIT_URL="https://github.com/monotek/zammad.git"
-GIT_BRANCH="unicorn"
+GIT_URL="https://github.com/zammad/zammad.git"
+GIT_BRANCH="develop"
+#GIT_URL="https://github.com/monotek/zammad.git"
+#GIT_BRANCH="unicorn"
 FRESH_INSTALL="yes"
 RAILS_SERVER="unicorn"
 DEBUG="yes"
