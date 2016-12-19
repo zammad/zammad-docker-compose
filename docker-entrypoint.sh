@@ -1,9 +1,22 @@
 #!/bin/bash
 
 ZAMMAD_DIR="/home/zammad"
-DEBUG="no"
+#GIT_URL="https://github.com/zammad/zammad.git"
+#GIT_BRANCH="develop"
+GIT_URL="https://github.com/monotek/zammad.git"
+GIT_BRANCH="unicorn"
+FRESH_INSTALL="yes"
+RAILS_SERVER="unicorn"
+DEBUG="yes"
 
 export RAILS_ENV="production"
+
+    shopt -s dotglob
+
+if [ "${FRESH_INSTALL}" == "yes" ]; then
+    echo "fresh install requested. delting everything in ${ZAMMAD_DIR}"
+    rm -rf ${ZAMMAD_DIR}/*
+fi
 
 if [ "$1" = 'zammad' ]; then
 
@@ -17,11 +30,10 @@ if [ "$1" = 'zammad' ]; then
     else
 	echo "installing zammad..."
 	cd /tmp
-	git clone https://github.com/zammad/zammad.git
-	shopt -s dotglob
+	git clone ${GIT_URL}
 	mv -f /tmp/zammad/* ${ZAMMAD_DIR}/
-	shopt -u dotglob
 	cd ${ZAMMAD_DIR}
+	git checkout ${GIT_BRANCH}
 	bundle install --without test development
 	sed -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: postgresql\n#g' < config/database.yml.pkgr > config/database.yml
 	rake db:drop
@@ -39,9 +51,14 @@ if [ "$1" = 'zammad' ]; then
     # run zammad
     echo "starting zammad..."
     echo "zammad will be accessable on http://localhost in some seconds"
-    script/websocket-server.rb -b 0.0.0.0 start &
-    script/scheduler.rb start &
-    rails s -p 3000 -b 0.0.0.0
+    bundle exec script/websocket-server.rb -b 0.0.0.0 start &
+    bundle exec script/scheduler.rb start &
+    if [ "${RAILS_SERVER}" == "puma" ]; then
+	#rails s -p 3000 -b 0.0.0.0
+	bundle exec puma -p 3000 -b 0.0.0.0
+    elif [ "${RAILS_SERVER}" == "unicorn" ]; then
+	bundle exec unicorn -p 3000 -c config/unicorn.rb
+    fi
 
     if [ "${DEBUG}" == "yes" ]; then
 	# keepalive if error
