@@ -5,17 +5,17 @@ GIT_URL="https://github.com/zammad/zammad.git"
 GIT_BRANCH="develop"
 #GIT_URL="https://github.com/monotek/zammad.git"
 #GIT_BRANCH="unicorn"
-FRESH_INSTALL="no"
 RAILS_SERVER="puma"
-DEBUG="no"
 RAILS_ENV="production"
+FRESH_INSTALL="no"
+DEBUG="no"
 
 export RAILS_ENV=${RAILS_ENV}
 
 shopt -s dotglob
 
 if [ "${FRESH_INSTALL}" == "yes" ]; then
-    echo "fresh install requested. delting everything in ${ZAMMAD_DIR}"
+    echo "fresh install requested. deleting everything in ${ZAMMAD_DIR}"
     rm -rf ${ZAMMAD_DIR}/*
 fi
 
