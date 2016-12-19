@@ -1,17 +1,15 @@
 #!/bin/bash
 
-ZAMMAD_DIR="/home/zammad"
-GIT_URL="https://github.com/zammad/zammad.git"
-GIT_BRANCH="develop"
-#GIT_URL="https://github.com/monotek/zammad.git"
-#GIT_BRANCH="unicorn"
-FRESH_INSTALL="no"
-RAILS_SERVER="puma"
-DEBUG="yes"
+export RAILS_ENV="${RAILS_ENV}"
 
-export RAILS_ENV="production"
+shopt -s dotglob
 
-    shopt -s dotglob
+if [ ! -f entrypoint.config ]; then
+    echo "entrypoint.config not found! create it from entrypoint.config.dist before running this script!"
+    exit 1
+fi
+
+. entrypoint.config
 
 if [ "${FRESH_INSTALL}" == "yes" ]; then
     echo "fresh install requested. delting everything in ${ZAMMAD_DIR}"
@@ -53,8 +51,8 @@ if [ "$1" = 'zammad' ]; then
     echo "zammad will be accessable on http://localhost in some seconds"
     bundle exec script/websocket-server.rb -b 0.0.0.0 start &
     bundle exec script/scheduler.rb start &
+
     if [ "${RAILS_SERVER}" == "puma" ]; then
-	#rails s -p 3000 -b 0.0.0.0
 	bundle exec puma -p 3000 -b 0.0.0.0
     elif [ "${RAILS_SERVER}" == "unicorn" ]; then
 	bundle exec unicorn -p 3000 -c config/unicorn.rb
