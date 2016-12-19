@@ -11,7 +11,7 @@ DEBUG="no"
 
 export RAILS_ENV="production"
 
-    shopt -s dotglob
+shopt -s dotglob
 
 if [ "${FRESH_INSTALL}" == "yes" ]; then
     echo "fresh install requested. delting everything in ${ZAMMAD_DIR}"
