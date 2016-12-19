@@ -7,7 +7,7 @@ GIT_BRANCH="develop"
 #GIT_BRANCH="unicorn"
 FRESH_INSTALL="no"
 RAILS_SERVER="puma"
-DEBUG="yes"
+DEBUG="no"
 
 export RAILS_ENV="production"
 
