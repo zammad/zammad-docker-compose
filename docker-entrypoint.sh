@@ -1,15 +1,15 @@
 #!/bin/bash
 
-export RAILS_ENV="${RAILS_ENV}"
-
-shopt -s dotglob
-
 if [ ! -f entrypoint.config ]; then
     echo "entrypoint.config not found! create it from entrypoint.config.dist before running this script!"
     exit 1
 fi
 
 . entrypoint.config
+
+export RAILS_ENV=${RAILS_ENV}
+
+shopt -s dotglob
 
 if [ "${FRESH_INSTALL}" == "yes" ]; then
     echo "fresh install requested. delting everything in ${ZAMMAD_DIR}"
