@@ -7,7 +7,7 @@ GIT_BRANCH="develop"
 #GIT_BRANCH="unicorn"
 RAILS_SERVER="puma"
 RAILS_ENV="production"
-FRESH_INSTALL="yes"
+FRESH_INSTALL="no"
 DEBUG="no"
 
 if [ "$1" = 'zammad' ]; then
