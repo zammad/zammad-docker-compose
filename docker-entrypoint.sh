@@ -56,7 +56,7 @@ if [ "$1" = 'zammad' ]; then
     bundle exec script/scheduler.rb start &
 
     if [ "${RAILS_SERVER}" == "puma" ]; then
-	bundle exec rails s -p 3000 -b 0.0.0.0
+	bundle exec puma -p 3000 -b tcp://0.0.0.0
     elif [ "${RAILS_SERVER}" == "unicorn" ]; then
 	bundle exec unicorn -p 3000 -c config/unicorn.rb
     fi
