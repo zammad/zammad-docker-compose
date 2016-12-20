@@ -7,19 +7,19 @@ GIT_BRANCH="develop"
 #GIT_BRANCH="unicorn"
 RAILS_SERVER="puma"
 RAILS_ENV="production"
-FRESH_INSTALL="no"
+FRESH_INSTALL="yes"
 DEBUG="no"
 
-export RAILS_ENV=${RAILS_ENV}
-
-shopt -s dotglob
-
-if [ "${FRESH_INSTALL}" == "yes" ]; then
-    echo "fresh install requested. deleting everything in ${ZAMMAD_DIR}"
-    rm -rf ${ZAMMAD_DIR}/*
-fi
-
 if [ "$1" = 'zammad' ]; then
+
+    export RAILS_ENV=${RAILS_ENV}
+
+    shopt -s dotglob
+
+    if [ "${FRESH_INSTALL}" == "yes" ]; then
+	echo "fresh install requested. deleting everything in ${ZAMMAD_DIR}"
+	rm -rf ${ZAMMAD_DIR}/*
+    fi
 
     # get zammad
     if [ -f ${ZAMMAD_DIR}/config/database.yml ]; then
