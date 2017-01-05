@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# build hook for dockerhubs autobuild feature
+# builds stable and develop images from only one branch
+#
+
+. "hooks/config"
+
+for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
+
+    echo "Build Zammad Docker image ${DOCKER_IMAGE} for DockerHubs ${DOCKER_REPO}:${DOCKER_IMAGE} repo"
+    docker build --build-arg PACKAGER_REPO=${PACKAGER_REPO} --build-arg BUILD_DATE=$(date -u +”%Y-%m-%dT%H:%M:%SZ”) -t ${DOCKER_REPO}:${DOCKER_IMAGE} Dockerfile.${DOCKER_IMAGE}
+
+done

@@ -32,7 +32,9 @@ services:
     volumes:
       - data-zammad:/home/zammad
 volumes:
-  data-zammad:
+  data-postgresql:
     driver: local
   data-ruby:
+    driver: local
+  data-zammad:
     driver: local

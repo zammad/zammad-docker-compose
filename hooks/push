@@ -1,0 +1,14 @@
+#!/bin/bash
+#
+# build hook for dockerhubs autobuild feature
+#
+
+. "hooks/config"
+
+for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
+
+    echo "Push Zammad Docker image ${DOCKER_IMAGE} to DockerHubs ${DOCKER_REPO}:${DOCKER_IMAGE} repo"
+    docker push ${DOCKER_REPO}:${DOCKER_IMAGE}
+
+done
+
