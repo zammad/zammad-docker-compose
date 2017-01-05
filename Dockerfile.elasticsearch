@@ -1,5 +1,6 @@
 FROM elasticsearch
 MAINTAINER André Bauer <monotek23@gmail.com>
+ARG BUILD_DATE
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="Zammad" \
