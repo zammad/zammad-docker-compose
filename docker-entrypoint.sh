@@ -31,10 +31,9 @@ if [ "$1" = 'zammad' ]; then
     else
 	echo "installing zammad..."
 	cd /tmp
-	git clone ${GIT_URL}
+	git clone --depth 1 -b ${GIT_BRANCH} ${GIT_URL}
 	mv -f /tmp/zammad/* ${ZAMMAD_DIR}/
 	cd ${ZAMMAD_DIR}
-	git checkout ${GIT_BRANCH}
 	bundle install --without test development
 	sed -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: postgresql\n#g' < config/database.yml.pkgr > config/database.yml
 	rake db:drop
@@ -57,9 +56,9 @@ if [ "$1" = 'zammad' ]; then
     bundle exec script/scheduler.rb start &
 
     if [ "${RAILS_SERVER}" == "puma" ]; then
-	bundle exec puma -b tcp://0.0.0.0:3000
+	bundle exec puma -b tcp://0.0.0.0:3000 -e ${RAILS_ENV}
     elif [ "${RAILS_SERVER}" == "unicorn" ]; then
-	bundle exec unicorn -p 3000 -c config/unicorn.rb
+	bundle exec unicorn -p 3000 -c config/unicorn.rb -E ${RAILS_ENV}
     fi
 
     if [ "${DEBUG}" == "yes" ]; then
