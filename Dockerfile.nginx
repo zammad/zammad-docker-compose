@@ -5,7 +5,7 @@ ARG BUILD_DATE
 LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="Zammad" \
       org.label-schema.license="AGPL-3.0" \
-      org.label-schema.description="Docker container for Zammad - nginx" \
+      org.label-schema.description="Docker container for Zammad - Nginx" \
       org.label-schema.url="https://zammad.org" \
       org.label-schema.vcs-url="https://github.com/zammad/zammad" \
       org.label-schema.vcs-type="Git" \
