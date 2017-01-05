@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# build hooks
+# build hooks config
 #
 
-DOCKER_IMAGES="elasticsearch nginx postgresql zammad"
 DOCKER_REPO="monotek/zammad-docker-compose"
+DOCKER_IMAGES="elasticsearch nginx postgresql zammad"

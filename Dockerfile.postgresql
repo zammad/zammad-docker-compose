@@ -1,4 +1,4 @@
-FROM postgresql
+FROM postgres
 MAINTAINER André Bauer <monotek23@gmail.com>
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \

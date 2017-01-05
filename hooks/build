@@ -1,7 +1,6 @@
 #!/bin/bash
 #
 # build hook for dockerhubs autobuild feature
-# builds stable and develop images from only one branch
 #
 
 . "hooks/config"
