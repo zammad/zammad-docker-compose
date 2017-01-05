@@ -5,8 +5,6 @@
 
 . "hooks/config"
 
-#exit 0
-
 for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
 
     echo "Push Zammad Docker image ${DOCKER_IMAGE} to DockerHubs ${DOCKER_REPO}:${DOCKER_IMAGE} repo"
