@@ -2,8 +2,6 @@ version: '2'
 services:
   elasticsearch:
     image: monotek/zammad-docker-compose:elasticsearch
-    volumes:
-      - data-elasticsearch:/var/lib/elasticsearch
   nginx:
     image: monotek/zammad-docker-compose:nginx
     ports:
@@ -16,8 +14,6 @@ services:
       - data-zammad:/home/zammad
   postgresql:
     image: monotek/zammad-docker-compose:postgresql
-    volumes:
-      - data-postgresql:/var/lib/postgresql
   zammad:
     image: monotek/zammad-docker-compose:zammad
     links:
@@ -30,10 +26,6 @@ services:
       - data-zammad:/home/zammad
       - data-ruby:/usr/local
 volumes:
-  data-elasticsearch:
-    driver: local
-  data-postgresql:
-    driver: local
   data-ruby:
     driver: local
   data-zammad:

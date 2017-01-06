@@ -11,7 +11,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.vcs-type="Git" \
       org.label-schema.vendor="Zammad" \
       org.label-schema.schema-version="1.0" \
-      org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up --build"
+      org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
 # Expose ports
 EXPOSE 3000
@@ -19,6 +19,10 @@ EXPOSE 6042
 
 # add zammad user
 RUN useradd -m -d /home/zammad -s /bin/bash zammad;chown -R zammad:zammad /home/zammad
+
+# install zammad
+COPY install-zammad.sh /tmp
+RUN chmod +x /tmp/install-zammad.sh;/bin/bash -l -c /tmp/install-zammad.sh
 
 # docker init
 COPY docker-entrypoint.sh /

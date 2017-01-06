@@ -7,36 +7,17 @@ GIT_BRANCH="develop"
 #GIT_BRANCH="unicorn"
 RAILS_SERVER="puma"
 RAILS_ENV="production"
-FRESH_INSTALL="no"
 DEBUG="no"
 
 if [ "$1" = 'zammad' ]; then
 
     export RAILS_ENV=${RAILS_ENV}
 
-    shopt -s dotglob
+    cd ${ZAMMAD_DIR}
+    rake db:migrate &> /dev/null
 
-    if [ "${FRESH_INSTALL}" == "yes" ]; then
-	echo "fresh install requested. deleting everything in ${ZAMMAD_DIR}"
-	rm -rf ${ZAMMAD_DIR}/*
-    fi
-
-    # get zammad
-    if [ -f ${ZAMMAD_DIR}/config/database.yml ]; then
-	echo "updating zammad..."
-	cd ${ZAMMAD_DIR}
-	git pull
-	bundle update
-	rake db:migrate
-    else
-	echo "installing zammad..."
-	cd /tmp
-	git clone --depth 1 -b ${GIT_BRANCH} ${GIT_URL}
-	mv -f /tmp/zammad/* ${ZAMMAD_DIR}/
-	cd ${ZAMMAD_DIR}
-	bundle install --without test development
-	sed -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: postgresql\n#g' < config/database.yml.pkgr > config/database.yml
-	rake db:drop
+    if [ $? != 0 ]; then
+	echo "creating db, assets, searchindex..."
 	rake db:create
 	rake db:migrate
 	rake db:seed
@@ -45,7 +26,7 @@ if [ "$1" = 'zammad' ]; then
 	rake searchindex:rebuild
     fi
 
-    # delte logs & pids
+    # delete logs & pids
     rm ${ZAMMAD_DIR}/log/*
     rm ${ZAMMAD_DIR}/tmp/pids/*
 

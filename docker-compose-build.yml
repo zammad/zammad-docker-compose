@@ -4,8 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.elasticsearch
-    volumes:
-      - data-elasticsearch:/var/lib/elasticsearch
   nginx:
     build:
       context: .
@@ -22,8 +20,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.postgresql
-    volumes:
-      - data-postgresql:/var/lib/postgresql
   zammad:
     build:
       context: .
@@ -38,10 +34,6 @@ services:
       - data-zammad:/home/zammad
       - data-ruby:/usr/local
 volumes:
-  data-elasticsearch:
-    driver: local
-  data-postgresql:
-    driver: local
   data-ruby:
     driver: local
   data-zammad:

@@ -27,7 +27,7 @@ If you like to run zammad in production you should use one of the DEB or RPM pac
 
 ### Building locally
 
-* docker-compose -f docker-compose-build.yml up --build
+* docker-compose -f docker-compose-build.yml up
 
 ## Docs
 
