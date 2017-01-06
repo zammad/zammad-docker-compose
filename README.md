@@ -9,8 +9,7 @@ You're going to love Zammad!
 
 ## What is zammad-docker-compose repo for?
 
-This repo is meant to be the starting point for somebody who likes to test zammad.
-If you like to run zammad in production you should use one of the DEB or RPM packages.
+This repo is meant to be the starting point for somebody who likes to use dockerized Zammad in production.
 
 ## Getting started with zammad-docker-compose
 
@@ -23,6 +22,11 @@ If you like to run zammad in production you should use one of the DEB or RPM pac
 
 ### Using DockerHub images
 
+* docker-compose up
+
+#### Updating Zammad
+
+* docker-compose pull
 * docker-compose up
 
 ### Building locally

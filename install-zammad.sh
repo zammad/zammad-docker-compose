@@ -3,6 +3,8 @@
 ZAMMAD_DIR="/home/zammad"
 GIT_URL="https://github.com/zammad/zammad.git"
 GIT_BRANCH="develop"
+#GIT_URL="https://github.com/monotek/zammad.git"
+#GIT_BRANCH="unicorn"
 
 # install zammad
 echo "installing zammad..."
