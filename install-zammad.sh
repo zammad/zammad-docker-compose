@@ -13,4 +13,4 @@ contrib/packager.io/fetch_locales.rb
 sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: postgresql\n#g' < config/database.yml.pkgr > config/database.yml
 bundle exec rake assets:precompile
 sed -e 's#.*adapter: postgresql#  adapter: postgresql#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: postgresql\n#g' < config/database.yml.pkgr > config/database.yml
-chown -R zammad:zammad /home/zammad/
+chown -R zammad:zammad ${ZAMMAD_DIR}
