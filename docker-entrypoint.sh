@@ -6,17 +6,17 @@ if [ "$1" = 'zammad' ]; then
     rake db:migrate &> /dev/null
 
     if [ $? != 0 ]; then
-	echo "creating db, assets, searchindex..."
-	rake db:create
-	rake db:migrate
-	rake db:seed
-	rails r "Setting.set('es_url', 'http://elasticsearch:9200')"
-	rake searchindex:rebuild
+	echo "creating db & searchindex..."
+	bundle exec rake db:create
+	bundle exec rake db:migrate
+	bundle exec rake db:seed
+	bundle exec rails r "Setting.set('es_url', 'http://elasticsearch:9200')"
+	bundle exec rake searchindex:rebuild
     fi
 
     # delete logs & pids
-    rm ${ZAMMAD_DIR}/log/*
-    rm ${ZAMMAD_DIR}/tmp/pids/*
+    rm ${ZAMMAD_DIR}/log/*.log
+    rm ${ZAMMAD_DIR}/tmp/pids/*.pid
 
     # run zammad
     echo "starting zammad..."
