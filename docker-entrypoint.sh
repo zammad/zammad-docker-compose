@@ -1,13 +1,6 @@
 #!/bin/bash
 
-ZAMMAD_DIR="/home/zammad"
-RAILS_SERVER="puma"
-RAILS_ENV="production"
-DEBUG="no"
-
 if [ "$1" = 'zammad' ]; then
-
-    export RAILS_ENV=${RAILS_ENV}
 
     cd ${ZAMMAD_DIR}
     rake db:migrate &> /dev/null
@@ -17,7 +10,6 @@ if [ "$1" = 'zammad' ]; then
 	rake db:create
 	rake db:migrate
 	rake db:seed
-	rake assets:precompile
 	rails r "Setting.set('es_url', 'http://elasticsearch:9200')"
 	rake searchindex:rebuild
     fi
@@ -38,7 +30,7 @@ if [ "$1" = 'zammad' ]; then
 	bundle exec unicorn -p 3000 -c config/unicorn.rb -E ${RAILS_ENV}
     fi
 
-    if [ "${DEBUG}" == "yes" ]; then
+    if [ "${ZAMMAD_DEBUG}" == "yes" ]; then
 	# keepalive if error
 	while true; do
     	    echo "debugging..."
