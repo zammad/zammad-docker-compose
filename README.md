@@ -13,7 +13,7 @@ This repo is meant to be the starting point for somebody who likes to use docker
 
 ## Getting started with zammad-docker-compose
 
-* git clone git@github.com:monotek/zammad-docker-compose.git
+* git clone git@github.com:zammad/zammad-docker-compose.git
 * cd zammad-docker-compose
 
 ### Setting vm.max_map_count for Elasticsearch
@@ -35,4 +35,4 @@ This repo is meant to be the starting point for somebody who likes to use docker
 
 ### DockerHub Repo
 
-* https://hub.docker.com/r/monotek/zammad-docker-compose/
+* https://hub.docker.com/r/zammad/zammad-docker-compose/
