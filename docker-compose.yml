@@ -1,9 +1,9 @@
 version: '2'
 services:
   elasticsearch:
-    image: monotek/zammad-docker-compose:elasticsearch
+    image: zammad/zammad-docker-compose:elasticsearch
   nginx:
-    image: monotek/zammad-docker-compose:nginx
+    image: zammad/zammad-docker-compose:nginx
     ports:
       - "80:80"
     links:
@@ -13,9 +13,9 @@ services:
     volumes:
       - data-zammad:/home/zammad
   postgresql:
-    image: monotek/zammad-docker-compose:postgresql
+    image: zammad/zammad-docker-compose:postgresql
   zammad:
-    image: monotek/zammad-docker-compose:zammad
+    image: zammad/zammad-docker-compose:zammad
     links:
       - postgresql
       - elasticsearch

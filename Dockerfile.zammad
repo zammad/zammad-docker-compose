@@ -1,5 +1,5 @@
 FROM ruby:2.3.1
-MAINTAINER André Bauer <monotek23@gmail.com>
+MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
 ENV ZAMMAD_DIR /home/zammad
@@ -7,9 +7,7 @@ ENV ZAMMAD_DEBUG no
 ENV RAILS_ENV production
 ENV RAILS_SERVER puma
 ENV GIT_URL https://github.com/zammad/zammad.git
-ENV GIT_BRANCH develop
-#ENV GIT_URL https://github.com/monotek/zammad.git
-#ENV GIT_BRANCH nulldb
+ENV GIT_BRANCH stable
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="Zammad" \
