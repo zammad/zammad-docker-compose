@@ -15,8 +15,8 @@ if [ "$1" = 'zammad' ]; then
     fi
 
     # delete logs & pids
-    rm ${ZAMMAD_DIR}/log/*.log
-    rm ${ZAMMAD_DIR}/tmp/pids/*.pid
+    find ${ZAMMAD_DIR}/log -iname *.pid -exec rm {} \;
+    find ${ZAMMAD_DIR}/tmp/pids -iname *.pid -exec rm {} \;
 
     # run zammad
     echo "starting zammad..."
