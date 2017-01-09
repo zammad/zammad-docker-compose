@@ -36,9 +36,6 @@ services:
     restart: always
     volumes:
       - data-zammad:/home/zammad
-      - data-ruby:/usr/local
 volumes:
-  data-ruby:
-    driver: local
   data-zammad:
     driver: local
