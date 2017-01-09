@@ -9,7 +9,7 @@ cp -R /tmp/zammad/.[!.]* ${ZAMMAD_DIR}
 cd ${ZAMMAD_DIR}
 rm -rf /tmp/zammad
 bundle install --without test development mysql
-&& contrib/packager.io/fetch_locales.rb
+contrib/packager.io/fetch_locales.rb
 sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: postgresql\n#g' < config/database.yml.pkgr > config/database.yml
 bundle exec rake assets:precompile
 sed -e 's#.*adapter: postgresql#  adapter: postgresql#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: postgresql\n#g' < config/database.yml.pkgr > config/database.yml
