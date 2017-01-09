@@ -1,12 +1,14 @@
 #!/bin/bash
 
+set -e
+
 # install zammad
 echo "installing zammad..."
-cd /tmp || exit 1
+cd /tmp
 git clone --depth 1 -b "${GIT_BRANCH}" "${GIT_URL}"
 cp -R /tmp/zammad/* "${ZAMMAD_DIR}"
 cp -R /tmp/zammad/.[!.]* "${ZAMMAD_DIR}"
-cd "${ZAMMAD_DIR}" || exit 1
+cd "${ZAMMAD_DIR}"
 rm -rf /tmp/zammad
 bundle install --without test development mysql
 contrib/packager.io/fetch_locales.rb
