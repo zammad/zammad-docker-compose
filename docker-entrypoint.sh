@@ -3,7 +3,7 @@
 if [ "$1" = 'zammad' ]; then
 
     cd ${ZAMMAD_DIR}
-    bundle exec db:migrate &> /dev/null
+    bundle exec rake db:migrate &> /dev/null
 
     if [ $? != 0 ]; then
 	echo "creating db & searchindex..."
