@@ -9,7 +9,7 @@ You're going to love Zammad!
 
 ## What is zammad-docker-compose repo for?
 
-This repo is meant to be the starting point for somebody who likes to use dockerized Zammad in production.
+This repo is meant to be the starting point for somebody who likes to use dockerized multi-container Zammad in production.
 
 ## Getting started with zammad-docker-compose
 
