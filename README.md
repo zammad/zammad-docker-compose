@@ -13,26 +13,4 @@ This repo is meant to be the starting point for somebody who likes to use docker
 
 ## Getting started with zammad-docker-compose
 
-* git clone git@github.com:zammad/zammad-docker-compose.git
-* cd zammad-docker-compose
-
-### Setting vm.max_map_count for Elasticsearch
-
-* sysctl -w vm.max_map_count=262144
-
-### Using DockerHub images
-
-* docker-compose up
-
-#### Updating Zammad
-
-* docker-compose pull
-* docker-compose up
-
-### Building locally
-
-* docker-compose -f docker-compose-build.yml up
-
-### DockerHub Repo
-
-* https://hub.docker.com/r/zammad/zammad-docker-compose/
+https://docs.zammad.org/en/latest/install-docker-compose.html
