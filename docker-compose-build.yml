@@ -4,32 +4,36 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.elasticsearch
+    restart: always
   nginx:
     build:
       context: .
       dockerfile: Dockerfile.nginx
-    ports:
-      - "80:80"
-    links:
-      - zammad
     depends_on:
       - zammad
+    links:
+      - zammad
+    ports:
+      - "80:80"
+    restart: always
     volumes:
       - data-zammad:/home/zammad
   postgresql:
     build:
       context: .
       dockerfile: Dockerfile.postgresql
+    restart: always
   zammad:
     build:
       context: .
       dockerfile: Dockerfile.zammad
-    links:
-      - postgresql
-      - elasticsearch
     depends_on:
       - postgresql
       - elasticsearch
+    links:
+      - postgresql
+      - elasticsearch
+    restart: always
     volumes:
       - data-zammad:/home/zammad
       - data-ruby:/usr/local

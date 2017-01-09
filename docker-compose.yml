@@ -2,18 +2,21 @@ version: '2'
 services:
   elasticsearch:
     image: zammad/zammad-docker-compose:elasticsearch
+    restart: always
   nginx:
-    image: zammad/zammad-docker-compose:nginx
-    ports:
-      - "80:80"
-    links:
-      - zammad
     depends_on:
       - zammad
+    image: zammad/zammad-docker-compose:nginx
+    links:
+      - zammad
+    ports:
+      - "80:80"
+    restart: always
     volumes:
       - data-zammad:/home/zammad
   postgresql:
     image: zammad/zammad-docker-compose:postgresql
+    restart: always
   zammad:
     image: zammad/zammad-docker-compose:zammad
     links:
@@ -22,6 +25,7 @@ services:
     depends_on:
       - postgresql
       - elasticsearch
+    restart: always
     volumes:
       - data-zammad:/home/zammad
       - data-ruby:/usr/local
