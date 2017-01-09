@@ -30,12 +30,4 @@ if [ "$1" = 'zammad' ]; then
 	bundle exec unicorn -p 3000 -c config/unicorn.rb -E ${RAILS_ENV}
     fi
 
-    if [ "${ZAMMAD_DEBUG}" == "yes" ]; then
-	# keepalive if error
-	while true; do
-    	    echo "debugging..."
-    	    sleep 600
-	done
-    fi
-
 fi

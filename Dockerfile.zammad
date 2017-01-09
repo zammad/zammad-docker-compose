@@ -3,7 +3,6 @@ MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
 ENV ZAMMAD_DIR /home/zammad
-ENV ZAMMAD_DEBUG no
 ENV RAILS_ENV production
 ENV RAILS_SERVER puma
 ENV GIT_URL https://github.com/zammad/zammad.git
