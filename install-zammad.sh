@@ -4,7 +4,7 @@ set -e
 
 echo "installing zammad..."
 
-# crreate zammad user
+# create zammad user
 useradd -M -d "${ZAMMAD_DIR}" -s /bin/bash zammad
 
 # git clone zammad
