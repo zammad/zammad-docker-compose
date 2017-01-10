@@ -8,7 +8,7 @@ echo "installing zammad..."
 useradd -M -d "${ZAMMAD_DIR}" -s /bin/bash zammad
 
 # git clone zammad
-cd $(dirname ${ZAMMAD_DIR})
+cd $(dirname "${ZAMMAD_DIR}")
 git clone --depth 1 -b "${GIT_BRANCH}" "${GIT_URL}"
 
 # install zammad
