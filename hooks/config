@@ -3,5 +3,4 @@
 # build hooks config
 #
 
-DOCKER_REPO="zammad/zammad-docker-compose"
 DOCKER_IMAGES="elasticsearch nginx postgresql zammad"

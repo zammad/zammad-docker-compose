@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:alpine
 MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 

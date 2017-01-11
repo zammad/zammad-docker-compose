@@ -1,4 +1,4 @@
-FROM elasticsearch
+FROM elasticsearch:alpine
 MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
