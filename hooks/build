@@ -8,6 +8,7 @@
 for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
 
     echo "Build Zammad Docker image ${DOCKER_IMAGE} for DockerHubs ${DOCKER_REPO}:${DOCKER_IMAGE} repo"
+    sleep 10
     docker build --no-cache --build-arg BUILD_DATE=$(date -u +”%Y-%m-%dT%H:%M:%SZ”) -t ${DOCKER_REPO}:${DOCKER_IMAGE} -f containers/${DOCKER_IMAGE}/Dockerfile .
     docker push ${DOCKER_REPO}:${DOCKER_IMAGE}
 
