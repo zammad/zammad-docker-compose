@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$1" = 'zammad' ]; then
+if [ "$1" = 'zammad-railsserver' ]; then
 
     cd ${ZAMMAD_DIR}
     bundle exec rake db:migrate &> /dev/null
@@ -14,15 +14,12 @@ if [ "$1" = 'zammad' ]; then
 	bundle exec rake searchindex:rebuild
     fi
 
-    # delete logs & pids
+    # delete logs
     find ${ZAMMAD_DIR}/log -iname *.log -exec rm {} \;
-    find ${ZAMMAD_DIR}/tmp/pids -iname *.pid -exec rm {} \;
 
     # run zammad
     echo "starting zammad..."
     echo "zammad will be accessable on http://localhost in some seconds"
-    bundle exec script/websocket-server.rb -b 0.0.0.0 start &
-    bundle exec script/scheduler.rb start &
 
     if [ "${RAILS_SERVER}" == "puma" ]; then
 	bundle exec puma -b tcp://0.0.0.0:3000 -e ${RAILS_ENV}

@@ -1,8 +1,6 @@
 #!/bin/bash
 
-set -e
-
-echo "installing zammad..."
+set -ex
 
 # create zammad user
 useradd -M -d "${ZAMMAD_DIR}" -s /bin/bash zammad

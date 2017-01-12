@@ -3,4 +3,4 @@
 # build hooks config
 #
 
-DOCKER_IMAGES="elasticsearch nginx postgresql zammad"
+DOCKER_IMAGES="elasticsearch nginx postgresql zammad zammad-railsserver zammad-scheduler zammad-websocket"

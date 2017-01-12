@@ -1,41 +1,81 @@
 version: '2'
+
 services:
+
   elasticsearch:
     build:
       context: .
-      dockerfile: Dockerfile.elasticsearch
+      dockerfile: containers/elasticsearch/Dockerfile
     restart: always
+
   nginx:
     build:
       context: .
-      dockerfile: Dockerfile.nginx
+      dockerfile: containers/nginx/Dockerfile
     depends_on:
       - zammad
     links:
-      - zammad
+      - zammad-railsserver
+      - zammad-websocket
     ports:
       - "80:80"
     restart: always
     volumes:
       - data-zammad:/home/zammad
+
   postgresql:
     build:
       context: .
-      dockerfile: Dockerfile.postgresql
+      dockerfile: containers/postgresql/Dockerfile
     restart: always
+
   zammad:
     build:
       context: .
-      dockerfile: Dockerfile.zammad
-    depends_on:
-      - postgresql
-      - elasticsearch
-    links:
-      - postgresql
-      - elasticsearch
-    restart: always
+      dockerfile: containers/zammad/Dockerfile
+    restart: on-failure
     volumes:
       - data-zammad:/home/zammad
+
+  zammad-railsserver:
+    build:
+      context: .
+      dockerfile: containers/zammad-railsserver/Dockerfile
+    depends_on:
+      - elasticsearch
+      - postgresql
+      - zammad
+    links:
+      - elasticsearch
+      - postgresql
+    restart: always
+
+  zammad-scheduler:
+    build:
+      context: .
+      dockerfile: containers/zammad-scheduler/Dockerfile
+    depends_on:
+      - elasticsearch
+      - postgresql
+      - zammad
+    links:
+      - elasticsearch
+      - postgresql
+    restart: always
+
+  zammad-websocket:
+    build:
+      context: .
+      dockerfile: containers/zammad-websocket/Dockerfile
+    depends_on:
+      - elasticsearch
+      - postgresql
+      - zammad
+    links:
+      - elasticsearch
+      - postgresql
+    restart: always
+
 volumes:
   data-zammad:
     driver: local
