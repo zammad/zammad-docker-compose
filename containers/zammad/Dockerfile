@@ -6,7 +6,7 @@ ENV ZAMMAD_DIR /home/zammad
 ENV RAILS_ENV production
 ENV RAILS_SERVER puma
 ENV GIT_URL https://github.com/zammad/zammad.git
-ENV GIT_BRANCH masterp
+ENV GIT_BRANCH master
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="Zammad" \
