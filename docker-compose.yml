@@ -33,7 +33,7 @@ services:
     image: zammad/zammad-docker-compose:zammad
     labels:
       io.rancher.container.pull_image: always
-      io.rancher.container.start_once: true
+      io.rancher.container.start_once: 'true'
     restart: on-failure
     volumes:
       - data-zammad:/home/zammad
