@@ -2,19 +2,19 @@ version: '2'
 
 services:
 
-  elasticsearch:
-    scale: 1
-    start_on_create: true
-
-  nginx:
-    scale: 1
-    start_on_create: true
-
-  postgresql:
-    scale: 1
-    start_on_create: true
-
   zammad:
+    scale: 1
+    start_on_create: true
+
+  zammad-elasticsearch:
+    scale: 1
+    start_on_create: true
+
+  zammad-nginx:
+    scale: 1
+    start_on_create: true
+
+  zammad-postgresql:
     scale: 1
     start_on_create: true
 

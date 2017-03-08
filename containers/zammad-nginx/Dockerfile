@@ -13,7 +13,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.schema-version="1.2" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
-ADD containers/nginx/nginx-zammad.conf /etc/nginx/conf.d/zammad.conf
+ADD containers/zammad-nginx/nginx-zammad.conf /etc/nginx/conf.d/zammad.conf
 
 RUN rm /etc/nginx/conf.d/default.conf
 

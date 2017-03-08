@@ -2,16 +2,27 @@ version: '2'
 
 services:
 
-  elasticsearch:
+  zammad:
     build:
       context: .
-      dockerfile: containers/elasticsearch/Dockerfile
+      dockerfile: containers/zammad/Dockerfile
+    depends_on:
+      - zammad-elasticsearch
+      - zammad-postgresql
+    restart: on-failure
+    volumes:
+      - data-zammad:/home/zammad
+
+  zammad-elasticsearch:
+    build:
+      context: .
+      dockerfile: containers/zammad-elasticsearch/Dockerfile
     restart: always
 
-  nginx:
+  zammad-nginx:
     build:
       context: .
-      dockerfile: containers/nginx/Dockerfile
+      dockerfile: containers/zammad-nginx/Dockerfile
     depends_on:
       - zammad
     links:
@@ -23,31 +34,21 @@ services:
     volumes:
       - data-zammad:/home/zammad
 
-  postgresql:
+  zammad-postgresql:
     build:
       context: .
-      dockerfile: containers/postgresql/Dockerfile
+      dockerfile: containers/zammad-postgresql/Dockerfile
     restart: always
-
-  zammad:
-    build:
-      context: .
-      dockerfile: containers/zammad/Dockerfile
-    restart: on-failure
-    volumes:
-      - data-zammad:/home/zammad
 
   zammad-railsserver:
     build:
       context: .
       dockerfile: containers/zammad-railsserver/Dockerfile
     depends_on:
-      - elasticsearch
-      - postgresql
       - zammad
     links:
-      - elasticsearch
-      - postgresql
+      - zammad-elasticsearch
+      - zammad-postgresql
     restart: always
 
   zammad-scheduler:
@@ -55,12 +56,10 @@ services:
       context: .
       dockerfile: containers/zammad-scheduler/Dockerfile
     depends_on:
-      - elasticsearch
-      - postgresql
-      - zammad
+      - zammad-railsserver
     links:
-      - elasticsearch
-      - postgresql
+      - zammad-elasticsearch
+      - zammad-postgresql
     restart: always
 
   zammad-websocket:
@@ -68,12 +67,10 @@ services:
       context: .
       dockerfile: containers/zammad-websocket/Dockerfile
     depends_on:
-      - elasticsearch
-      - postgresql
-      - zammad
+      - zammad-railsserver
     links:
-      - elasticsearch
-      - postgresql
+      - zammad-elasticsearch
+      - zammad-postgresql
     restart: always
 
 volumes:

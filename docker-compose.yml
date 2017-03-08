@@ -2,16 +2,28 @@ version: '2'
 
 services:
 
-  elasticsearch:
-    image: zammad/zammad-docker-compose:elasticsearch
+  zammad:
+    depends_on:
+      - zammad-elasticsearch
+      - zammad-postgresql
+    image: zammad/zammad-docker-compose:zammad
+    labels:
+      io.rancher.container.pull_image: always
+      io.rancher.container.start_once: 'true'
+    restart: on-failure
+    volumes:
+      - data-zammad:/home/zammad
+
+  zammad-elasticsearch:
+    image: zammad/zammad-docker-compose:zammad-elasticsearch
     labels:
       io.rancher.container.pull_image: always
     restart: always
 
-  nginx:
+  zammad-nginx:
     depends_on:
       - zammad
-    image: zammad/zammad-docker-compose:nginx
+    image: zammad/zammad-docker-compose:zammad-nginx
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -23,32 +35,21 @@ services:
     volumes:
       - data-zammad:/home/zammad
 
-  postgresql:
-    image: zammad/zammad-docker-compose:postgresql
+  zammad-postgresql:
+    image: zammad/zammad-docker-compose:zammad-postgresql
     labels:
       io.rancher.container.pull_image: always
     restart: always
-
-  zammad:
-    image: zammad/zammad-docker-compose:zammad
-    labels:
-      io.rancher.container.pull_image: always
-      io.rancher.container.start_once: 'true'
-    restart: on-failure
-    volumes:
-      - data-zammad:/home/zammad
 
   zammad-railsserver:
     image: zammad/zammad-docker-compose:zammad-railsserver
     labels:
       io.rancher.container.pull_image: always
     links:
-      - elasticsearch
-      - postgresql
+      - zammad-elasticsearch
+      - zammad-postgresql
       - zammad
     depends_on:
-      - elasticsearch
-      - postgresql
       - zammad
     restart: always
 
@@ -57,13 +58,11 @@ services:
     labels:
       io.rancher.container.pull_image: always
     links:
-      - elasticsearch
-      - postgresql
+      - zammad-elasticsearch
+      - zammad-postgresql
       - zammad
     depends_on:
-      - elasticsearch
-      - postgresql
-      - zammad
+      - zammad-railsserver
     restart: always
 
   zammad-websocket:
@@ -71,11 +70,10 @@ services:
     labels:
       io.rancher.container.pull_image: always
     links:
-      - postgresql
+      - zammad-postgresql
       - zammad
     depends_on:
-      - postgresql
-      - zammad
+      - zammad-railsserver
     restart: always
 
 volumes:

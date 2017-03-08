@@ -2,29 +2,35 @@
 
 if [ "$1" = 'zammad-railsserver' ]; then
 
-    cd ${ZAMMAD_DIR}
-    bundle exec rake db:migrate &> /dev/null
+  # wait for postgres process coming up on zammad-postgresql
+  until echo > /dev/tcp/zammad-postgresql/5432; do
+    echo "waiting for postgres to be ready..."
+    sleep 5
+  done
 
-    if [ $? != 0 ]; then
-	echo "creating db & searchindex..."
-	bundle exec rake db:create
-	bundle exec rake db:migrate
-	bundle exec rake db:seed
-	bundle exec rails r "Setting.set('es_url', 'http://elasticsearch:9200')"
-	bundle exec rake searchindex:rebuild
-    fi
+  cd ${ZAMMAD_DIR}
+  bundle exec rake db:migrate &> /dev/null
 
-    # delete logs
-    find ${ZAMMAD_DIR}/log -iname *.log -exec rm {} \;
+  if [ $? != 0 ]; then
+    echo "creating db & searchindex..."
+    bundle exec rake db:create
+    bundle exec rake db:migrate
+    bundle exec rake db:seed
+    bundle exec rails r "Setting.set('es_url', 'http://elasticsearch:9200')"
+    bundle exec rake searchindex:rebuild
+  fi
 
-    # run zammad
-    echo "starting zammad..."
-    echo "zammad will be accessable on http://localhost in some seconds"
+  # delete logs
+  find ${ZAMMAD_DIR}/log -iname *.log -exec rm {} \;
 
-    if [ "${RAILS_SERVER}" == "puma" ]; then
-	bundle exec puma -b tcp://0.0.0.0:3000 -e ${RAILS_ENV}
+  # run zammad
+  echo "starting zammad..."
+  echo "zammad will be accessable on http://localhost in some seconds"
+
+  if [ "${RAILS_SERVER}" == "puma" ]; then
+    bundle exec puma -b tcp://0.0.0.0:3000 -e ${RAILS_ENV}
     elif [ "${RAILS_SERVER}" == "unicorn" ]; then
-	bundle exec unicorn -p 3000 -c config/unicorn.rb -E ${RAILS_ENV}
-    fi
+    bundle exec unicorn -p 3000 -c config/unicorn.rb -E ${RAILS_ENV}
+  fi
 
 fi
