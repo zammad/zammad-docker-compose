@@ -2,8 +2,8 @@
 
 if [ "$1" = 'zammad-websocket' ]; then
   # wait for zammad process coming up
-  until echo > /dev/tcp/zammad-railsserver/3000; do
-    echo "waiting for zammad to be ready..."
+  until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do
+    echo "websocket server waiting for zammads railsserver to be ready..."
     sleep 5
   done
 

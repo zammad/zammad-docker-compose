@@ -3,8 +3,8 @@
 if [ "$1" = 'zammad-railsserver' ]; then
 
   # wait for postgres process coming up on zammad-postgresql
-  until echo > /dev/tcp/zammad-postgresql/5432; do
-    echo "waiting for postgres to be ready..."
+  until (echo > /dev/tcp/zammad-postgresql/5432) &> /dev/null; do
+    echo "zammad waiting for postgresql server to be ready..."
     sleep 5
   done
 
