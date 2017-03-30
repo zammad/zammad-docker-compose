@@ -40,6 +40,8 @@ services:
     labels:
       io.rancher.container.pull_image: always
     restart: always
+    volumes:
+      - postgres-zammad:/var/lib/postgresql/data
 
   zammad-railsserver:
     image: zammad/zammad-docker-compose:zammad-railsserver
@@ -78,4 +80,6 @@ services:
 
 volumes:
   data-zammad:
+    driver: local
+  postgres-zammad:
     driver: local
