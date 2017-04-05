@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
 
@@ -50,28 +50,34 @@ services:
       - zammad-elasticsearch
       - zammad-postgresql
     restart: always
+    volumes:
+      - data-zammad:/home/zammad
 
   zammad-scheduler:
     build:
       context: .
       dockerfile: containers/zammad-scheduler/Dockerfile
     depends_on:
-      - zammad-railsserver
+      - zammad
     links:
       - zammad-elasticsearch
       - zammad-postgresql
     restart: always
+    volumes:
+      - data-zammad:/home/zammad
 
   zammad-websocket:
     build:
       context: .
       dockerfile: containers/zammad-websocket/Dockerfile
     depends_on:
-      - zammad-railsserver
+      - zammad
     links:
       - zammad-elasticsearch
       - zammad-postgresql
     restart: always
+    volumes:
+      - data-zammad:/home/zammad
 
 volumes:
   data-zammad:

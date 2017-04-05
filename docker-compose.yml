@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
 
@@ -42,39 +42,45 @@ services:
     restart: always
 
   zammad-railsserver:
+    depends_on:
+      - zammad
     image: zammad/zammad-docker-compose:zammad-railsserver
     labels:
       io.rancher.container.pull_image: always
     links:
       - zammad-elasticsearch
       - zammad-postgresql
-      - zammad
     depends_on:
       - zammad
     restart: always
+    volumes:
+      - data-zammad:/home/zammad
 
   zammad-scheduler:
+    depends_on:
+      - zammad
     image: zammad/zammad-docker-compose:zammad-scheduler
     labels:
       io.rancher.container.pull_image: always
     links:
       - zammad-elasticsearch
       - zammad-postgresql
-      - zammad
-    depends_on:
-      - zammad-railsserver
     restart: always
+    volumes:
+      - data-zammad:/home/zammad
 
   zammad-websocket:
+    depends_on:
+      - zammad
     image: zammad/zammad-docker-compose:zammad-websocket
     labels:
       io.rancher.container.pull_image: always
     links:
       - zammad-postgresql
       - zammad
-    depends_on:
-      - zammad-railsserver
     restart: always
+    volumes:
+      - data-zammad:/home/zammad
 
 volumes:
   data-zammad:
