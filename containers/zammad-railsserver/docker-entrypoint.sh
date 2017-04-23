@@ -4,9 +4,11 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   # wait for postgres process coming up on zammad-postgresql
   until (echo > /dev/tcp/zammad-postgresql/5432) &> /dev/null; do
-    echo "zammad waiting for postgresql server to be ready..."
+    echo "zammad railsserver waiting for postgresql server to be ready..."
     sleep 5
   done
+
+  echo "railsserver can access postgresql server now..."
 
   cd ${ZAMMAD_DIR}
   bundle exec rake db:migrate &> /dev/null

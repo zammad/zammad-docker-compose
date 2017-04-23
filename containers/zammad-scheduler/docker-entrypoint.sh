@@ -7,6 +7,8 @@ if [ "$1" = 'zammad-scheduler' ]; then
     sleep 2
   done
 
+  echo "scheduler can access raillsserver now..."
+
   # start scheduler
   cd ${ZAMMAD_DIR}
   bundle exec script/scheduler.rb run

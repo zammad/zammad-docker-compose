@@ -7,6 +7,8 @@ if [ "$1" = 'zammad-websocket' ]; then
     sleep 5
   done
 
+  echo "websocket server can access raillsserver now..."
+
   cd ${ZAMMAD_DIR}
   bundle exec script/websocket-server.rb -b 0.0.0.0 start
 fi
