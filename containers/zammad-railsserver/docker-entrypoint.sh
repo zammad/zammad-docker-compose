@@ -31,7 +31,7 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   if [ "${RAILS_SERVER}" == "puma" ]; then
     bundle exec puma -b tcp://0.0.0.0:3000 -e ${RAILS_ENV}
-    elif [ "${RAILS_SERVER}" == "unicorn" ]; then
+  elif [ "${RAILS_SERVER}" == "unicorn" ]; then
     bundle exec unicorn -p 3000 -c config/unicorn.rb -E ${RAILS_ENV}
   fi
 
