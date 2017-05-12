@@ -11,8 +11,8 @@ if [ "$1" = 'zammad-railsserver' ]; then
   echo "railsserver can access postgresql server now..."
 
   cd ${ZAMMAD_DIR}
-  bundle exec rake db:migrate &> /dev/null
   bundle exec rails r "Setting.set('es_url', 'http://zammad-elasticsearch:9200')"
+  bundle exec rake db:migrate &> /dev/null
 
   if [ $? != 0 ]; then
     echo "creating db & searchindex..."
