@@ -12,13 +12,13 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   cd ${ZAMMAD_DIR}
   bundle exec rake db:migrate &> /dev/null
+  bundle exec rails r "Setting.set('es_url', 'http://zammad-elasticsearch:9200')"
 
   if [ $? != 0 ]; then
     echo "creating db & searchindex..."
     bundle exec rake db:create
     bundle exec rake db:migrate
     bundle exec rake db:seed
-    bundle exec rails r "Setting.set('es_url', 'http://zammad-elasticsearch:9200')"
     bundle exec rake searchindex:rebuild
   fi
 
