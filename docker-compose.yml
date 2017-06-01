@@ -40,6 +40,8 @@ services:
     labels:
       io.rancher.container.pull_image: always
     restart: always
+    volumes:
+      - postgres-zammad:/var/lib/postgresql/data
 
   zammad-railsserver:
     depends_on:
@@ -84,4 +86,6 @@ services:
 
 volumes:
   data-zammad:
+    driver: local
+  postgres-zammad:
     driver: local
