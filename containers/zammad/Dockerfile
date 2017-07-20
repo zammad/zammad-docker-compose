@@ -19,14 +19,29 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.schema-version="1.2" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
-# install dependencies
-RUN apt-get update && apt-get install -y build-essential git-core libpq5 libpq-dev
-
-# install zammad
+# copy installer and make it executable
 COPY containers/zammad/install-zammad.sh /tmp
-RUN chmod +x /tmp/install-zammad.sh;/bin/bash -l -c /tmp/install-zammad.sh
+RUN chmod +x /tmp/install-zammad.sh
 
-# cleanup
-RUN apt-get remove --purge -y build-essential bzip2 git-core libffi-dev libgdbm3 libssl-dev procps zlib1g-dev && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
+# install permanent dependencies
+RUN apt-get update && apt-get install -y libpq5 libpq-dev && rm -rf /var/lib/apt/lists/*
+
+# install build dependencies, zammad and clean up
+RUN apt-get update \
+    && apt-get install -y \
+        build-essential \
+        git-core \
+    \
+    && /bin/bash -l -c /tmp/install-zammad.sh \
+    \
+    && apt-get remove --purge -y \
+        build-essential \
+        bzip2 \
+        git-core \
+        libffi-dev \
+        libgdbm3 \
+        libssl-dev \
+        procps \
+        zlib1g-dev \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
