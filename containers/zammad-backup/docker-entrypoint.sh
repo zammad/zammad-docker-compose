@@ -13,14 +13,11 @@ if [ "$1" = 'zammad-backup' ]; then
 
     echo "${TIMESTAMP} - backuping zammad..."
 
-    # create backup dis
-    test -d ${BACKUP_DIR} || mkdir -p ${BACKUP_DIR}
-
     # delete old backups
     test -d ${BACKUP_DIR} && find ${BACKUP_DIR}/*_zammad_*.gz -type f -mtime +${HOLD_DAYS} -exec rm {} \;
 
     # tar files
-    tar -czf ${ZAMMAD_DIR} ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz
+    tar -czf ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_DIR}
 
     #db backup
     pg_dump --dbname=postgresql://postgres@zammad-postgresql:5432/zammad_production | gzip > ${BACKUP_DIR}/${TIMESTAMP}_zammad_db.psql.gz
