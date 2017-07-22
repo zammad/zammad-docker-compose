@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 services:
 
@@ -12,6 +12,19 @@ services:
     restart: on-failure
     volumes:
       - data-zammad:/home/zammad
+
+  zammad-backup:
+    build:
+      context: .
+      dockerfile: containers/zammad-backup/Dockerfile
+    depends_on:
+      - zammad
+    links:
+      - zammad-postgresql
+    restart: always
+    volumes:
+      - data-zammad:/home/zammad
+      - backup-zammad:/var/tmp/zammad
 
   zammad-elasticsearch:
     build:
@@ -80,5 +93,7 @@ services:
       - data-zammad:/home/zammad
 
 volumes:
+  backup-zammad:
+    driver: local
   data-zammad:
     driver: local

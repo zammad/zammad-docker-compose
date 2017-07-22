@@ -6,6 +6,10 @@ services:
     scale: 1
     start_on_create: true
 
+  zammad-backup:
+    scale: 1
+    start_on_create: true
+
   zammad-elasticsearch:
     scale: 1
     start_on_create: true

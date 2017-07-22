@@ -11,5 +11,5 @@ if [ "$1" = 'zammad-scheduler' ]; then
 
   # start scheduler
   cd ${ZAMMAD_DIR}
-  bundle exec script/scheduler.rb run
+  exec gosu ${ZAMMAD_USER}:${ZAMMAD_USER} bundle exec script/scheduler.rb run
 fi

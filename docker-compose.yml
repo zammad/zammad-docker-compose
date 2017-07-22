@@ -1,4 +1,4 @@
-version: '3'
+version: '3.3'
 
 services:
 
@@ -13,6 +13,19 @@ services:
     restart: on-failure
     volumes:
       - data-zammad:/home/zammad
+
+  zammad-backup:
+    depends_on:
+      - zammad
+    image: zammad/zammad-docker-compose:zammad-backup
+    labels:
+      io.rancher.container.pull_image: always
+    links:
+      - zammad-postgresql
+    restart: always
+    volumes:
+      - data-zammad:/home/zammad
+      - backup-zammad:/var/tmp/zammad
 
   zammad-elasticsearch:
     image: zammad/zammad-docker-compose:zammad-elasticsearch
@@ -83,5 +96,7 @@ services:
       - data-zammad:/home/zammad
 
 volumes:
+  backup-zammad:
+    driver: local
   data-zammad:
     driver: local
