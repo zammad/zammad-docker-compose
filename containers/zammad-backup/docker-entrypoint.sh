@@ -1,7 +1,6 @@
 #!/bin/bash
 
 if [ "$1" = 'zammad-backup' ]; then
-
   # wait for zammad process coming up
   until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do
     echo "backup waiting for zammads railsserver to be ready..."
@@ -25,5 +24,4 @@ if [ "$1" = 'zammad-backup' ]; then
     # wait until next backup
     sleep ${BACKUP_SLEEP}
   done
-
 fi

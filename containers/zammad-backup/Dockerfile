@@ -19,7 +19,8 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
 
 RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key add - \
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" >> /etc/apt/sources.list.d/postgres.list \
-    && apt-get update;apt-get -y install postgresql-client
+    && apt-get update;apt-get -y install postgresql-client \
+    && rm -rf /var/lib/apt/lists/*
 
 # create entrypoint
 COPY containers/zammad-backup/docker-entrypoint.sh /
