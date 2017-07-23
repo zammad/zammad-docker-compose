@@ -21,7 +21,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.schema-version="1.2" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
-# install dependencies & GOSU
+# install dependencies, GOSU & zammad
 RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev" \
     GOSU_DEPENDENCIES="ca-certificates wget" \
     set -ex \
@@ -33,10 +33,7 @@ RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev" \
 	  && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
 	  && rm -rf "${GNUPGHOME}" /usr/local/bin/gosu.asc \
 	  && chmod +x /usr/local/bin/gosu \
-	  && gosu nobody true
-
-# install zammad
-RUN set -ex \
+	  && gosu nobody true \
     && useradd -M -d ${ZAMMAD_DIR} -s /bin/bash ${ZAMMAD_USER} \
     && cd $(dirname ${ZAMMAD_DIR}) \
     && git clone --depth 1 -b "${GIT_BRANCH}" "${GIT_URL}" \
