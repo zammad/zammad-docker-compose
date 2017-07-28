@@ -32,6 +32,8 @@ services:
     labels:
       io.rancher.container.pull_image: always
     restart: always
+    volumes:
+      - data-elasticsearch:/usr/share/elasticsearch/data
 
   zammad-nginx:
     depends_on:
@@ -99,4 +101,6 @@ volumes:
   backup-zammad:
     driver: local
   data-zammad:
+    driver: local
+  data-elasticsearch:
     driver: local
