@@ -10,10 +10,11 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   echo "railsserver can access postgresql server now..."
 
+  rsync -a --delete ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
+
   cd ${ZAMMAD_DIR}
 
   # update zammad
-  git pull
   gem update bundler
   bundle install
 
@@ -32,9 +33,6 @@ if [ "$1" = 'zammad-railsserver' ]; then
   bundle exec rake searchindex:rebuild
 
   chown -R ${ZAMMAD_USER}:${ZAMMAD_USER} ${ZAMMAD_DIR}
-
-  # delete logs
-  find ${ZAMMAD_DIR}/log -iname *.log -exec rm {} \;
 
   # run zammad
   echo "starting zammad..."
