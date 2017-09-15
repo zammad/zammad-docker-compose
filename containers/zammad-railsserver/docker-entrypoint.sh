@@ -10,7 +10,7 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   echo "railsserver can access postgresql server now..."
 
-  rsync -a --delete ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
+  rsync -a --delete --exclude 'storage/fs/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
 
   cd ${ZAMMAD_DIR}
 
