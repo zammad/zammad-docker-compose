@@ -80,7 +80,6 @@ services:
       io.rancher.container.pull_image: always
     links:
       - zammad-postgresql
-      - zammad
     restart: always
     volumes:
       - data-zammad:/home/zammad
