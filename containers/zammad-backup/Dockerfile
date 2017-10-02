@@ -4,6 +4,7 @@ ARG BUILD_DATE
 
 ENV BACKUP_SLEEP 86400
 ENV HOLD_DAYS 10
+ENV ZAMMAD_DIR /home/zammad
 ENV BACKUP_DIR /var/tmp/zammad
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
