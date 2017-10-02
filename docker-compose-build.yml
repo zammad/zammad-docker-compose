@@ -2,23 +2,12 @@ version: '3.3'
 
 services:
 
-  zammad:
-    build:
-      context: .
-      dockerfile: containers/zammad/Dockerfile
-    depends_on:
-      - zammad-elasticsearch
-      - zammad-postgresql
-    restart: on-failure
-    volumes:
-      - data-zammad:/home/zammad
-
   zammad-backup:
     build:
       context: .
       dockerfile: containers/zammad-backup/Dockerfile
     depends_on:
-      - zammad
+      - zammad-railsserver
     links:
       - zammad-postgresql
     restart: always
@@ -37,7 +26,7 @@ services:
       context: .
       dockerfile: containers/zammad-nginx/Dockerfile
     depends_on:
-      - zammad
+      - zammad-railsserver
     links:
       - zammad-railsserver
       - zammad-websocket
@@ -58,39 +47,42 @@ services:
       context: .
       dockerfile: containers/zammad-railsserver/Dockerfile
     depends_on:
-      - zammad
+      - zammad-postgresql
     links:
       - zammad-elasticsearch
       - zammad-postgresql
     restart: always
     volumes:
       - data-zammad:/home/zammad
+    command: ["zammad-railsserver"]
 
   zammad-scheduler:
     build:
       context: .
       dockerfile: containers/zammad-scheduler/Dockerfile
     depends_on:
-      - zammad
+      - zammad-railsserver
     links:
       - zammad-elasticsearch
       - zammad-postgresql
     restart: always
     volumes:
       - data-zammad:/home/zammad
+    command: ["zammad-scheduler"]
 
   zammad-websocket:
     build:
       context: .
       dockerfile: containers/zammad-websocket/Dockerfile
     depends_on:
-      - zammad
+      - zammad-railsserver
     links:
       - zammad-elasticsearch
       - zammad-postgresql
     restart: always
     volumes:
       - data-zammad:/home/zammad
+    command: ["zammad-websocket"]
 
 volumes:
   backup-zammad:

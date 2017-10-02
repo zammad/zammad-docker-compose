@@ -2,10 +2,6 @@ version: '2'
 
 services:
 
-  zammad:
-    scale: 1
-    start_on_create: true
-
   zammad-backup:
     scale: 1
     start_on_create: true

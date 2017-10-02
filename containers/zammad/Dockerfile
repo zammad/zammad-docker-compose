@@ -47,4 +47,9 @@ RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev rsync" \
     && rm -r tmp/cache \
     && chown -R ${ZAMMAD_USER}:${ZAMMAD_USER} ${ZAMMAD_TMP_DIR}
 
+# docker init
+COPY containers/zammad/docker-entrypoint.sh /
+RUN chown ${ZAMMAD_USER}:${ZAMMAD_USER} /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
 WORKDIR ${ZAMMAD_DIR}

@@ -2,21 +2,9 @@ version: '3.3'
 
 services:
 
-  zammad:
-    depends_on:
-      - zammad-elasticsearch
-      - zammad-postgresql
-    image: zammad/zammad-docker-compose:zammad
-    labels:
-      io.rancher.container.pull_image: always
-      io.rancher.container.start_once: 'true'
-    restart: on-failure
-    volumes:
-      - data-zammad:/home/zammad
-
   zammad-backup:
     depends_on:
-      - zammad
+      - zammad-railsserver
     image: zammad/zammad-docker-compose:zammad-backup
     labels:
       io.rancher.container.pull_image: always
@@ -37,7 +25,7 @@ services:
 
   zammad-nginx:
     depends_on:
-      - zammad
+      - zammad-railsserver
     image: zammad/zammad-docker-compose:zammad-nginx
     labels:
       io.rancher.container.pull_image: always
@@ -58,23 +46,22 @@ services:
 
   zammad-railsserver:
     depends_on:
-      - zammad
-    image: zammad/zammad-docker-compose:zammad-railsserver
+      - zammad-postgresql
+    image: zammad/zammad-docker-compose:zammad
     labels:
       io.rancher.container.pull_image: always
     links:
       - zammad-elasticsearch
       - zammad-postgresql
-    depends_on:
-      - zammad
     restart: always
     volumes:
       - data-zammad:/home/zammad
+    command: ["zammad-railsserver"]
 
   zammad-scheduler:
     depends_on:
-      - zammad
-    image: zammad/zammad-docker-compose:zammad-scheduler
+      - zammad-railsserver
+    image: zammad/zammad-docker-compose:zammad
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -83,11 +70,12 @@ services:
     restart: always
     volumes:
       - data-zammad:/home/zammad
+    command: ["zammad-scheduler"]
 
   zammad-websocket:
     depends_on:
-      - zammad
-    image: zammad/zammad-docker-compose:zammad-websocket
+      - zammad-railsserver
+    image: zammad/zammad-docker-compose:zammad
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -96,6 +84,7 @@ services:
     restart: always
     volumes:
       - data-zammad:/home/zammad
+    command: ["zammad-websocket"]
 
 volumes:
   backup-zammad:

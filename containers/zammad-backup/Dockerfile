@@ -1,4 +1,4 @@
-FROM zammad/zammad-docker-compose:zammad
+FROM debian
 MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
@@ -17,10 +17,11 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.schema-version="1.2" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
-RUN wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key add - \
-    && echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" >> /etc/apt/sources.list.d/postgres.list \
-    && apt-get update;apt-get -y install postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update;apt-get -y wget gnupg2 \
+  && wget -q https://www.postgresql.org/media/keys/ACCC4CF8.asc -O - | apt-key add - \
+  && echo "deb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main" >> /etc/apt/sources.list.d/postgres.list \
+  && apt-get update;apt-get -y install postgresql-client \
+  && rm -rf /var/lib/apt/lists/*
 
 # create entrypoint
 COPY containers/zammad-backup/docker-entrypoint.sh /
