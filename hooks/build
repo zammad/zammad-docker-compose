@@ -9,9 +9,14 @@ set -ex
 
 for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
   if [ "${TRAVIS}" == 'true' ]; then
+
+    if [ -n "${ZAMMAD_VERSION}" ]; then
+      DOCKER_TAG="-t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${ZAMMAD_VERSION}"
+    fi
+
     echo "Build Zammad Docker image ${DOCKER_IMAGE} with version ${ZAMMAD_VERSION} for DockerHubs ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE} repo"
 
-    docker build --pull --no-cache --build-arg BUILD_DATE=$(date -u +”%Y-%m-%dT%H:%M:%SZ”) -t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE} -t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${ZAMMAD_VERSION} -f containers/${DOCKER_IMAGE}/Dockerfile .
+    docker build --pull --no-cache --build-arg BUILD_DATE=$(date -u +”%Y-%m-%dT%H:%M:%SZ”) -t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE} ${DOCKER_TAG} -f containers/${DOCKER_IMAGE}/Dockerfile .
 
     docker push ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}
 
