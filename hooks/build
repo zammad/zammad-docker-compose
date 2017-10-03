@@ -22,7 +22,9 @@ for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
 
     docker push ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}
 
-    docker push ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${ZAMMAD_VERSION}
+    if [ "${ZAMMAD_VERSION}" != "latest" ]; then
+      docker push ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${ZAMMAD_VERSION}
+    fi  
   else
     echo "Build Zammad Docker image ${DOCKER_IMAGE} for DockerHubs ${DOCKER_REPO}:${DOCKER_IMAGE} repo"
 
