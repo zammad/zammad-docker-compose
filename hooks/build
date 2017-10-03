@@ -12,6 +12,8 @@ for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
 
     if [ -n "${ZAMMAD_VERSION}" ]; then
       DOCKER_TAG="-t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${ZAMMAD_VERSION}"
+    else
+      ZAMMAD_VERSION="latest"
     fi
 
     echo "Build Zammad Docker image ${DOCKER_IMAGE} with version ${ZAMMAD_VERSION} for DockerHubs ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE} repo"
