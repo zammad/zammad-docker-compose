@@ -3,4 +3,4 @@
 # build hooks config
 #
 
-DOCKER_IMAGES="zammad zammad-backup zammad-elasticsearch zammad-nginx zammad-postgresql"
+DOCKER_IMAGES="zammad zammad-elasticsearch zammad-nginx zammad-postgresql"

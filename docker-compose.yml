@@ -5,7 +5,7 @@ services:
   zammad-backup:
     depends_on:
       - zammad-railsserver
-    image: zammad/zammad-docker-compose:zammad-backup
+    image: zammad/zammad-docker-compose:zammad-postgresql
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -14,6 +14,8 @@ services:
     volumes:
       - data-zammad:/home/zammad
       - backup-zammad:/var/tmp/zammad
+    entrypoint: /usr/local/bin/backup.sh
+    command: zammad-backup
 
   zammad-elasticsearch:
     image: zammad/zammad-docker-compose:zammad-elasticsearch
