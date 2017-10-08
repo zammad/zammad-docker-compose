@@ -5,7 +5,7 @@ services:
   zammad-backup:
     build:
       context: .
-      dockerfile: containers/zammad-backup/Dockerfile
+      dockerfile: containers/zammad-postgresql/Dockerfile
     depends_on:
       - zammad-railsserver
     links:
@@ -14,6 +14,8 @@ services:
     volumes:
       - data-zammad:/home/zammad
       - backup-zammad:/var/tmp/zammad
+    entrypoint: /usr/local/bin/backup.sh  
+    command: ["zammad-backup"]
 
   zammad-elasticsearch:
     build:
@@ -45,7 +47,7 @@ services:
   zammad-railsserver:
     build:
       context: .
-      dockerfile: containers/zammad-railsserver/Dockerfile
+      dockerfile: containers/zammad/Dockerfile
     depends_on:
       - zammad-postgresql
     links:
@@ -59,7 +61,7 @@ services:
   zammad-scheduler:
     build:
       context: .
-      dockerfile: containers/zammad-scheduler/Dockerfile
+      dockerfile: containers/zammad/Dockerfile
     depends_on:
       - zammad-railsserver
     links:
@@ -73,7 +75,7 @@ services:
   zammad-websocket:
     build:
       context: .
-      dockerfile: containers/zammad-websocket/Dockerfile
+      dockerfile: containers/zammad/Dockerfile
     depends_on:
       - zammad-railsserver
     links:
