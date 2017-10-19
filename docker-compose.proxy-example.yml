@@ -1,0 +1,14 @@
+version: '3.3'
+services:
+
+  zammad-nginx:
+    environment:
+      - VIRTUAL_HOST=helpdesk.domain.tld
+    networks:
+      - default
+      - proxy_2_zammad
+
+networks:
+  proxy_2_zammad:
+    external:
+      name: proxy_2_apps
