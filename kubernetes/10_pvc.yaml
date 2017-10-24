@@ -1,0 +1,42 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: zammad-postgresql
+  namespace: zammad
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standard
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10G
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: zammad-elasticsearch
+  namespace: zammad
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standard
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10G
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: zammad-home
+  namespace: zammad
+  annotations:
+    volume.beta.kubernetes.io/storage-class: standard
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10G

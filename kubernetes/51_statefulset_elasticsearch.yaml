@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: zammad-elasticsearch
+  namespace: zammad
+  labels:
+    component: database
+    app: elasticsearch
+spec:
+  serviceName: zammad-elasticsearch
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: searchindex
+        app: elasticsearch
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: zammad-elasticsearch
+        persistentVolumeClaim:
+          claimName: zammad-elasticsearch
+      containers:
+      - name: zammad-elasticsearch
+        image: zammad/zammad-docker-compose:zammad-elasticsearch
+        ports:
+        - containerPort: 9200
+          name: elasticsearch
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: zammad-elasticsearch

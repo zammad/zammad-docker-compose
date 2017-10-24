@@ -1,0 +1,33 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: zammad-railsserver
+  namespace: zammad
+  labels:
+    component: railsserver
+    app: zammad
+spec:
+  serviceName: zammad-railsserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: railsserver
+        app: zammad
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: zammad-home
+        persistentVolumeClaim:
+          claimName: zammad-home
+      containers:
+      - name: zammad-railsserver
+        image: zammad/zammad-docker-compose:zammad-railsserver
+        imagePullPolicy: Always
+        args: ["zammad-railsserver"]
+        ports:
+        - containerPort: 3000
+          name: railsserver
+        volumeMounts:
+        - mountPath: /home/zammad
+          name: zammad-home

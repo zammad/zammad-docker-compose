@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: zammad-nginx
+  namespace: zammad
+  labels:
+    component: nginx
+    app: zammad
+spec:
+  serviceName: zammad-nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: nginx
+        app: zammad
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: zammad-home
+        persistentVolumeClaim:
+          claimName: zammad-home
+      containers:
+      - name: zammad-nginx
+        image: zammad/zammad-docker-compose:zammad-nginx
+        ports:
+        - containerPort: 80
+          name: nginx
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /home/zammad
+          name: zammad-home

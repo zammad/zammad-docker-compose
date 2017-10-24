@@ -1,0 +1,85 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-postgresql
+  namespace: zammad
+  labels:
+    component: database
+    app: postgresql
+spec:
+  ports:
+  - name: postgresql
+    port: 5432
+  selector:
+    component: database
+    app: postgresql
+  type: NodePort
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-elasticsearch
+  namespace: zammad
+  labels:
+    component: searchindex
+    app: elasticsearch
+spec:
+  ports:
+  - name: elasticsearch
+    port: 9200
+  selector:
+    component: searchindex
+    app: elasticsearch
+  type: NodePort
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-railsserver
+  namespace: zammad
+  labels:
+    component: railsserver
+    app: zammad
+spec:
+  ports:
+  - name: railsserver
+    port: 3000
+  selector:
+    component: railsserver
+    app: zammad
+  type: NodePort
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-websocket
+  namespace: zammad
+  labels:
+    component: websocket
+    app: zammad
+spec:
+  ports:
+  - name: websocket
+    port: 6042
+  selector:
+    component: websocket
+    app: zammad
+  type: NodePort
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-nginx
+  namespace: zammad
+  labels:
+    component: nginx
+    app: zammad
+spec:
+  ports:
+  - name: nginx
+    port: 80
+  selector:
+    component: nginx
+    app: zammad
+  type: NodePort

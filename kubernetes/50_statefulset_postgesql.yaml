@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: zammad-postgresql
+  namespace: zammad
+  labels:
+    component: database
+    app: postgresql
+spec:
+  serviceName: zammad-postgresql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: database
+        app: postgresql
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: zammad-postgresql
+        persistentVolumeClaim:
+          claimName: zammad-postgresql
+      containers:
+      - name: zammad-postgresql
+        image: zammad/zammad-docker-compose:zammad-postgresql
+        ports:
+        - containerPort: 5432
+          name: postgresql
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /var/lib/postgresql
+          name: zammad-postgresql

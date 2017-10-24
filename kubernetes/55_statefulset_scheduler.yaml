@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: zammad-scheduler
+  namespace: zammad
+  labels:
+    component: scheduler
+    app: zammad
+spec:
+  serviceName: zammad-scheduler
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: scheduler
+        app: zammad
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: zammad-home
+        persistentVolumeClaim:
+          claimName: zammad-home
+      containers:
+      - name: zammad-scheduler
+        image: zammad/zammad-docker-compose:zammad
+        args: [ "zammad-scheduler" ]
+        imagePullPolicy: Always
+        volumeMounts:
+        - mountPath: /home/zammad
+          name: zammad-home
