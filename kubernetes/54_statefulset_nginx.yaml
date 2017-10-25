@@ -26,6 +26,8 @@ spec:
         ports:
         - containerPort: 80
           name: nginx
+        - containerPort: 6042
+          name: nginx-ws
         imagePullPolicy: Always
         volumeMounts:
         - mountPath: /home/zammad
