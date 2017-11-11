@@ -28,7 +28,7 @@ if [ "$1" = 'zammad-backup' ]; then
   check_railsserver_available
 
   while true; do
-    backup
+    zammad_backup
 
     # wait until next backup
     sleep ${BACKUP_SLEEP}
@@ -38,5 +38,5 @@ fi
 if [ "$1" = 'zammad-backup-once' ]; then
   check_railsserver_available
 
-  backup
+  zammad_backup
 fi
