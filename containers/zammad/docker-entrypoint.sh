@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # zammad-railsserver
 if [ "$1" = 'zammad-railsserver' ]; then
   # wait for postgres process coming up on zammad-postgresql
