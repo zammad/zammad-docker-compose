@@ -1,4 +1,4 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:5.5.0
+FROM docker.elastic.co/elasticsearch/elasticsearch:5.5.3
 MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
