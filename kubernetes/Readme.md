@@ -17,9 +17,6 @@
 * minikube start --memory=4096 --cpus=2
 * minikube addons enable ingress
 * echo "$(minikube ip) zammad.example.com" | sudo tee -a /etc/hosts
-* minikube ssh
-  * su -
-  * sysctl -w vm.max_map_count=262144
 * kubectl apply -f .
 * minikube dashboard
   * switch to namespace "zammad"

@@ -20,6 +20,12 @@ spec:
       - name: zammad-elasticsearch
         persistentVolumeClaim:
           claimName: zammad-elasticsearch
+      initContainers:
+      - name: sysctl
+        image: busybox
+        command: ["sysctl", "-w", "vm.max_map_count=262144"]
+        securityContext:
+          privileged: true                
       containers:
       - name: zammad-elasticsearch
         image: zammad/zammad-docker-compose:zammad-elasticsearch
