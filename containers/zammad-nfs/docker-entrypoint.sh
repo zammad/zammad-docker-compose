@@ -1,8 +1,6 @@
 #!/bin/bash
 
-set -o errexit
-set -o nounset
-set -o pipefail
+set -e
 
 if [ "$1" = 'zammad-nfs' ]; then
   echo "create & mount tmpfs"
