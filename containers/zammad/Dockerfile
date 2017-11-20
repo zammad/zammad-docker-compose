@@ -23,7 +23,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
 # install dependencies, GOSU & zammad
-RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev rsync" \
+RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev nfs-common rsync" \
     GOSU_DEPENDENCIES="ca-certificates wget" \
     set -ex \
 	  && apt-get update && apt-get install -y --force-yes --no-install-recommends ${BUILD_DEPENDENCIES} ${GOSU_DEPENDENCIES} && rm -rf /var/lib/apt/lists/* \
@@ -49,7 +49,7 @@ RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev rsync" \
 
 # docker init
 COPY containers/zammad/docker-entrypoint.sh /
-RUN chown ${ZAMMAD_USER}:${ZAMMAD_USER} /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 WORKDIR ${ZAMMAD_DIR}

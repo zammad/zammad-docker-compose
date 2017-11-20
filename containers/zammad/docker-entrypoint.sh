@@ -1,7 +1,26 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+function check_railsserver_available {
+  # wait for zammad process coming up
+  until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do
+    echo "backup waiting for zammads railsserver to be ready..."
+    sleep 2
+  done
+}
+
+function mount_nfs {
+  if [ -n "$(env|grep KUBERNETES)" ]; then
+    mount -t nfs4 zammad-nfs:/ /home/zammad/tmp
+  fi
+}
+
 # zammad-railsserver
 if [ "$1" = 'zammad-railsserver' ]; then
+
   # wait for postgres process coming up on zammad-postgresql
   until (echo > /dev/tcp/zammad-postgresql/5432) &> /dev/null; do
     echo "zammad railsserver waiting for postgresql server to be ready..."
@@ -11,12 +30,11 @@ if [ "$1" = 'zammad-railsserver' ]; then
   echo "railsserver can access postgresql server now..."
 
   rsync -a --delete --exclude 'storage/fs/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
-
   cd ${ZAMMAD_DIR}
-
-  # update zammad
   gem update bundler
   bundle install
+
+  mount_nfs
 
   # db mirgrate
   bundle exec rake db:migrate &> /dev/null
@@ -48,13 +66,11 @@ fi
 
 # zammad-scheduler
 if [ "$1" = 'zammad-scheduler' ]; then
-  # wait for zammad process coming up
-  until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do
-    echo "scheduler waiting for zammads railsserver to be ready..."
-    sleep 2
-  done
+  check_railsserver_available
 
   echo "scheduler can access raillsserver now..."
+
+  mount_nfs
 
   # start scheduler
   cd ${ZAMMAD_DIR}
@@ -64,13 +80,11 @@ fi
 
 # zammad-websocket
 if [ "$1" = 'zammad-websocket' ]; then
-  # wait for zammad process coming up
-  until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do
-    echo "websocket server waiting for zammads railsserver to be ready..."
-    sleep 5
-  done
+  check_railsserver_available
 
   echo "websocket server can access raillsserver now..."
+
+  mount_nfs
 
   cd ${ZAMMAD_DIR}
   exec gosu ${ZAMMAD_USER}:${ZAMMAD_USER} bundle exec script/websocket-server.rb -b 0.0.0.0 start

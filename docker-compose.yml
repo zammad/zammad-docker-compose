@@ -5,7 +5,7 @@ services:
   zammad-backup:
     depends_on:
       - zammad-railsserver
-    image: zammad/zammad-docker-compose:zammad-postgresql${VERSION}
+    image: monotek/zammad-docker-compose:zammad-postgresql${VERSION}
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -18,7 +18,7 @@ services:
     command: zammad-backup
 
   zammad-elasticsearch:
-    image: zammad/zammad-docker-compose:zammad-elasticsearch${VERSION}
+    image: monotek/zammad-docker-compose:zammad-elasticsearch${VERSION}
     labels:
       io.rancher.container.pull_image: always
     restart: always
@@ -28,7 +28,7 @@ services:
   zammad-nginx:
     depends_on:
       - zammad-railsserver
-    image: zammad/zammad-docker-compose:zammad-nginx${VERSION}
+    image: monotek/zammad-docker-compose:zammad-nginx${VERSION}
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -39,7 +39,7 @@ services:
       - data-zammad:/home/zammad
 
   zammad-postgresql:
-    image: zammad/zammad-docker-compose:zammad-postgresql${VERSION}
+    image: monotek/zammad-docker-compose:zammad-postgresql${VERSION}
     labels:
       io.rancher.container.pull_image: always
     restart: always
@@ -47,7 +47,7 @@ services:
   zammad-railsserver:
     depends_on:
       - zammad-postgresql
-    image: zammad/zammad-docker-compose:zammad${VERSION}
+    image: monotek/zammad-docker-compose:zammad${VERSION}
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -61,7 +61,7 @@ services:
   zammad-scheduler:
     depends_on:
       - zammad-railsserver
-    image: zammad/zammad-docker-compose:zammad${VERSION}
+    image: monotek/zammad-docker-compose:zammad${VERSION}
     labels:
       io.rancher.container.pull_image: always
     links:
@@ -75,7 +75,7 @@ services:
   zammad-websocket:
     depends_on:
       - zammad-railsserver
-    image: zammad/zammad-docker-compose:zammad${VERSION}
+    image: monotek/zammad-docker-compose:zammad${VERSION}
     labels:
       io.rancher.container.pull_image: always
     links:

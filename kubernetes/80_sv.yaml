@@ -83,3 +83,22 @@ spec:
     component: nginx
     app: zammad
   type: NodePort
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-nfs
+  namespace: zammad
+  labels:
+    component: netfs
+    app: nfs
+spec:
+  ports:
+  - name: nfsserver
+    port: 2049
+  - name: rpc
+    port: 111
+  selector:
+    component: netfs
+    app: nfs
+  type: NodePort

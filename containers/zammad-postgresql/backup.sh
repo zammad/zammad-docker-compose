@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function check_railsserver_available {
   # wait for zammad process coming up
   until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do

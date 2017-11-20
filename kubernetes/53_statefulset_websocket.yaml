@@ -22,12 +22,14 @@ spec:
           claimName: zammad-home
       containers:
       - name: zammad-websocket
-        image: zammad/zammad-docker-compose:zammad
+        image: monotek/zammad-docker-compose:zammad
         args: [ "zammad-websocket" ]
         ports:
         - containerPort: 6042
           name: websocket
         imagePullPolicy: Always
+        securityContext:
+          privileged: true
         volumeMounts:
         - mountPath: /home/zammad
           name: zammad-home
