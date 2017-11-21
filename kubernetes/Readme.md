@@ -1,4 +1,4 @@
-# Zammad kubernetes example deployment
+# Zammad kubernetes example deployment(beta)
 
 ## Prerequisites
 
