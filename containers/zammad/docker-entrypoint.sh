@@ -35,9 +35,12 @@ if [ "$1" = 'zammad-railsserver' ]; then
   mount_nfs
 
   # db mirgrate
+  set +e
   bundle exec rake db:migrate &> /dev/null
+  DB_CHECK="$?"
+  set -e
 
-  if [ $? != 0 ]; then
+  if [ "${DB_CHECK}" != "0" ]; then
     echo "creating db & searchindex..."
     bundle exec rake db:create
     bundle exec rake db:migrate
