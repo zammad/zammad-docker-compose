@@ -22,7 +22,7 @@ spec:
           claimName: zammad-home
       containers:
       - name: zammad-nginx
-        image: monotek/zammad-docker-compose:zammad-nginx
+        image: zammad/zammad-docker-compose:zammad-nginx
         ports:
         - containerPort: 80
           name: nginx

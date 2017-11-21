@@ -22,7 +22,7 @@ spec:
           claimName: zammad-home
       containers:
       - name: zammad-websocket
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         args: [ "zammad-websocket" ]
         ports:
         - containerPort: 6042

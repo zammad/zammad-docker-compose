@@ -28,7 +28,7 @@ spec:
           privileged: true
       containers:
       - name: zammad-elasticsearch
-        image: monotek/zammad-docker-compose:zammad-elasticsearch
+        image: zammad/zammad-docker-compose:zammad-elasticsearch
         ports:
         - containerPort: 9200
           name: elasticsearch

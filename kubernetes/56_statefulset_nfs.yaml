@@ -18,7 +18,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: zammad-nfs
-        image: monotek/zammad-docker-compose:zammad-nfs
+        image: zammad/zammad-docker-compose:zammad-nfs
         args: [ "zammad-nfs" ]
         imagePullPolicy: Always
         ports:

@@ -22,7 +22,7 @@ spec:
           claimName: zammad-home
       containers:
       - name: zammad-railsserver
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         imagePullPolicy: Always
         args: ["zammad-railsserver"]
         ports:
@@ -32,4 +32,4 @@ spec:
           privileged: true
         volumeMounts:
         - mountPath: /home/zammad
-          name: zammad-home          
+          name: zammad-home

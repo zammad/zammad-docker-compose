@@ -19,10 +19,10 @@ spec:
       volumes:
       - name: zammad-home
         persistentVolumeClaim:
-          claimName: zammad-home    
+          claimName: zammad-home
       containers:
       - name: zammad-scheduler
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         args: [ "zammad-scheduler" ]
         imagePullPolicy: Always
         securityContext:
