@@ -16,7 +16,9 @@ function zammad_backup {
   echo "${TIMESTAMP} - backuping zammad..."
 
   # delete old backups
-  test -d ${BACKUP_DIR} && find ${BACKUP_DIR}/*_zammad_*.gz -type f -mtime +${HOLD_DAYS} -exec rm {} \; || true
+  if [ -d "${BACKUP_DIR}" ] && [ -n "$(ls ${BACKUP_DIR})" ]; then
+    find ${BACKUP_DIR}/*_zammad_*.gz -type f -mtime +${HOLD_DAYS} -exec rm {} \;
+  fi
 
   # tar files
   tar -czf ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_DIR}
