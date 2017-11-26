@@ -3,10 +3,9 @@
 set -e
 
 function check_railsserver_available {
-  # wait for zammad process coming up
   until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do
-    echo "backup waiting for zammads railsserver to be ready..."
-    sleep 2
+    echo "waiting for railsserver to be ready..."
+    sleep 60
   done
 }
 

@@ -4,7 +4,7 @@ metadata:
   name: zammad.example.com
   namespace: zammad
   labels:
-    component: website
+    component: webserver
     app: zammad
     host: zammad.example.com
   annotations:

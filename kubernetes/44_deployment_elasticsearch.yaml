@@ -1,13 +1,9 @@
 apiVersion: apps/v1beta1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: zammad-elasticsearch
   namespace: zammad
-  labels:
-    component: database
-    app: elasticsearch
 spec:
-  serviceName: zammad-elasticsearch
   replicas: 1
   template:
     metadata:
@@ -20,19 +16,21 @@ spec:
       - name: zammad-elasticsearch
         persistentVolumeClaim:
           claimName: zammad-elasticsearch
+
       initContainers:
       - name: sysctl
         image: busybox
         command: ["sysctl", "-w", "vm.max_map_count=262144"]
         securityContext:
           privileged: true
+
       containers:
       - name: zammad-elasticsearch
-        image: zammad/zammad-docker-compose:zammad-elasticsearch
+        image: monotek/zammad-docker-compose:zammad-elasticsearch
         ports:
-        - containerPort: 9200
-          name: elasticsearch
+        - name: elasticsearch
+          containerPort: 9200
         imagePullPolicy: Always
         volumeMounts:
-        - mountPath: /usr/share/elasticsearch/data
-          name: zammad-elasticsearch
+        - name: zammad-elasticsearch
+          mountPath: /usr/share/elasticsearch/data

@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zammad-memcached
+  namespace: zammad
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: memcached
+        component: cache
+    spec:
+      terminationGracePeriodSeconds: 10
+
+      containers:
+      - name: zammad-memcached
+        image: monotek/zammad-docker-compose:zammad-memcached
+        args: [ "zammad-memcached" ]
+        ports:
+        - containerPort: 11211
+          name: memcached
+        imagePullPolicy: Always

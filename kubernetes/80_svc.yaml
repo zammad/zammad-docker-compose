@@ -2,19 +2,22 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: zammad-postgresql
+  name: zammad
   namespace: zammad
   labels:
-    component: database
-    app: postgresql
+    app: zammad
+    component: services
 spec:
   ports:
-  - name: postgresql
-    port: 5432
+  - name: railsserver
+    port: 3000
+  - name: websocket
+    port: 6042
   selector:
-    component: database
-    app: postgresql
+    app: zammad
+    component: services
   type: NodePort
+
 ---
 kind: Service
 apiVersion: v1
@@ -22,67 +25,35 @@ metadata:
   name: zammad-elasticsearch
   namespace: zammad
   labels:
-    component: searchindex
     app: elasticsearch
+    component: searchindex
 spec:
   ports:
   - name: elasticsearch
     port: 9200
   selector:
-    component: searchindex
     app: elasticsearch
+    component: searchindex
   type: NodePort
+
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: zammad-railsserver
+  name: zammad-memcached
   namespace: zammad
   labels:
-    component: railsserver
-    app: zammad
+    app: memcached
+    component: cache
 spec:
   ports:
-  - name: railsserver
-    port: 3000
+  - name: memcached
+    port: 11211
   selector:
-    component: railsserver
-    app: zammad
+    app: memcached
+    component: cache
   type: NodePort
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: zammad-websocket
-  namespace: zammad
-  labels:
-    component: websocket
-    app: zammad
-spec:
-  ports:
-  - name: websocket
-    port: 6042
-  selector:
-    component: websocket
-    app: zammad
-  type: NodePort
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: zammad-nginx
-  namespace: zammad
-  labels:
-    component: nginx
-    app: zammad
-spec:
-  ports:
-  - name: nginx
-    port: 80
-  selector:
-    component: nginx
-    app: zammad
-  type: NodePort
+
 ---
 kind: Service
 apiVersion: v1
@@ -90,8 +61,8 @@ metadata:
   name: zammad-nfs
   namespace: zammad
   labels:
-    component: netfs
     app: nfs
+    component: networkstorage
 spec:
   ports:
   - name: nfsserver
@@ -99,6 +70,42 @@ spec:
   - name: rpc
     port: 111
   selector:
-    component: netfs
     app: nfs
+    component: networkstorage
+  type: NodePort
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-nginx
+  namespace: zammad
+  labels:
+    app: nginx
+    component: webserver
+spec:
+  ports:
+  - name: nginx
+    port: 80
+  selector:
+    app: nginx
+    component: webserver
+  type: NodePort
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: zammad-postgresql
+  namespace: zammad
+  labels:
+    app: postgresql
+    component: database
+spec:
+  ports:
+  - name: postgresql
+    port: 5432
+  selector:
+    app: postgresql
+    component: database
   type: NodePort

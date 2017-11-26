@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zammad-nginx
+  namespace: zammad
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+        component: webserver
+    spec:
+      terminationGracePeriodSeconds: 10
+#      volumes:
+#      - name: uploads
+#        nfs:
+#          # FIXME: use nfs service  IP instead of 'zammad-nfs'
+#          server: zammad-nfs
+#          path: /uploads
+      containers:
+      - name: zammad-nginx
+        image: monotek/zammad-docker-compose:zammad
+        args: [ "zammad-nginx" ]
+        ports:
+        - containerPort: 80
+          name: nginx
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+#        volumeMounts:
+#        - name: uploads
+#          mountPath: /opt/zammad/assets/uploads

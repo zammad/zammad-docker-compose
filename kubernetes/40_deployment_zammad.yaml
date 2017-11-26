@@ -1,0 +1,87 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: zammad
+  namespace: zammad
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zammad
+        component: services
+    spec:
+      terminationGracePeriodSeconds: 10
+      # volumes:
+      # - name: cache-volume
+      #   emptyDir: {}
+      # - name: data
+      #   nfs:
+      #     # FIXME: use the nfs service IP instead of 'zammad-nfs'
+      #     server: zammad-nfs
+      #     path: /data
+      # - name: uploads
+      #   nfs:
+      #     # FIXME: use nfs service  IP instead of 'zammad-nfs'
+      #     server: zammad-nfs
+      #     path: /uploads
+
+      initContainers:
+      - name: zammad-init
+        image: monotek/zammad-docker-compose:zammad
+        args: [ "zammad-init" ]
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        # volumeMounts:
+        # - name: cache-volume
+        #   mountPath: /opt/zammad/tmp
+        # - name: data
+        #   mountPath: /opt/zammad/storage
+        # - name: uploads
+        #   mountPath: /opt/zammad/assets/uploads
+
+      containers:
+      - name: zammad-scheduler
+        image: monotek/zammad-docker-compose:zammad
+        args: [ "zammad-scheduler" ]
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        # volumeMounts:
+        # - name: cache-volume
+        #   mountPath: /opt/zammad/tmp
+        # - name: data
+        #   mountPath: /opt/zammad/storage
+
+      - name: zammad-railsserver
+        image: monotek/zammad-docker-compose:zammad
+        args: ["zammad-railsserver"]
+        imagePullPolicy: Always
+        ports:
+        - name: railsserver
+          containerPort: 3000
+        securityContext:
+          privileged: true
+        # volumeMounts:
+        # - name: cache-volume
+        #   mountPath: /opt/zammad/tmp
+        # - name: data
+        #   mountPath: /opt/zammad/storage
+        # - name: uploads
+        #   mountPath: /opt/zammad/assets/uploads
+
+      - name: zammad-websocket
+        image: monotek/zammad-docker-compose:zammad
+        args: [ "zammad-websocket" ]
+        imagePullPolicy: Always
+        ports:
+        - name: websocket
+          containerPort: 6042
+        securityContext:
+          privileged: true  
+        # volumeMounts:
+        # - name: cache-volume
+        #   mountPath: /opt/zammad/tmp
+        # - name: data
+        #   mountPath: /opt/zammad/storage

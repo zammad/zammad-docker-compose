@@ -10,6 +10,14 @@ services:
     scale: 1
     start_on_create: true
 
+  zammad-init:
+    scale: 1
+    start_on_create: true
+
+  zammad-memcached:
+    scale: 1
+    start_on_create: true
+
   zammad-nginx:
     scale: 1
     start_on_create: true
