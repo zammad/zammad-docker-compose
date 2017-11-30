@@ -48,3 +48,4 @@ beta and not ready for production.
 * document steps to use existing helm charts for elasticsearch, postgresql and so on
 * add cpu & mem limits
 * add rolling upgrade strategy to deployments
+* add RBAC
