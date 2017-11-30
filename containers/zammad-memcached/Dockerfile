@@ -15,7 +15,9 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
 # docker init
+USER root
 COPY containers/zammad-memcached/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
+USER memcache
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["zammad-memcached"]
