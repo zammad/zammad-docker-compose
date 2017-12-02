@@ -24,7 +24,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
 # install dependencies, GOSU & zammad
-RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev nfs-common nginx rsync" \
+RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev nginx rsync" \
     GOSU_DEPENDENCIES="ca-certificates wget" \
     set -ex \
 	  && apt-get update && apt-get install -y --force-yes --no-install-recommends ${BUILD_DEPENDENCIES} ${GOSU_DEPENDENCIES} && rm -rf /var/lib/apt/lists/* \
@@ -46,6 +46,7 @@ RUN BUILD_DEPENDENCIES="git build-essential libffi-dev libpq5 libpq-dev nfs-comm
     && bundle exec rake assets:precompile \
     && sed -e 's#.*adapter: postgresql#  adapter: postgresql#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: zammad-postgresql\n#g' < config/database.yml.pkgr > config/database.yml \
     && rm -r tmp/cache \
+    && sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, 'zammad-memcached:11211'\n    config.session_store = :dalli_store, 'zammad-memcached:11211'/" config/application.rb \
     && sed -e 's#server localhost:3000#server zammad-railsserver:3000#g' -e 's#localhost:6042#zammad-websocket:6042#g' -e 's#server_name localhost#server_name _#g' -e 's#.*\(access\|error\)_log.*log;##g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default \
     && chown -R ${ZAMMAD_USER}:${ZAMMAD_USER} ${ZAMMAD_TMP_DIR}
 

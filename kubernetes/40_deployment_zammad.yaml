@@ -5,6 +5,7 @@ metadata:
   namespace: zammad
 spec:
   replicas: 1
+  revisionHistoryLimit: 1
   template:
     metadata:
       labels:
@@ -12,47 +13,51 @@ spec:
         component: services
     spec:
       terminationGracePeriodSeconds: 10
-      # volumes:
-      # - name: cache-volume
-      #   emptyDir: {}
-      # - name: data
-      #   nfs:
-      #     # FIXME: use the nfs service IP instead of 'zammad-nfs'
-      #     server: zammad-nfs
-      #     path: /data
-      # - name: uploads
-      #   nfs:
-      #     # FIXME: use nfs service  IP instead of 'zammad-nfs'
-      #     server: zammad-nfs
-      #     path: /uploads
+      volumes:
+        - name: zammad
+          persistentVolumeClaim:
+            claimName: zammad
+        - name: nginx-configmap
+          configMap:
+             name: nginx-configmap
+             items:
+              - key: config
+                path: default
 
       initContainers:
       - name: zammad-init
         image: monotek/zammad-docker-compose:zammad
         args: [ "zammad-init" ]
         imagePullPolicy: Always
-        securityContext:
-          privileged: true
-        # volumeMounts:
-        # - name: cache-volume
-        #   mountPath: /opt/zammad/tmp
-        # - name: data
-        #   mountPath: /opt/zammad/storage
-        # - name: uploads
-        #   mountPath: /opt/zammad/assets/uploads
+        volumeMounts:
+         - name: zammad
+           mountPath: /opt/zammad
 
       containers:
-      - name: zammad-scheduler
+      - name: zammad-nginx
         image: monotek/zammad-docker-compose:zammad
-        args: [ "zammad-scheduler" ]
+        args: [ "zammad-nginx" ]
+        ports:
+        - containerPort: 80
+          name: nginx
         imagePullPolicy: Always
-        securityContext:
-          privileged: true
-        # volumeMounts:
-        # - name: cache-volume
-        #   mountPath: /opt/zammad/tmp
-        # - name: data
-        #   mountPath: /opt/zammad/storage
+        volumeMounts:
+         - name: zammad
+           mountPath: /opt/zammad
+         - name: nginx-configmap
+           mountPath: /etc/nginx/sites-enabled
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
 
       - name: zammad-railsserver
         image: monotek/zammad-docker-compose:zammad
@@ -61,15 +66,29 @@ spec:
         ports:
         - name: railsserver
           containerPort: 3000
-        securityContext:
-          privileged: true
-        # volumeMounts:
-        # - name: cache-volume
-        #   mountPath: /opt/zammad/tmp
-        # - name: data
-        #   mountPath: /opt/zammad/storage
-        # - name: uploads
-        #   mountPath: /opt/zammad/assets/uploads
+        volumeMounts:
+         - name: zammad
+           mountPath: /opt/zammad
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 90
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 90
+          periodSeconds: 10
+
+      - name: zammad-scheduler
+        image: monotek/zammad-docker-compose:zammad
+        args: [ "zammad-scheduler" ]
+        imagePullPolicy: Always
+        volumeMounts:
+         - name: zammad
+           mountPath: /opt/zammad
 
       - name: zammad-websocket
         image: monotek/zammad-docker-compose:zammad
@@ -78,10 +97,16 @@ spec:
         ports:
         - name: websocket
           containerPort: 6042
-        securityContext:
-          privileged: true  
-        # volumeMounts:
-        # - name: cache-volume
-        #   mountPath: /opt/zammad/tmp
-        # - name: data
-        #   mountPath: /opt/zammad/storage
+        volumeMounts:
+         - name: zammad
+           mountPath: /opt/zammad
+        readinessProbe:
+          tcpSocket:
+            port: 6042
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 6042
+          initialDelaySeconds: 60
+          periodSeconds: 10

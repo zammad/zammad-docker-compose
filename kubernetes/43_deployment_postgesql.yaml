@@ -5,6 +5,7 @@ metadata:
   namespace: zammad
 spec:
   replicas: 1
+  revisionHistoryLimit: 1
   template:
     metadata:
       labels:
@@ -27,3 +28,13 @@ spec:
         volumeMounts:
         - name: zammad-postgresql
           mountPath: /var/lib/postgresql
+        readinessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 60
+          periodSeconds: 10

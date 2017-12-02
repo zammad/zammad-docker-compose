@@ -9,14 +9,6 @@ function check_zammad_ready {
   done
 }
 
-function mount_nfs {
-  if [ -n "$(env|grep KUBERNETES)" ]; then
-    test -d ${ZAMMAD_DIR} || mkdir -p ${ZAMMAD_DIR}
-    mount -t nfs4 zammad-nfs:/data /opt/zammad
-    chown ${ZAMMAD_USER}:${ZAMMAD_USER} ${ZAMMAD_DIR}
-  fi
-}
-
 # zammad init
 if [ "$1" = 'zammad-init' ]; then
   until (echo > /dev/tcp/zammad-postgresql/5432) &> /dev/null; do
@@ -24,16 +16,11 @@ if [ "$1" = 'zammad-init' ]; then
     sleep 5
   done
 
-  mount_nfs
-
   # install / update zammad
-  rsync -a --delete --exclude 'storage/fs/*' --exclude 'public/assets/images/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
-  rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
+  rsync -av --delete --exclude 'storage/fs/*' --exclude 'public/assets/images/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
+  rsync -av ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
   cd ${ZAMMAD_DIR}
-
-  # enable memcached
-  sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, 'zammad-memcached:11211'\n    config.session_store = :dalli_store, 'zammad-memcached:11211'/" config/application.rb
 
   echo "initialising / updating database..."
   # db mirgrate
@@ -70,12 +57,6 @@ fi
 
 # zammad nginx
 if [ "$1" = 'zammad-nginx' ]; then
-  mount_nfs
-
-  if [ -n "$(env|grep KUBERNETES)" ]; then
-    sed -i -e 's#server zammad-\(railsserver\|websocket\):#server zammad:#g' /etc/nginx/sites-enabled/default
-  fi
-
   until [ -f "${ZAMMAD_DIR}/${ZAMMAD_READY_FILE}" ] && [ -n "$(grep zammad-railsserver < ${ZAMMAD_DIR}/${ZAMMAD_READY_FILE})" ] && [ -n "$(grep zammad-scheduler < ${ZAMMAD_DIR}/${ZAMMAD_READY_FILE})" ] && [ -n "$(grep zammad-websocket < ${ZAMMAD_DIR}/${ZAMMAD_READY_FILE})" ] ; do
     echo "waiting for all zammad services to start..."
     sleep 5
@@ -91,8 +72,6 @@ fi
 
 # zammad-railsserver
 if [ "$1" = 'zammad-railsserver' ]; then
-  mount_nfs
-
   check_zammad_ready
 
   cd ${ZAMMAD_DIR}
@@ -107,8 +86,6 @@ fi
 
 # zammad-scheduler
 if [ "$1" = 'zammad-scheduler' ]; then
-  mount_nfs
-
   check_zammad_ready
 
   cd ${ZAMMAD_DIR}
@@ -123,8 +100,6 @@ fi
 
 # zammad-websocket
 if [ "$1" = 'zammad-websocket' ]; then
-  mount_nfs
-
   check_zammad_ready
 
   cd ${ZAMMAD_DIR}

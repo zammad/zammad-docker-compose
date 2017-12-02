@@ -9,10 +9,8 @@ metadata:
     component: services
 spec:
   ports:
-  - name: railsserver
-    port: 3000
-  - name: websocket
-    port: 6042
+  - name: nginx
+    port: 80
   selector:
     app: zammad
     component: services
@@ -52,44 +50,6 @@ spec:
   selector:
     app: memcached
     component: cache
-  type: NodePort
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: zammad-nfs
-  namespace: zammad
-  labels:
-    app: nfs
-    component: networkstorage
-spec:
-  ports:
-  - name: nfsserver
-    port: 2049
-  - name: rpc
-    port: 111
-  selector:
-    app: nfs
-    component: networkstorage
-  type: NodePort
-
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: zammad-nginx
-  namespace: zammad
-  labels:
-    app: nginx
-    component: webserver
-spec:
-  ports:
-  - name: nginx
-    port: 80
-  selector:
-    app: nginx
-    component: webserver
   type: NodePort
 
 ---

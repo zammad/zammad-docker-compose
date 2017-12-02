@@ -4,8 +4,8 @@ metadata:
   name: zammad.example.com
   namespace: zammad
   labels:
-    component: webserver
     app: zammad
+    component: services
     host: zammad.example.com
   annotations:
     ingress.kubernetes.io/ssl-redirect: 'true'
@@ -22,5 +22,5 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: zammad-nginx
+              serviceName: zammad
               servicePort: 80
