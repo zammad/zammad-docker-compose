@@ -26,6 +26,9 @@ data:
 
         root /opt/zammad/public;
 
+        access_log /dev/stdout;
+        error_log  /dev/stderr;
+
         client_max_body_size 50M;
 
         location ~ ^/(assets/|robots.txt|humans.txt|favicon.ico) {

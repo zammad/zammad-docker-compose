@@ -37,8 +37,6 @@ beta and not ready for production.
 
 
 ## If you want to help to improve the Kuberntes deployments here are some todos:
-* create a zammad helm chart
-* document steps to use existing helm charts for elasticsearch, postgresql and so on
 * add cpu & mem limits
 * add rolling upgrade strategy to deployments
 * add RBAC

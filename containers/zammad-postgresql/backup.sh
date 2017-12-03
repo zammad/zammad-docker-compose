@@ -2,8 +2,10 @@
 
 set -e
 
+: "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
+
 function check_railsserver_available {
-  until (echo > /dev/tcp/zammad-railsserver/3000) &> /dev/null; do
+  until (echo > /dev/tcp/${ZAMMAD_RAILSSERVER_HOST}/3000) &> /dev/null; do
     echo "waiting for railsserver to be ready..."
     sleep 60
   done
@@ -19,8 +21,10 @@ function zammad_backup {
     find ${BACKUP_DIR}/*_zammad_*.gz -type f -mtime +${HOLD_DAYS} -exec rm {} \;
   fi
 
-  # tar files
-  tar -czf ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_DIR}
+  if [ "${NO_FILE_BACKUP}" != "yes" ]; then
+    # tar files
+    tar -czf ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_DIR}
+  fi
 
   #db backup
   pg_dump --dbname=postgresql://postgres@zammad-postgresql:5432/zammad_production | gzip > ${BACKUP_DIR}/${TIMESTAMP}_zammad_db.psql.gz
@@ -40,6 +44,12 @@ fi
 
 if [ "$1" = 'zammad-backup-once' ]; then
   check_railsserver_available
+
+  zammad_backup
+fi
+
+if [ "$1" = 'zammad-backup-db' ]; then
+  NO_FILE_BACKUP="yes"
 
   zammad_backup
 fi

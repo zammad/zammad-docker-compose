@@ -65,6 +65,8 @@ services:
     labels:
       io.rancher.container.pull_image: always
     restart: always
+    volumes:
+      - postgresql-data:/var/lib/postgresql/data
 
   zammad-railsserver:
     command: ["zammad-railsserver"]
@@ -115,6 +117,8 @@ services:
 
 volumes:
   elasticsearch-data:
+    driver: local
+  postgresql-data:
     driver: local
   zammad-backup:
     driver: local

@@ -1,0 +1,23 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: backup
+  namespace: zammad
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+          - name: zammad-backup
+            persistentVolumeClaim:
+              claimName: zammad-backup
+          containers:
+          - name: zammad-backup
+            image: zammad/zammad-docker-compose:zammad-postgresql
+            args: [ "zammad-backup-db" ]
+            volumeMounts:
+             - name: zammad-backup
+               mountPath: /var/tmp/zammad

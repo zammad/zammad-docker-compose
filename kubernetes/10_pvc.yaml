@@ -16,6 +16,20 @@ spec:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  name: zammad-backup
+  namespace: zammad
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10G
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
   name: zammad-elasticsearch
   namespace: zammad
 spec:
@@ -25,7 +39,7 @@ spec:
   resources:
     requests:
       storage: 10G
-      
+
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
