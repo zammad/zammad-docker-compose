@@ -34,6 +34,7 @@ beta and not ready for production.
 * kubectl apply -f .
 * open dashboard in browser
   * http://127.0.0.1:8001/ui
+* if everything is green add backends / ingress rules to create external endpoint
 
 
 ## If you want to help to improve the Kuberntes deployments here are some todos:
