@@ -16,7 +16,7 @@ spec:
 
       containers:
       - name: zammad-memcached
-        image: monotek/zammad-docker-compose:zammad-memcached
+        image: zammad/zammad-docker-compose:zammad-memcached
         args: [ "zammad-memcached" ]
         ports:
         - containerPort: 11211

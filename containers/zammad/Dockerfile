@@ -8,11 +8,11 @@ ENV RAILS_ENV production
 ENV RAILS_SERVER puma
 ENV PROJECT_URL https://github.com/zammad/zammad
 ENV GIT_URL ${PROJECT_URL}.git
-ENV GIT_BRANCH develop
+ENV GIT_BRANCH stable
 ENV ZAMMAD_TMP_DIR /tmp/zammad-${GIT_BRANCH}
 ENV TAR_GZ_URL ${PROJECT_URL}/archive/${GIT_BRANCH}.tar.gz
 ENV GOSU_VERSION 1.10
-ENV ZAMMAD_READY_FILE tmp/zammad.ready
+ENV ZAMMAD_READY_FILE ${ZAMMAD_DIR}/tmp/zammad.ready
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.name="Zammad" \

@@ -20,7 +20,7 @@ spec:
 
       containers:
       - name: zammad-postgresql
-        image: monotek/zammad-docker-compose:zammad-postgresql
+        image: zammad/zammad-docker-compose:zammad-postgresql
         ports:
         - name: postgresql
           containerPort: 5432

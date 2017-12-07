@@ -26,7 +26,7 @@ spec:
 
       initContainers:
       - name: zammad-init
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         args: [ "zammad-init" ]
         imagePullPolicy: Always
         volumeMounts:
@@ -35,7 +35,7 @@ spec:
 
       containers:
       - name: zammad-nginx
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         args: [ "zammad-nginx" ]
         ports:
         - containerPort: 80
@@ -60,7 +60,7 @@ spec:
           periodSeconds: 10
 
       - name: zammad-railsserver
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         args: ["zammad-railsserver"]
         imagePullPolicy: Always
         ports:
@@ -83,7 +83,7 @@ spec:
           periodSeconds: 10
 
       - name: zammad-scheduler
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         args: [ "zammad-scheduler" ]
         imagePullPolicy: Always
         volumeMounts:
@@ -91,7 +91,7 @@ spec:
            mountPath: /opt/zammad
 
       - name: zammad-websocket
-        image: monotek/zammad-docker-compose:zammad
+        image: zammad/zammad-docker-compose:zammad
         args: [ "zammad-websocket" ]
         imagePullPolicy: Always
         ports:
