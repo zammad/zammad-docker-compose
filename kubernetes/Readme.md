@@ -5,7 +5,7 @@ beta and not ready for production.
 
 ## Prerequisites
 
-- Kubernetes 1.8.x Cluster with at least 1 node, 2 CPUs and 4 GB of RAM
+- Kubernetes 1.8.x Cluster with at least 1 worker node, 2 CPUs and 6 GB of RAM
 - Change the ingress to your needs
 
 
