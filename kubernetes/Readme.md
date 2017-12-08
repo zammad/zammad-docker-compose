@@ -17,7 +17,7 @@ beta and not ready for production.
   * https://kubernetes.io/docs/tasks/tools/install-kubectl/
 * Install Minkube
   * https://github.com/kubernetes/minikube
-* minikube start --memory=4096 --cpus=2
+* minikube start --memory=6144 --cpus=2
 * minikube addons enable ingress
 * echo "$(minikube ip) zammad.example.com" | sudo tee -a /etc/hosts
 * kubectl apply -f .
