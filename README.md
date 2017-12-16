@@ -41,3 +41,9 @@ Like this, you can add your `docker-compose.prod.yml` to a branch of your Git re
 ## Using Rancher
 
 * RANCHER_URL=http://RANCHER_HOST:8080 rancher-compose --env-file=.env up
+
+
+Docker images build status
+-------------------------
+
+[![Build Status](https://travis-ci.org/zammad/zammad-docker-compose.svg?branch=master)](https://travis-ci.org/zammad/zammad-docker-compose)
