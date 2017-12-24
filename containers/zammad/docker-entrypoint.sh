@@ -21,16 +21,15 @@ function check_zammad_ready {
 
 # zammad init
 if [ "$1" = 'zammad-init' ]; then
-  rm ${ZAMMAD_READY_FILE}
+  # install / update zammad
+  rm -rf ${ZAMMAD_DIR:=?}/tmp
+  rsync -a --delete --exclude 'storage/fs/*' --exclude 'public/assets/images/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
+  rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
   until (echo > /dev/tcp/${POSTGRESQL_HOST}/5432) &> /dev/null; do
     echo "zammad railsserver waiting for postgresql server to be ready..."
     sleep 5
   done
-
-  # install / update zammad
-  rsync -a --delete --exclude 'storage/fs/*' --exclude 'public/assets/images/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
-  rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
   cd ${ZAMMAD_DIR}
 
