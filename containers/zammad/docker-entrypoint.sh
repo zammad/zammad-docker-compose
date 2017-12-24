@@ -22,7 +22,7 @@ function check_zammad_ready {
 # zammad init
 if [ "$1" = 'zammad-init' ]; then
   # install / update zammad
-  rm ${ZAMMAD_READY_FILE}
+  test -f ${ZAMMAD_READY_FILE} && rm ${ZAMMAD_READY_FILE}
   rsync -a --delete --exclude 'storage/fs/*' --exclude 'public/assets/images/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
   rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
