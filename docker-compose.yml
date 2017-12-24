@@ -8,8 +8,6 @@ services:
       - zammad-railsserver
     entrypoint: /usr/local/bin/backup.sh
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     links:
       - zammad-postgresql
     restart: always
@@ -19,8 +17,6 @@ services:
 
   zammad-elasticsearch:
     image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     restart: always
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -30,8 +26,6 @@ services:
     depends_on:
       - zammad-postgresql
     image: ${IMAGE_REPO}:zammad${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     links:
       - zammad-elasticsearch
       - zammad-postgresql
@@ -42,8 +36,6 @@ services:
   zammad-memcached:
     command: ["zammad-memcached"]
     image: ${IMAGE_REPO}:zammad-memcached${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     restart: always
 
   zammad-nginx:
@@ -51,8 +43,6 @@ services:
     depends_on:
       - zammad-railsserver
     image: ${IMAGE_REPO}:zammad${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     links:
       - zammad-railsserver
       - zammad-websocket
@@ -62,8 +52,6 @@ services:
 
   zammad-postgresql:
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     restart: always
     volumes:
       - postgresql-data:/var/lib/postgresql/data
@@ -74,8 +62,6 @@ services:
       - zammad-memcached
       - zammad-postgresql
     image: ${IMAGE_REPO}:zammad${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     links:
       - zammad-elasticsearch
       - zammad-memcached
@@ -90,8 +76,6 @@ services:
       - zammad-memcached
       - zammad-railsserver
     image: ${IMAGE_REPO}:zammad${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     links:
       - zammad-elasticsearch
       - zammad-memcached
@@ -106,8 +90,6 @@ services:
       - zammad-memcached
       - zammad-railsserver
     image: ${IMAGE_REPO}:zammad${VERSION}
-    labels:
-      io.rancher.container.pull_image: always
     links:
       - zammad-postgresql
       - zammad-memcached

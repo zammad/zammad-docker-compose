@@ -12,7 +12,7 @@ set -e
 : "${NGINX_SERVER_NAME:=_}"
 
 function check_zammad_ready {
-  sleep 10
+  sleep 15
   until [ -f "${ZAMMAD_READY_FILE}" ]; do
     echo "waiting for init container to finish install or update..."
     sleep 10
@@ -22,7 +22,7 @@ function check_zammad_ready {
 # zammad init
 if [ "$1" = 'zammad-init' ]; then
   # install / update zammad
-  rm -rf ${ZAMMAD_DIR:=?}/tmp
+  rm ${ZAMMAD_READY_FILE}
   rsync -a --delete --exclude 'storage/fs/*' --exclude 'public/assets/images/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
   rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
@@ -73,7 +73,6 @@ if [ "$1" = 'zammad-init' ]; then
   # create install ready file
   su -c "echo 'zammad-init' > ${ZAMMAD_READY_FILE}" ${ZAMMAD_USER}
 fi
-  echo "zammad-websocket" >> ${ZAMMAD_READY_FILE}
 
 # zammad nginx
 if [ "$1" = 'zammad-nginx' ]; then
