@@ -21,7 +21,7 @@ function check_zammad_ready {
 
 # zammad init
 if [ "$1" = 'zammad-init' ]; then
-  test -f ${ZAMMAD_READY_FILE} && rm ${ZAMMAD_READY_FILE}
+  rm ${ZAMMAD_READY_FILE}
 
   until (echo > /dev/tcp/${POSTGRESQL_HOST}/5432) &> /dev/null; do
     echo "zammad railsserver waiting for postgresql server to be ready..."
