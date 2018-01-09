@@ -49,6 +49,8 @@ services:
     restart: always
     volumes:
       - zammad-data:/opt/zammad
+    expose:
+      - "80"
 
   zammad-postgresql:
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
