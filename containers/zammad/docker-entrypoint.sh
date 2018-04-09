@@ -7,6 +7,7 @@ set -e
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
 : "${POSTGRESQL_USER:=postgres}"
 : "${POSTGRESQL_PASS:=}"
+: "${POSTGRESQL_DB:=zammad_production}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
 : "${NGINX_SERVER_NAME:=_}"
@@ -34,7 +35,7 @@ if [ "$1" = 'zammad-init' ]; then
   cd ${ZAMMAD_DIR}
 
   # configure database & cache
-  sed -e "s#.*adapter:.*#  adapter: postgresql#g" -e "s#.*username:.*#  username: ${POSTGRESQL_USER}#g" -e "s#.*password:.*#  password: ${POSTGRESQL_PASS}\n  host: ${POSTGRESQL_HOST}\n#g" < config/database.yml.pkgr > config/database.yml
+  sed -e "s#.*adapter:.*#  adapter: postgresql#g" -e "s#.*database:.*#  database: ${POSTGRESQL_DB}#g" -e "s#.*username:.*#  username: ${POSTGRESQL_USER}#g" -e "s#.*password:.*#  password: ${POSTGRESQL_PASS}\n  host: ${POSTGRESQL_HOST}\n#g" < config/database.yml.pkgr > config/database.yml
   sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:11211'\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:11211'/" config/application.rb
 
   echo "initialising / updating database..."
