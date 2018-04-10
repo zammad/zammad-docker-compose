@@ -8,6 +8,7 @@ set -e
 : "${POSTGRESQL_USER:=postgres}"
 : "${POSTGRESQL_PASS:=}"
 : "${POSTGRESQL_DB:=zammad_production}"
+: "${POSTGRESQL_DB_CREATE:=true}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
 : "${NGINX_SERVER_NAME:=_}"
@@ -46,7 +47,9 @@ if [ "$1" = 'zammad-init' ]; then
   set -e
 
   if [ "${DB_CHECK}" != "0" ]; then
-    bundle exec rake db:create
+    if [ "{POSTGRESQL_DB_CREATE}" == "true" ]; then
+      bundle exec rake db:create
+    fi  
     bundle exec rake db:migrate
     bundle exec rake db:seed
   fi
