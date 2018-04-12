@@ -47,7 +47,7 @@ if [ "$1" = 'zammad-init' ]; then
   set -e
 
   if [ "${DB_CHECK}" != "0" ]; then
-    if [ "{POSTGRESQL_DB_CREATE}" == "true" ]; then
+    if [ "${POSTGRESQL_DB_CREATE}" == "true" ]; then
       bundle exec rake db:create
     fi  
     bundle exec rake db:migrate
