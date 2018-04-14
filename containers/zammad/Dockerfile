@@ -34,7 +34,7 @@ RUN BUILD_DEPENDENCIES="build-essential ca-certificates curl git libffi-dev libp
 	  && export GNUPGHOME="$(mktemp -d)" \
 	  && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 \
 	  && gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu \
-	  && rm -rf "${GNUPGHOME}" /usr/local/bin/gosu.asc \
+	  && rm -rf "${GNUPGHOME}" /usr/locaproductions.logl/bin/gosu.asc \
 	  && chmod +x /usr/local/bin/gosu \
 	  && gosu nobody true
 
@@ -49,6 +49,8 @@ RUN groupadd -g 1000 ${ZAMMAD_USER} \
     && bundle install --without test development mysql \
     && contrib/packager.io/fetch_locales.rb \
     && sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: zammad-postgresql\n#g' < config/database.yml.pkgr > config/database.yml \
+    && sed -i '/# Use a different logger for distributed setups./a \ \ config.logger = Logger.new(STDOUT)' config/environments/production.rb \
+    && sed -i 's/.*scheduler_\(err\|out\).log.*//g' script/scheduler.rb \
     && bundle exec rake assets:precompile \
     && rm -r tmp/cache \
     && chown -R ${ZAMMAD_USER}:${ZAMMAD_USER} ${ZAMMAD_TMP_DIR}

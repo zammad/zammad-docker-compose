@@ -5,6 +5,7 @@ set -e
 : "${ELASTICSEARCH_HOST:=zammad-elasticsearch}"
 : "${ELASTICSEARCH_PORT:=9200}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
+: "${MEMCACHED_PORT:=11211}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
 : "${POSTGRESQL_USER:=postgres}"
 : "${POSTGRESQL_PASS:=}"
@@ -26,7 +27,7 @@ function check_zammad_ready {
 if [ "$1" = 'zammad-init' ]; then
   # install / update zammad
   test -f ${ZAMMAD_READY_FILE} && rm ${ZAMMAD_READY_FILE}
-  rsync -a --delete --exclude 'storage/fs/*' --exclude 'public/assets/images/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
+  rsync -a --delete --exclude --exclude 'public/assets/images/*' --exclude 'storage/fs/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
   rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
   until (echo > /dev/tcp/${POSTGRESQL_HOST}/5432) &> /dev/null; do
@@ -36,9 +37,11 @@ if [ "$1" = 'zammad-init' ]; then
 
   cd ${ZAMMAD_DIR}
 
-  # configure database & cache
+  # configure database
   sed -e "s#.*adapter:.*#  adapter: postgresql#g" -e "s#.*database:.*#  database: ${POSTGRESQL_DB}#g" -e "s#.*username:.*#  username: ${POSTGRESQL_USER}#g" -e "s#.*password:.*#  password: ${POSTGRESQL_PASS}\n  host: ${POSTGRESQL_HOST}\n#g" < config/database.yml.pkgr > config/database.yml
-  sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:11211'\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:11211'/" config/application.rb
+
+  # configure memcache
+  sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'/" config/application.rb
 
   echo "initialising / updating database..."
   # db mirgrate
