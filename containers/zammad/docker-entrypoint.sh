@@ -118,6 +118,8 @@ fi
 if [ "$1" = 'zammad-scheduler' ]; then
   check_zammad_ready
 
+  sleep 10
+
   cd ${ZAMMAD_DIR}
 
   echo "starting scheduler..."
