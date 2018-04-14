@@ -7,6 +7,7 @@ set -e
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
+: "${POSTGRESQL_PORT:=5432}"
 : "${POSTGRESQL_USER:=postgres}"
 : "${POSTGRESQL_PASS:=}"
 : "${POSTGRESQL_DB:=zammad_production}"
@@ -30,7 +31,7 @@ if [ "$1" = 'zammad-init' ]; then
   rsync -a --delete --exclude 'public/assets/images/*' --exclude 'storage/fs/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
   rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
-  until (echo > /dev/tcp/${POSTGRESQL_HOST}/5432) &> /dev/null; do
+  until (echo > /dev/tcp/${POSTGRESQL_HOST}/${POSTGRESQL_PORT}) &> /dev/null; do
     echo "zammad railsserver waiting for postgresql server to be ready..."
     sleep 5
   done
@@ -114,6 +115,11 @@ fi
 # zammad-scheduler
 if [ "$1" = 'zammad-scheduler' ]; then
   check_zammad_ready
+
+  until (echo > /dev/tcp/${MEMCACHED_HOST}/${MEMCACHED_PORT}) &> /dev/null; do
+    echo "zammad scheduler waiting for memcached server to be ready..."
+    sleep 5
+  done
 
   cd ${ZAMMAD_DIR}
 
