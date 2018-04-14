@@ -27,7 +27,7 @@ function check_zammad_ready {
 if [ "$1" = 'zammad-init' ]; then
   # install / update zammad
   test -f ${ZAMMAD_READY_FILE} && rm ${ZAMMAD_READY_FILE}
-  rsync -a --delete --exclude --exclude 'public/assets/images/*' --exclude 'storage/fs/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
+  rsync -a --delete --exclude 'public/assets/images/*' --exclude 'storage/fs/*' ${ZAMMAD_TMP_DIR}/ ${ZAMMAD_DIR}
   rsync -a ${ZAMMAD_TMP_DIR}/public/assets/images/ ${ZAMMAD_DIR}/public/assets/images
 
   until (echo > /dev/tcp/${POSTGRESQL_HOST}/5432) &> /dev/null; do
