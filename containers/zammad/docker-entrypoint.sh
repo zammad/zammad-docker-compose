@@ -13,7 +13,9 @@ set -e
 : "${POSTGRESQL_DB:=zammad_production}"
 : "${POSTGRESQL_DB_CREATE:=true}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
+: "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
+: "${ZAMMAD_WEBSOCKET_PORT:=6042}"
 : "${NGINX_SERVER_NAME:=_}"
 
 function check_zammad_ready {
@@ -91,7 +93,7 @@ if [ "$1" = 'zammad-nginx' ]; then
 
   # configure nginx
   if [ -z "$(env|grep KUBERNETES)" ]; then
-    sed -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:3000#g" -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:6042#g" -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
+    sed -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
   fi
 
   echo "starting nginx..."
@@ -108,7 +110,7 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   echo "starting railsserver..."
 
-  exec gosu ${ZAMMAD_USER}:${ZAMMAD_USER} bundle exec rails server puma -b [::] -p 3000 -e ${RAILS_ENV}
+  exec gosu ${ZAMMAD_USER}:${ZAMMAD_USER} bundle exec rails server puma -b [::] -p ${ZAMMAD_RAILSSERVER_PORT} -e ${RAILS_ENV}
 fi
 
 
@@ -137,5 +139,5 @@ if [ "$1" = 'zammad-websocket' ]; then
 
   echo "starting websocket server..."
 
-  exec gosu ${ZAMMAD_USER}:${ZAMMAD_USER} bundle exec script/websocket-server.rb -b 0.0.0.0 -p 6042 start
+  exec gosu ${ZAMMAD_USER}:${ZAMMAD_USER} bundle exec script/websocket-server.rb -b 0.0.0.0 -p ${ZAMMAD_WEBSOCKET_PORT} start
 fi
