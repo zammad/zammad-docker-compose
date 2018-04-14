@@ -3,6 +3,7 @@
 set -e
 
 : "${ELASTICSEARCH_HOST:=zammad-elasticsearch}"
+: "${ELASTICSEARCH_PORT:=9200}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
 : "${POSTGRESQL_USER:=postgres}"
@@ -49,27 +50,29 @@ if [ "$1" = 'zammad-init' ]; then
   if [ "${DB_CHECK}" != "0" ]; then
     if [ "${POSTGRESQL_DB_CREATE}" == "true" ]; then
       bundle exec rake db:create
-    fi  
+    fi
     bundle exec rake db:migrate
     bundle exec rake db:seed
   fi
 
   echo "changing settings..."
   # es config
-  bundle exec rails r "Setting.set('es_url', 'http://${ELASTICSEARCH_HOST}:9200')"
+  bundle exec rails r "Setting.set('es_url', 'http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
 
   if [ -n "${ELASTICSEARCH_USER}" ] && [ -n "${ELASTICSEARCH_PASS}" ]; then
     bundle exec rails r "Setting.set('es_user', \"${ELASTICSEARCH_USER}\")"
     bundle exec rails r "Setting.set('es_password', \"${ELASTICSEARCH_PASS}\")"
   fi
 
-  until (echo > /dev/tcp/${ELASTICSEARCH_HOST}/9200) &> /dev/null; do
+  until (echo > /dev/tcp/${ELASTICSEARCH_HOST}/${ELASTICSEARCH_PORT}) &> /dev/null; do
     echo "zammad railsserver waiting for elasticsearch server to be ready..."
     sleep 5
   done
 
-  echo "rebuilding es searchindex..."
-  bundle exec rake searchindex:rebuild
+  if [ -n "$(curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices |grep zammad)" ]; then
+    echo "rebuilding es searchindex..."
+    bundle exec rake searchindex:rebuild
+  fi
 
   # chown everything to zammad user
   chown -R ${ZAMMAD_USER}:${ZAMMAD_USER} ${ZAMMAD_DIR}
