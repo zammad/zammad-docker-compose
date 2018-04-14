@@ -118,11 +118,6 @@ fi
 if [ "$1" = 'zammad-scheduler' ]; then
   check_zammad_ready
 
-  until (echo > /dev/tcp/${MEMCACHED_HOST}/${MEMCACHED_PORT}) &> /dev/null; do
-    echo "zammad scheduler waiting for memcached server to be ready..."
-    sleep 5
-  done
-
   cd ${ZAMMAD_DIR}
 
   echo "starting scheduler..."
