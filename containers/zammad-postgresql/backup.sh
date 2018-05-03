@@ -3,7 +3,7 @@
 set -e
 
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver-host}"
-: "${ZAMMAD_RAILSSERVER_PORT:=3000l}"
+: "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 
 function check_railsserver_available {
   until (echo > /dev/tcp/${ZAMMAD_RAILSSERVER_HOST}/${ZAMMAD_RAILSSERVER_PORT}) &> /dev/null; do
