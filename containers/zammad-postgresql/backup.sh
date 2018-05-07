@@ -2,7 +2,7 @@
 
 set -e
 
-: "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver-host}"
+: "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 
 function check_railsserver_available {
