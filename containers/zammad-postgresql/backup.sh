@@ -4,10 +4,10 @@ set -e
 
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
-: "${POSTGRES_USER:=postgres}"
-: "${POSTGRES_HOST:=zammad-postgresql}"
-: "${POSTGRES_PORT:=5432}"
-: "${POSTGRES_DB:=zammad_production}"
+: "${POSTGRESQL_USER:=postgres}"
+: "${POSTGRESQL_HOST:=zammad-postgresql}"
+: "${POSTGRESQL_PORT:=5432}"
+: "${POSTGRESQL_DB:=zammad_production}"
 
 function check_railsserver_available {
   until (echo > /dev/tcp/${ZAMMAD_RAILSSERVER_HOST}/${ZAMMAD_RAILSSERVER_PORT}) &> /dev/null; do
@@ -32,7 +32,7 @@ function zammad_backup {
   fi
 
   #db backup
-  pg_dump --dbname=postgresql://${POSTGRES_USER}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB} | gzip > ${BACKUP_DIR}/${TIMESTAMP}_zammad_db.psql.gz
+  pg_dump --dbname=postgresql://${POSTGRESQL_USER}@${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB} | gzip > ${BACKUP_DIR}/${TIMESTAMP}_zammad_db.psql.gz
 }
 
 if [ "$1" = 'zammad-backup' ]; then
