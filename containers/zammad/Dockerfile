@@ -28,7 +28,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
 # install dependencies & gosu
 RUN BUILD_DEPENDENCIES="build-essential ca-certificates curl git libffi-dev libpq5 libpq-dev nginx rsync" \
     set -ex \
-	  && apt-get update && apt-get install -y --force-yes --no-install-recommends ${BUILD_DEPENDENCIES} && rm -rf /var/lib/apt/lists/* \
+	  && apt-get update && apt-get install -y --allow --no-install-recommends ${BUILD_DEPENDENCIES} && rm -rf /var/lib/apt/lists/* \
 	  && curl -s -J -L -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$(dpkg --print-architecture)" \
 	  && curl -s -J -L -o /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$(dpkg --print-architecture).asc" \
 	  && export GNUPGHOME="$(mktemp -d)" \
