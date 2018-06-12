@@ -26,7 +26,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
 # install dependencies & gosu
-RUN BUILD_DEPENDENCIES="build-essential ca-certificates curl git gnupg2 libffi-dev libpq5 libpq-dev nginx rsync" \
+RUN BUILD_DEPENDENCIES="build-essential ca-certificates curl dirmngr git gnupg2 libffi-dev libpq5 libpq-dev nginx rsync" \
     set -ex \
 	  && apt-get update && apt-get install -y --no-install-recommends ${BUILD_DEPENDENCIES} && rm -rf /var/lib/apt/lists/* \
 	  && curl -s -J -L -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$(dpkg --print-architecture)" \
