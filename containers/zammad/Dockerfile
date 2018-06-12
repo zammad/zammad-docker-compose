@@ -48,7 +48,7 @@ RUN groupadd -g 1000 ${ZAMMAD_USER} \
     && cd ${ZAMMAD_TMP_DIR} \
     && bundle install --without test development mysql \
     && contrib/packager.io/fetch_locales.rb \
-    && sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: zammad-postgresql\n#g' < config/database.yml.pkgr > config/database.yml \
+    && sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: zammad-postgresql\n#g' < contrib/packager.io/database.yml.pkgr > config/database.yml \
     && sed -i '/# Use a different logger for distributed setups./a \ \ config.logger = Logger.new(STDOUT)' config/environments/production.rb \
     && sed -i 's/.*scheduler_\(err\|out\).log.*//g' script/scheduler.rb \
     && bundle exec rake assets:precompile \
