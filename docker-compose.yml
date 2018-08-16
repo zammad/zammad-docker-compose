@@ -10,14 +10,14 @@ services:
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
     links:
       - zammad-postgresql
-    restart: always
+    restart: ${RESTART}
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-data:/opt/zammad
 
   zammad-elasticsearch:
     image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
-    restart: always
+    restart: ${RESTART}
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
@@ -36,7 +36,7 @@ services:
   zammad-memcached:
     command: ["zammad-memcached"]
     image: ${IMAGE_REPO}:zammad-memcached${VERSION}
-    restart: always
+    restart: ${RESTART}
 
   zammad-nginx:
     command: ["zammad-nginx"]
@@ -46,7 +46,7 @@ services:
     links:
       - zammad-railsserver
       - zammad-websocket
-    restart: always
+    restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
     expose:
@@ -54,7 +54,7 @@ services:
 
   zammad-postgresql:
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
-    restart: always
+    restart: ${RESTART}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
 
@@ -68,7 +68,7 @@ services:
       - zammad-elasticsearch
       - zammad-memcached
       - zammad-postgresql
-    restart: always
+    restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
 
@@ -82,7 +82,7 @@ services:
       - zammad-elasticsearch
       - zammad-memcached
       - zammad-postgresql
-    restart: always
+    restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
 
@@ -95,7 +95,7 @@ services:
     links:
       - zammad-postgresql
       - zammad-memcached
-    restart: always
+    restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
 
