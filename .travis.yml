@@ -8,6 +8,6 @@ before_install:
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   - sudo apt-get update
   - sudo apt-get -o Dpkg::Options::="--force-confnew" -y install docker-ce
-  - docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
+  - echo "${DOCKER_PASSWORD}" | docker login -u="${DOCKER_USERNAME}" --password-stdin
 install: true
 script: hooks/build
