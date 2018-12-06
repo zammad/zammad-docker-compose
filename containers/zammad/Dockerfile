@@ -30,11 +30,6 @@ RUN BUILD_DEPENDENCIES="build-essential ca-certificates curl dirmngr git gnupg2 
   set -ex && \
   apt-get update && apt-get install -y --no-install-recommends ${BUILD_DEPENDENCIES} && rm -rf /var/lib/apt/lists/* && \
   curl -s -J -L -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$(dpkg --print-architecture)" && \
-#  curl -s -J -L -o /usr/local/bin/gosu.asc "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-$(dpkg --print-architecture).asc" && \
-#  export GNUPGHOME="$(mktemp -d)" && \
-#  gpg --no-tty --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && \
-#  gpg --no-tty --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu && \
-#  rm -rf "${GNUPGHOME}" /usr/local/bin/gosu.asc && \
   chmod +x /usr/local/bin/gosu && \
   gosu nobody true
 
