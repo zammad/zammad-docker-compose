@@ -47,18 +47,27 @@ if [ "$1" = 'zammad-init' ]; then
   sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'/" config/application.rb
 
   echo "initialising / updating database..."
-  # db mirgrate
+
+  # check database
   set +e
   bundle exec rake db:migrate &> /dev/null
-  DB_CHECK="$?"
+  DB_MIGRATE="$?"
+
+  if [ "${DB_MIGRATE}" == "0" ]; then
+      bundle exec rails r "Setting.set('es_url', 'http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')" &> /dev/null
+      DB_SETTINGS="$?"
+  fi
   set -e
 
-  if [ "${DB_CHECK}" != "0" ]; then
-    if [ "${POSTGRESQL_DB_CREATE}" == "true" ]; then
+  # migrate database
+  if [ "${DB_MIGRATE}" != "0" -a "${POSTGRESQL_DB_CREATE}" == "true" ]; then
+      echo "creating database..."
       bundle exec rake db:create
-    fi
-    bundle exec rake db:migrate
-    bundle exec rake db:seed
+  fi
+
+  if [ "${DB_SETTINGS}" != "0" ]; then
+      echo "seeding database..."
+      bundle exec rake db:seed
   fi
 
   echo "changing settings..."
