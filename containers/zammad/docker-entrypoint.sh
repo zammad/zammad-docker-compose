@@ -114,6 +114,8 @@ fi
 
 # zammad-railsserver
 if [ "$1" = 'zammad-railsserver' ]; then
+  test -f /opt/zammad/tmp/pids/server.pid && rm /opt/zammad/tmp/pids/server.pid
+
   check_zammad_ready
 
   cd ${ZAMMAD_DIR}
