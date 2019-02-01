@@ -84,10 +84,14 @@ if [ "$1" = 'zammad-init' ]; then
     sleep 5
   done
 
-  if [ -z "$(curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices |grep zammad)" ]; then
+  if [ -z "$(curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep zammad)" ]; then
     curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices
     echo "rebuilding es searchindex..."
     bundle exec rake searchindex:rebuild
+  fi
+
+  if [ -n "${AUTOWIZARD_JSON}" ]; then
+    echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
   fi
 
   # chown everything to zammad user
