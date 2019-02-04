@@ -22,17 +22,17 @@ function zammad_backup {
   echo "${TIMESTAMP} - backuping zammad..."
 
   # delete old backups
-  if [ -d "${BACKUP_DIR}" ] && [ -n "$(ls ${BACKUP_DIR})" ]; then
-    find ${BACKUP_DIR}/*_zammad_*.gz -type f -mtime +${HOLD_DAYS} -exec rm {} \;
+  if [ -d "${BACKUP_DIR}" ] && [ -n "$(ls "${BACKUP_DIR}")" ]; then
+    find "${BACKUP_DIR}"/*_zammad_*.gz -type f -mtime +"${HOLD_DAYS}" -exec rm {} \;
   fi
 
   if [ "${NO_FILE_BACKUP}" != "yes" ]; then
     # tar files
-    tar -czf ${BACKUP_DIR}/${TIMESTAMP}_zammad_files.tar.gz ${ZAMMAD_DIR}
+    tar -czf "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_files.tar.gz "${ZAMMAD_DIR}"
   fi
 
   #db backup
-  pg_dump --dbname=postgresql://${POSTGRESQL_USER}@${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB} | gzip > ${BACKUP_DIR}/${TIMESTAMP}_zammad_db.psql.gz
+  pg_dump --dbname=postgresql://"${POSTGRESQL_USER}"@"${POSTGRESQL_HOST}":"${POSTGRESQL_PORT}"/"${POSTGRESQL_DB}" | gzip > "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_db.psql.gz
 }
 
 if [ "$1" = 'zammad-backup' ]; then
@@ -43,7 +43,7 @@ if [ "$1" = 'zammad-backup' ]; then
     zammad_backup
 
     # wait until next backup
-    sleep ${BACKUP_SLEEP}
+    sleep "${BACKUP_SLEEP}"
   done
 fi
 
