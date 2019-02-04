@@ -2,6 +2,7 @@
 
 set -e
 
+: "${AUTOWIZARD_JSON:=''}"
 : "${ELASTICSEARCH_HOST:=zammad-elasticsearch}"
 : "${ELASTICSEARCH_PORT:=9200}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
@@ -48,30 +49,36 @@ if [ "$1" = 'zammad-init' ]; then
 
   echo "initialising / updating database..."
 
-  # check database
+  # check if database exists / update to new version
   set +e
   bundle exec rake db:migrate &> /dev/null
   DB_MIGRATE="$?"
 
+  # check if database is populated
   if [ "${DB_MIGRATE}" == "0" ]; then
       bundle exec rails r "Setting.set('es_url', 'http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')" &> /dev/null
       DB_SETTINGS="$?"
   fi
   set -e
 
-  # migrate database
+  # create database if not exists
   if [ "${DB_MIGRATE}" != "0" -a "${POSTGRESQL_DB_CREATE}" == "true" ]; then
       echo "creating database..."
       bundle exec rake db:create
   fi
 
+  # populate database and create autowizard.json on first install
   if [ "${DB_SETTINGS}" != "0" ]; then
       echo "seeding database..."
       bundle exec rake db:seed
+
+      if [ -n "${AUTOWIZARD_JSON}" ]; then
+        echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
+      fi
   fi
 
-  echo "changing settings..."
   # es config
+  echo "changing settings..."
   bundle exec rails r "Setting.set('es_url', 'http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
 
   if [ -n "${ELASTICSEARCH_USER}" ] && [ -n "${ELASTICSEARCH_PASS}" ]; then
@@ -90,16 +97,13 @@ if [ "$1" = 'zammad-init' ]; then
     bundle exec rake searchindex:rebuild
   fi
 
-  if [ -n "${AUTOWIZARD_JSON}" ]; then
-    echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
-  fi
-
   # chown everything to zammad user
   chown -R ${ZAMMAD_USER}:${ZAMMAD_USER} ${ZAMMAD_DIR}
 
   # create install ready file
   su -c "echo 'zammad-init' > ${ZAMMAD_READY_FILE}" ${ZAMMAD_USER}
 fi
+
 
 # zammad nginx
 if [ "$1" = 'zammad-nginx' ]; then
