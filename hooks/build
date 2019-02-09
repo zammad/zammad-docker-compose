@@ -18,17 +18,17 @@ for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
 
     echo "Build Zammad Docker image ${DOCKER_IMAGE} with version ${ZAMMAD_VERSION} for DockerHubs ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE} repo"
 
-    docker build --pull --no-cache --build-arg BUILD_DATE=$(date -u +”%Y-%m-%dT%H:%M:%SZ”) -t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE} ${DOCKER_TAG} -f containers/${DOCKER_IMAGE}/Dockerfile .
+    docker build --pull --no-cache --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE} ${DOCKER_TAG} -f containers/${DOCKER_IMAGE}/Dockerfile .
 
     docker push ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}
 
     if [ "${ZAMMAD_VERSION}" != "latest" ]; then
       docker push ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${ZAMMAD_VERSION}
-    fi  
+    fi
   else
     echo "Build Zammad Docker image ${DOCKER_IMAGE} for DockerHubs ${DOCKER_REPO}:${DOCKER_IMAGE} repo"
 
-    docker build --pull --no-cache --build-arg BUILD_DATE=$(date -u +”%Y-%m-%dT%H:%M:%SZ”) -t ${DOCKER_REPO}:${DOCKER_IMAGE} -f containers/${DOCKER_IMAGE}/Dockerfile .
+    docker build --pull --no-cache --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -t "${DOCKER_REPO}:${DOCKER_IMAGE}" -f containers/"${DOCKER_IMAGE}"/Dockerfile .
 
     docker push ${DOCKER_REPO}:${DOCKER_IMAGE}
   fi
