@@ -91,8 +91,7 @@ if [ "$1" = 'zammad-init' ]; then
     sleep 5
   done
 
-  if curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
-    curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices
+  if ! curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
     echo "rebuilding es searchindex..."
     bundle exec rake searchindex:rebuild
   fi
