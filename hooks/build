@@ -8,7 +8,7 @@ set -ex
 . "hooks/config"
 
 for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
-  if [ "${TRAVIS}" == 'true' ]; then
+  if [ "${TRAVIS}" == 'true' ] || [ "${CIRCLECI}" == 'true' ]; then
 
     if [ -n "${ZAMMAD_VERSION}" ]; then
       DOCKER_TAG="-t ${DOCKER_REGISTRY}/${GITHUB_USERNAME}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${ZAMMAD_VERSION}"
