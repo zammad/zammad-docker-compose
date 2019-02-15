@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
@@ -129,8 +129,10 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   echo "starting railsserver..."
 
+  #shellcheck disable=SC2101
   exec gosu "${ZAMMAD_USER}":"${ZAMMAD_USER}" bundle exec rails server puma -b [::] -p "${ZAMMAD_RAILSSERVER_PORT}" -e "${RAILS_ENV}"
 fi
+
 
 
 # zammad-scheduler
