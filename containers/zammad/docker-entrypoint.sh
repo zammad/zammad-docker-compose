@@ -134,7 +134,6 @@ if [ "$1" = 'zammad-railsserver' ]; then
 fi
 
 
-
 # zammad-scheduler
 if [ "$1" = 'zammad-scheduler' ]; then
   check_zammad_ready
