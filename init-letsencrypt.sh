@@ -39,6 +39,8 @@ echo "### Starting $nginx_service_name ..."
 docker-compose $compose_files up --force-recreate -d $nginx_service_name
 echo
 
+read -p "Please wait for $nginx_service_name to be started and serving on ports 80 and 443. Then press any key to continue." unused_input
+
 echo "### Deleting dummy certificate for $domains ..."
 docker-compose $compose_files run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/live/$domains && \
