@@ -1,4 +1,4 @@
-FROM postgres:9.6-alpine
+FROM postgres:10.7-alpine
 MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
