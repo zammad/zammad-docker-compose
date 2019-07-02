@@ -5,6 +5,7 @@ set -e
 : "${AUTOWIZARD_JSON:=''}"
 : "${ELASTICSEARCH_HOST:=zammad-elasticsearch}"
 : "${ELASTICSEARCH_PORT:=9200}"
+: "${ELASTICSEARCH_SCHEMA:=http}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
@@ -56,7 +57,7 @@ if [ "$1" = 'zammad-init' ]; then
 
   # check if database is populated
   if [ "${DB_MIGRATE}" == "0" ]; then
-      bundle exec rails r "Setting.set('es_url', 'http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')" &> /dev/null
+      bundle exec rails r "Setting.set('es_url', '${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')" &> /dev/null
       DB_SETTINGS="$?"
   fi
   set -e
@@ -79,7 +80,7 @@ if [ "$1" = 'zammad-init' ]; then
 
   # es config
   echo "changing settings..."
-  bundle exec rails r "Setting.set('es_url', 'http://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
+  bundle exec rails r "Setting.set('es_url', '${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
 
   if [ -n "${ELASTICSEARCH_USER}" ] && [ -n "${ELASTICSEARCH_PASS}" ]; then
     bundle exec rails r "Setting.set('es_user', \"${ELASTICSEARCH_USER}\")"
@@ -91,7 +92,7 @@ if [ "$1" = 'zammad-init' ]; then
     sleep 5
   done
 
-  if ! curl -s ${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
+  if ! curl -s -k ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
     echo "rebuilding es searchindex..."
     bundle exec rake searchindex:rebuild
   fi
