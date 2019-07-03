@@ -6,6 +6,7 @@ set -e
 : "${ELASTICSEARCH_HOST:=zammad-elasticsearch}"
 : "${ELASTICSEARCH_PORT:=9200}"
 : "${ELASTICSEARCH_SCHEMA:=http}"
+: "${ELASTICSEARCH_SSL_VERIFY:=true}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
