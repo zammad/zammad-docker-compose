@@ -1,4 +1,4 @@
-FROM ruby:2.4.4-slim AS builder
+FROM ruby:2.5.5-slim AS builder
 # note: zammad is currently incompatible to alpine because of: 
 # https://github.com/docker-library/ruby/issues/113
 
@@ -23,7 +23,7 @@ RUN chmod +x /tmp/setup.sh; \
     /tmp/setup.sh install
 
 
-FROM ruby:2.4.4-slim
+FROM ruby:2.5.5-slim
 
 MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
