@@ -102,9 +102,25 @@ services:
 volumes:
   elasticsearch-data:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/data/elasticsearch'
   postgresql-data:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/data/postgresql'
   zammad-backup:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/data/backup'
   zammad-data:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${PWD}/data/data'
