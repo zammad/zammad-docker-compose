@@ -5,7 +5,7 @@ set -e
 if [ "$1" = 'install' ]; then
   PACKAGES="build-essential curl git libimlib2-dev libpq-dev"
 elif [ "$1" = 'run' ]; then
-  PACKAGES="curl libimlib2 libimlib2-dev libpq5 nginx rsync"
+  PACKAGES="curl libimlib2 libpq5 nginx rsync"
 fi
 
 apt-get update
