@@ -13,5 +13,4 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.schema-version="2.9.0" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
-RUN /usr/share/elasticsearch/bin/elasticsearch-plugin remove x-pack --purge && \
-  yes | /usr/share/elasticsearch/bin/elasticsearch-plugin install ingest-attachment
+RUN yes | /usr/share/elasticsearch/bin/elasticsearch-plugin install ingest-attachment
