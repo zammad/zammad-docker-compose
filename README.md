@@ -40,3 +40,13 @@ Like this, you can add your `docker-compose.prod.yml` to a branch of your Git re
 ## Using Rancher
 
 * RANCHER_URL=http://RANCHER_HOST:8080 rancher-compose --env-file=.env up
+
+## Upgrading
+
+We recently updated the Elasticsearch image from 5.6 to 7.6.
+As there is no direct upgrade path we have to delete all Elasticsearch indicies and rebuild them.
+To do this start docker-compose like:
+
+```
+docker-compose up -e ELASTICSEARCH_PURGE=true
+```
