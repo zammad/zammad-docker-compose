@@ -43,7 +43,8 @@ Like this, you can add your `docker-compose.prod.yml` to a branch of your Git re
 
 ## Upgrading
 
-We've recently updated the Elasticsearch image from 5.6 to 7.6.
+We've recently updated the Elasticsearch image from 5.6 to 7.6 in our "latest" images. 
+This will become available in all images with version > 3.2.0-12.
 As there is no direct upgrade path we have to delete all Elasticsearch indicies and rebuild them.
 To do this start docker-compose like:
 
