@@ -47,8 +47,10 @@ Like this, you can add your `docker-compose.prod.yml` to a branch of your Git re
 
 We've updated the Elasticsearch image from 5.6 to 7.6. 
 As there is no direct upgrade path we have to delete all Elasticsearch indicies and rebuild them.
-To do this start docker-compose like:
+Do the following to empty the ES docker volume:
 
 ```
-docker-compose up -e ELASTICSEARCH_PURGE=true
+docker-compose stop
+rm -r $(docker volume inspect zammaddockercompose_elasticsearch-data | grep Mountpoint | sed -e 's#.*": "##g' -e 's#",##')/*
+docker-compose start
 ```
