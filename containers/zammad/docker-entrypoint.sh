@@ -7,7 +7,6 @@ set -e
 : "${ELASTICSEARCH_PORT:=9200}"
 : "${ELASTICSEARCH_SCHEMA:=http}"
 : "${ELASTICSEARCH_SSL_VERIFY:=true}"
-: "${ELASTICSEARCH_PURGE:=false}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
@@ -98,11 +97,6 @@ if [ "$1" = 'zammad-init' ]; then
     SSL_SKIP_VERIFY="-k"
   else
     SSL_SKIP_VERIFY=""
-  fi
-  
-  if [ "${ELASTICSEARCH_PURGE}" == "true" ]; then
-     echo "deleting all es indicies..."
-     curl -XDELETE ${SSL_SKIP_VERIFY} ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/*
   fi
   
   if ! curl -s ${SSL_SKIP_VERIFY} ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
