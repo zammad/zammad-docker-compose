@@ -18,6 +18,8 @@ services:
   zammad-elasticsearch:
     image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
     restart: ${RESTART}
+    environment:
+      - discovery.type=single-node
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
 
