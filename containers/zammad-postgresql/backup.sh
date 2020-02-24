@@ -2,9 +2,10 @@
 
 set -e
 
+: "${ZAMMAD_DIR:=/opt/zammad}"
+: "${BACKUP_DIR:=/var/tmp/zammad}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
-: "${POSTGRESQL_USER:=postgres}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
 : "${POSTGRESQL_PORT:=5432}"
 : "${POSTGRESQL_DB:=zammad_production}"
