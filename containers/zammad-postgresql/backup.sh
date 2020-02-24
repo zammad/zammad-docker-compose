@@ -33,7 +33,7 @@ function zammad_backup {
   fi
 
   #db backup
-  pg_dump --dbname=postgresql://"${POSTGRESQL_USER}"@"${POSTGRESQL_HOST}":"${POSTGRESQL_PORT}"/"${POSTGRESQL_DB}" | gzip > "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_db.psql.gz
+  pg_dump --dbname=postgresql://"${POSTGRESQL_USER}:${POSTGRES_PASSWORD}"@"${POSTGRESQL_HOST}":"${POSTGRESQL_PORT}"/"${POSTGRESQL_DB}" | gzip > "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_db.psql.gz
 }
 
 if [ "$1" = 'zammad-backup' ]; then

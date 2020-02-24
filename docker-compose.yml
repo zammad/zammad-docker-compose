@@ -18,7 +18,7 @@ services:
       - BACKUP_SLEEP=86400
       - HOLD_DAYS=10
       - POSTGRES_USER="zammad"
-      - POSTGRES_PASSWORD="zammad"       
+      - POSTGRES_PASSWORD="zammad"
 
   zammad-elasticsearch:
     image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
