@@ -2,9 +2,10 @@
 
 set -e
 
+: "${ZAMMAD_DIR:=/opt/zammad}"
+: "${BACKUP_DIR:=/var/tmp/zammad}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
-: "${POSTGRESQL_USER:=postgres}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
 : "${POSTGRESQL_PORT:=5432}"
 : "${POSTGRESQL_DB:=zammad_production}"
@@ -32,7 +33,7 @@ function zammad_backup {
   fi
 
   #db backup
-  pg_dump --dbname=postgresql://"${POSTGRESQL_USER}"@"${POSTGRESQL_HOST}":"${POSTGRESQL_PORT}"/"${POSTGRESQL_DB}" | gzip > "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_db.psql.gz
+  pg_dump --dbname=postgresql://"${POSTGRESQL_USER}:${POSTGRESQL_PASSWORD}"@"${POSTGRESQL_HOST}":"${POSTGRESQL_PORT}"/"${POSTGRESQL_DB}" | gzip > "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_db.psql.gz
 }
 
 if [ "$1" = 'zammad-backup' ]; then
