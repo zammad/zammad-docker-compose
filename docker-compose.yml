@@ -17,8 +17,8 @@ services:
     environment:
       - BACKUP_SLEEP=86400
       - HOLD_DAYS=10
-      - POSTGRES_USER="zammad"
-      - POSTGRES_PASSWORD="zammad"
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
 
   zammad-elasticsearch:
     image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
@@ -65,8 +65,8 @@ services:
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER="zammad"
-      - POSTGRES_PASSWORD="zammad"
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
 
   zammad-railsserver:
     command: ["zammad-railsserver"]
