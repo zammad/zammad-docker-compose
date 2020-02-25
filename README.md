@@ -54,3 +54,14 @@ docker-compose stop
 rm -r $(docker volume inspect zammaddockercompose_elasticsearch-data | grep Mountpoint | sed -e 's#.*": "##g' -e 's#",##')/*
 docker-compose start
 ```
+
+To workaround the changes in the PostgreSQL container do the following:
+
+```
+docker-compose start
+docker exec -it zammaddockercompose_zammad-postgresql_1 bash
+psql --username postgres --dbname zammad_production
+CREATE USER zammad;
+ALTER USER zammad WITH PASSWORD 'zammad';
+ALTER USER zammad WITH SUPERUSER CREATEDB;
+```
