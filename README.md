@@ -55,7 +55,7 @@ rm -r $(docker volume inspect zammaddockercompose_elasticsearch-data | grep Moun
 docker-compose start
 ```
 
-To workaround the changes in the PostgreSQL container do the following:
+To workaround the [changes in the PostgreSQL 9.6 container](https://github.com/docker-library/postgres/commit/f1bc8782e7e57cc403d0b32c0e24599535859f76) do the following:
 
 ```
 docker-compose start
