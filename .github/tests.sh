@@ -17,6 +17,11 @@ set -o errexit
 #rake test:units
 ruby -I test/ test/integration/object_manager_test.rb
 ruby -I test/ test/integration/package_test.rb
+
+bundle exec rails test test/integration/elasticsearch_active_test.rb
+bundle exec rails test test/integration/elasticsearch_test.rb
+bundle exec rails test test/integration/report_test.rb
+
 EOF
 
 docker-compose logs
