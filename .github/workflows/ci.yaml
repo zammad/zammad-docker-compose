@@ -43,7 +43,7 @@ jobs:
       - name: pull container images
         run: docker-compose pull
       - name: run docker-compose up
-        run: docker-compose up &
+        run: docker-compose up --detach
       - name: run tests
         run: .github/tests.sh
 
