@@ -15,12 +15,6 @@ docker exec -i zammad-docker-compose_zammad-railsserver_1 bash <<'EOF'
 set -o errexit
 RAILS_ENV=test
 bundle install --without mysql
-#bundle exec rubocop
-# rake db:migrate
-# rake db:seed
-# bundle exec rspec -t ~type:system -t ~searchindex
-bundle exec rake db:environment:set RAILS_ENV=test
-rake db:reset
 rake test:units
 ruby -I test/ test/integration/object_manager_test.rb
 ruby -I test/ test/integration/package_test.rb
