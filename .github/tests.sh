@@ -16,7 +16,7 @@ set -o errexit
 #bundle install --without mysql
 #rake test:units
 
-ruby -I test/ test/integration/package_test.rb
+#ruby -I test/ test/integration/package_test.rb
 
 bundle exec rails test test/integration/elasticsearch_active_test.rb
 bundle exec rails test test/integration/elasticsearch_test.rb
