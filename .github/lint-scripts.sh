@@ -14,5 +14,3 @@ while read -r FILE; do
   echo lint "${FILE}"
   shellcheck -x "${FILE}"
 done < "${TMP_FILE}"
-
-rm "${TMP_FILE}"
