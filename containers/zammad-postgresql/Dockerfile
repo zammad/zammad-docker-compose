@@ -1,6 +1,5 @@
 FROM postgres:9.6.17-alpine
 
-MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \

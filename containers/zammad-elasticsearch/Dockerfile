@@ -1,5 +1,4 @@
 FROM docker.elastic.co/elasticsearch/elasticsearch:7.6.0
-MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \

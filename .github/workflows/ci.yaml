@@ -23,7 +23,15 @@ jobs:
       - name: lint zammad dockerfile
         uses: brpaz/hadolint-action@master
         with:
-          dockerfile: containers/zammad/Dockerfile
+          dockerfile: containers/zammad-elasticsearch/Dockerfile
+      - name: lint elasticsearch dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: containers/zammad-postgresql/Dockerfile
+      - name: lint postgresql dockerfile
+        uses: brpaz/hadolint-action@master
+        with:
+          dockerfile: containers/zammad/Dockerfile                    
 
   install-docker-compose:
     timeout-minutes: 30

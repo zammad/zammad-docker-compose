@@ -2,7 +2,6 @@ FROM ruby:2.5.5-slim AS builder
 # note: zammad is currently incompatible to alpine because of: 
 # https://github.com/docker-library/ruby/issues/113
 
-MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
 
