@@ -12,6 +12,7 @@ done
 
 docker exec -i zammad-docker-compose_zammad-railsserver_1 bash <<'EOF'
 set -o errexit
+bundle install
 bundle exec rubocop
 # rake db:migrate
 # rake db:seed
