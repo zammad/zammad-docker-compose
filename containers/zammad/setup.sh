@@ -10,7 +10,8 @@ fi
 
 apt-get update
 apt-get upgrade -y
-apt-get install -y --no-install-recommends "${PACKAGES}"
+# shellcheck disable=SC2086
+apt-get install -y --no-install-recommends ${PACKAGES}
 rm -rf /var/lib/apt/lists/*
 
 # install gosu
