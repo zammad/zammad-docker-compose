@@ -5,15 +5,10 @@
 
 set -o errexit
 
-CONFIG_DIR=".github"
-HOOKS_DIR="hooks"
-CONTAINER_DIR="containers"
-
+REPO_ROOT="$(git rev-parse --show-toplevel)"
 TMP_FILE="$(mktemp)"
 
-find "${CONFIG_DIR}" -type f -name "*.sh" > "${TMP_FILE}"
-find "${HOOKS_DIR}" -type f -name "*.sh" >> "${TMP_FILE}"
-find "${CONTAINER_DIR}" -type f -name "*.sh" >> "${TMP_FILE}"
+find "${REPO_ROOT}" -type f -name "*.sh" > "${TMP_FILE}"
 
 while read -r FILE; do
   echo lint "${FILE}"
