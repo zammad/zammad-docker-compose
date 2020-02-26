@@ -13,8 +13,10 @@ done
 
 docker exec -i zammad-docker-compose_zammad-railsserver_1 bash <<'EOF'
 set -o errexit
-bundle install --without mysql
-rake test:units
+#bundle install --without mysql
+#rake test:units
 ruby -I test/ test/integration/object_manager_test.rb
 ruby -I test/ test/integration/package_test.rb
 EOF
+
+docker-compose logs
