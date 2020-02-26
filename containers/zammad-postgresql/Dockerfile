@@ -1,6 +1,5 @@
 FROM postgres:9.6.17-alpine
 
-MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
@@ -13,6 +12,8 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.vendor="Zammad" \
       org.label-schema.schema-version="3.2.0" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
+
+SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 
 # copy backup script
 COPY containers/zammad-postgresql/backup.sh /usr/local/bin/

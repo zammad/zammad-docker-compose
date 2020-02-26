@@ -1,5 +1,4 @@
 FROM docker.elastic.co/elasticsearch/elasticsearch:7.6.0
-MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
@@ -12,5 +11,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.vendor="Zammad" \
       org.label-schema.schema-version="3.2.0" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
+
+SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 
 RUN yes | /usr/share/elasticsearch/bin/elasticsearch-plugin install ingest-attachment
