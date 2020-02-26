@@ -13,7 +13,7 @@ done
 
 docker exec -i zammad-docker-compose_zammad-railsserver_1 bash <<'EOF'
 set -o errexit
-export RAILS_ENV=test
+RAILS_ENV=test
 bundle install --without mysql
 #bundle exec rubocop
 # rake db:migrate
