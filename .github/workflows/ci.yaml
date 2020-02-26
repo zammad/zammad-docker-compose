@@ -23,7 +23,7 @@ jobs:
       - name: lint zammad dockerfile
         uses: brpaz/hadolint-action@master
         with:
-          dockerfile: zammad/Dockerfile
+          dockerfile: containers/zammad/Dockerfile
 
   install-docker-compose:
     timeout-minutes: 30
