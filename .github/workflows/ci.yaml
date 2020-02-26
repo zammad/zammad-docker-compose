@@ -24,4 +24,4 @@ jobs:
       - name: get containers
         run: docker-compose pull
       - name: install
-        run: docker-compose up
+        run: docker-compose up -d
