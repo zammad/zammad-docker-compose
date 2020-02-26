@@ -19,7 +19,7 @@ https://docs.zammad.org/en/latest/install-docker-compose.html
 
 ## CI Status
 
-![CI Status](https://github.com/zammad/zammad-docker-compose/workflows/ci/badge.svg)
+[![CI Status](https://github.com/zammad/zammad-docker-compose/workflows/ci/badge.svg)](https://github.com/zammad/zammad-docker-compose/actions)
 
 ## Using a reverse proxy
 
