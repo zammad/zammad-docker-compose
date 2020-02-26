@@ -4,6 +4,7 @@
 #
 
 set -o errexit
+set -o pipefail
 
 until (curl -I --silent --fail localhost | grep -iq zammad_session); do
     echo "wait for zammad to be ready..."
@@ -12,8 +13,8 @@ done
 
 docker exec -i zammad-docker-compose_zammad-railsserver_1 bash <<'EOF'
 set -o errexit
-bundle install
-bundle exec rubocop
+bundle install --without mysql
+#bundle exec rubocop
 # rake db:migrate
 # rake db:seed
 bundle exec rspec -t ~type:system -t ~searchindex
