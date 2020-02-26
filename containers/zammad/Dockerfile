@@ -16,6 +16,8 @@ ENV ZAMMAD_READY_FILE ${ZAMMAD_DIR}/tmp/zammad.ready
 ENV ZAMMAD_TMP_DIR /tmp/zammad-${GIT_BRANCH}
 ENV ZAMMAD_USER zammad
 
+SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
+
 # install zammad
 COPY containers/zammad/setup.sh /tmp
 RUN chmod +x /tmp/setup.sh; \
@@ -24,7 +26,6 @@ RUN chmod +x /tmp/setup.sh; \
 
 FROM ruby:2.5.5-slim
 
-MAINTAINER Zammad <info@zammad.org>
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
 
