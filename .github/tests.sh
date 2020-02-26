@@ -18,7 +18,7 @@ bundle install --without mysql
 #bundle exec rubocop
 # rake db:migrate
 # rake db:seed
-bundle exec rspec -t ~type:system -t ~searchindex
+# bundle exec rspec -t ~type:system -t ~searchindex
 bundle exec rake db:environment:set RAILS_ENV=test
 rake db:reset
 rake test:units
