@@ -6,13 +6,15 @@
 set -o errexit
 set -o pipefail
 
-export TERM=dumb
+#export TERM=dumb
+
+docker-compose logs --timestamps --follow &
 
 until (curl -I --silent --fail localhost | grep -iq "HTTP/1.1 200 OK"); do
     echo "wait for zammad to be ready..."
-    docker-compose logs
+    #docker-compose logs
     sleep 15
-    clear
+    #clear
 done
 
 echo
