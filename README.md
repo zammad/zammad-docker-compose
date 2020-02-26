@@ -17,10 +17,9 @@ This repo is meant to be the starting point for somebody who likes to use docker
 https://docs.zammad.org/en/latest/install-docker-compose.html
 
 
-## Build Status
+## CI Status
 
-[![Build Status](https://travis-ci.org/zammad/zammad-docker-compose.svg?branch=master)](https://travis-ci.org/zammad/zammad-docker-compose)
-
+![CI Status](https://github.com/zammad/zammad-docker-compose/workflows/ci/badge.svg)
 
 ## Using a reverse proxy
 
