@@ -10,7 +10,7 @@ fi
 
 apt-get update
 apt-get upgrade -y
-apt-get install -y --no-install-recommends ${PACKAGES}
+apt-get install -y --no-install-recommends "${PACKAGES}"
 rm -rf /var/lib/apt/lists/*
 
 # install gosu
