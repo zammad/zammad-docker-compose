@@ -1,0 +1,31 @@
+{
+    "Token": "docker_compose_token",
+    "TextModuleLocale": {
+        "Locale": "en-us"
+    },
+    "Users": [
+        {
+        "login": "info@zammad.org",
+        "firstname": "Zam",
+        "lastname": "Mad",
+        "email": "info@zammad.org",
+        "organization": "Zammad",
+        "password": "Zammad"
+        }
+    ],
+    "Settings": [
+        {
+        "name": "product_name",
+        "value": "Zammad Service Desk"
+        },
+        {
+        "name": "system_online_service",
+        "value": true
+        }
+    ],
+    "Organizations": [
+        {
+        "name": "Zammad"
+        }
+    ]
+}
