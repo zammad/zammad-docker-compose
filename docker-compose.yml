@@ -20,7 +20,6 @@ services:
       - zammad-backup:/var/tmp/zammad
       - zammad-data:/opt/zammad
 
-
   zammad-elasticsearch:
     environment:
       - discovery.type=single-node
