@@ -19,9 +19,11 @@ echo
 echo "Success - Zammad is up :)"
 echo
 echo "Execute autowizard..."
+echo
 
 curl -I --silent --fail --show-error "http://localhost/#getting_started/auto_wizard/docker_compose_token" > /dev/null
 
-sleep 30
-
+echo 
 echo "Autowizard executed successful"
+echo 
+
