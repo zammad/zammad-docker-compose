@@ -13,7 +13,7 @@ until (curl -I --silent --fail localhost | grep -iq "HTTP/1.1 200 OK"); do
     sleep 15
 done
 
-sleep 10
+sleep 30
 
 echo
 echo "Success - Zammad is up :)"
