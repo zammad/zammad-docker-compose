@@ -22,4 +22,6 @@ echo "Execute autowizard..."
 
 curl -I --silent --fail --show-error "http://localhost/#getting_started/auto_wizard/docker_compose_token" > /dev/null
 
-echo "autowizard executed successful"
+sleep 30
+
+echo "Autowizard executed successful"
