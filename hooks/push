@@ -1,6 +1,0 @@
-#!/bin/bash
-#
-# build hook for dockerhubs autobuild feature
-#
-
-exit 0

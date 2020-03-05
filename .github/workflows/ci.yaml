@@ -22,15 +22,15 @@ jobs:
       - name: lint zammad dockerfile
         uses: brpaz/hadolint-action@master
         with:
-          dockerfile: containers/zammad-elasticsearch/Dockerfile
+          dockerfile: containers/zammad/Dockerfile
       - name: lint elasticsearch dockerfile
         uses: brpaz/hadolint-action@master
         with:
-          dockerfile: containers/zammad-postgresql/Dockerfile
+          dockerfile: containers/zammad-elasticsearch/Dockerfile
       - name: lint postgresql dockerfile
         uses: brpaz/hadolint-action@master
         with:
-          dockerfile: containers/zammad/Dockerfile                    
+          dockerfile: containers/zammad-postgresql/Dockerfile                 
 
   test-docker-compose:
     timeout-minutes: 10

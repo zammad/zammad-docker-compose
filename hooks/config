@@ -1,6 +1,0 @@
-#!/bin/bash
-#
-# build hooks config
-#
-
-DOCKER_IMAGES="zammad zammad-elasticsearch zammad-postgresql"
