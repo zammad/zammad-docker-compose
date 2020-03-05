@@ -14,4 +14,4 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
 
 SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 
-RUN yes | /usr/share/elasticsearch/bin/elasticsearch-plugin install ingest-attachment
+RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch ingest-attachment
