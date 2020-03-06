@@ -45,7 +45,7 @@ jobs:
       #   run: .github/docker-image-build.sh        
       - name: use images build by ci
         run: |
-          "sed -i -e 's#image: ${IMAGE_REPO}:##g' -e 's#${VERSION}##g' docker-compose.yml"
+          sed -i -e 's#image: ${IMAGE_REPO}:##g' -e 's#${VERSION}##g' docker-compose.yml
           cat docker-compose.yml
       - name: run docker-compose up
         run: docker-compose up --detach
