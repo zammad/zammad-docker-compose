@@ -41,6 +41,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: build docker containers
+        run: .github/docker-image-build.sh        
       - name: use images build by ci
         run: sed -i -e 's#${IMAGE_REPO}:##g' -e 's#${VERSION}##g' docker-compose.yml
       - name: run docker-compose up
