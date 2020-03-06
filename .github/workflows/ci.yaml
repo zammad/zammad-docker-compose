@@ -32,32 +32,19 @@ jobs:
         with:
           dockerfile: containers/zammad-postgresql/Dockerfile                 
 
-  build-containers:
+  build-and-run-docker-compose:
     needs: 
       - lint-bash-scripts
       - lint-docker-files
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      REPO_USER: ${{ secrets.REPO_USER }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1 
-      - name: build docker containers
-        run: .github/docker-image-build.sh
-
-  test-docker-compose:
-    needs: build-containers
-    timeout-minutes: 10
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: build docker containers
+        run: .github/docker-image-build.sh        
       - name: use images build by ci
-        run: sed -i -e 's#VERSION=.*#VERSION=-ci-snapshot#g' < .env
-      - name: pull container images
-        run: docker-compose pull
+        run: sed -i -e 's#${IMAGE_REPO}:##g' -e 's#${VERSION}##g' docker-compose.yml
       - name: run docker-compose up
         run: docker-compose up --detach
       - name: add autowizard file
