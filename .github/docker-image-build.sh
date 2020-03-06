@@ -15,4 +15,5 @@ for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
 done
 
 # change images in compose file
+# shellcheck disable=SC2016
 sed -i -e 's#image: ${IMAGE_REPO}:##g' -e 's#${VERSION}#-ci-snapsoht#g'< docker-compose.yml
