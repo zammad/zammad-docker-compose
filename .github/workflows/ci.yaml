@@ -36,18 +36,20 @@ jobs:
     needs: 
       - lint-bash-scripts
       - lint-docker-files
-    timeout-minutes: 10
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: build docker containers
-        run: .github/docker-image-build.sh        
+      # - name: build docker containers
+      #   run: .github/docker-image-build.sh        
       - name: use images build by ci
-        run: "sed -i -e 's#image: ${IMAGE_REPO}:##g' -e 's#${VERSION}#-ci-snapsoht#g'< docker-compose.yml"
-      - name: run docker-compose up
-        run: docker-compose up --detach
-      - name: add autowizard file
-        run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad
-      - name: run tests
-        run: .github/tests.sh
+        run: | 
+          sed -i -e 's#image: ${IMAGE_REPO}:##g' -e 's#${VERSION}#-ci-snapsoht#g'< docker-compose.yml
+          cat docker-compose.yml
+      # - name: run docker-compose up
+      #   run: docker-compose up --detach
+      # - name: add autowizard file
+      #   run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad
+      # - name: run tests
+      #   run: .github/tests.sh
