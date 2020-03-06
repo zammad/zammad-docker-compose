@@ -37,6 +37,7 @@ jobs:
     env:
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      REPO_USER: ${{ secrets.REPO_USER }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1 
