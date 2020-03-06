@@ -49,36 +49,23 @@ if [ "$1" = 'zammad-init' ]; then
   # configure memcache
   sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'\\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'/" config/application.rb
 
-  echo "initialising / updating database..."
-
   # check if database exists / update to new version
-  set +e
-  bundle exec rake db:migrate &> /dev/null
-  DB_MIGRATE="$?"
+  echo "initialising / updating database..."
+  if ! (bundle exec rails r 'puts User.any?' 2> /dev/null | grep -q true); then
+        if [ "${POSTGRESQL_DB_CREATE}" == "true" ]; then
+          bundle exec rake db:create
+        fi
+        bundle exec rake db:migrate
+        bundle exec rake db:seed
 
-  # check if database is populated
-  if [ "${DB_MIGRATE}" == "0" ]; then
-      bundle exec rails r "Setting.set('es_url', '${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')" &> /dev/null
-      DB_SETTINGS="$?"
+        # create autowizard.json on first install
+        if [ -n "${AUTOWIZARD_JSON}" ]; then
+          echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
+        fi
+  else
+        bundle exec rake db:migrate
   fi
-  set -e
-
-  # create database if not exists
-  if [ "${DB_MIGRATE}" != "0" ] && [ "${POSTGRESQL_DB_CREATE}" == "true" ]; then
-      echo "creating database..."
-      bundle exec rake db:create
-  fi
-
-  # populate database and create autowizard.json on first install
-  if [ "${DB_SETTINGS}" != "0" ]; then
-      echo "seeding database..."
-      bundle exec rake db:seed
-
-      if [ -n "${AUTOWIZARD_JSON}" ]; then
-        echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
-      fi
-  fi
-
+ 
   # es config
   echo "changing settings..."
   bundle exec rails r "Setting.set('es_url', '${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
@@ -115,11 +102,6 @@ fi
 # zammad nginx
 if [ "$1" = 'zammad-nginx' ]; then
   check_zammad_ready
-
-  # configure nginx
-  if ! env | grep -q KUBERNETES; then
-    sed -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
-  fi
 
   echo "starting nginx..."
 

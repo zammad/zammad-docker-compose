@@ -11,7 +11,7 @@ services:
       - BACKUP_SLEEP=86400
       - HOLD_DAYS=10
       - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASSWORD=${POSTGRES_PASS}    
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
     links:
       - zammad-postgresql
