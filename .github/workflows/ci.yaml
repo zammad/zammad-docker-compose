@@ -32,21 +32,6 @@ jobs:
         with:
           dockerfile: containers/zammad-postgresql/Dockerfile                 
 
-  build-containers:
-    needs: 
-      - lint-bash-scripts
-      - lint-docker-files
-    runs-on: ubuntu-latest
-    env:
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      REPO_USER: ${{ secrets.REPO_USER }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1 
-      - name: build docker containers
-        run: .github/docker-image-build.sh
-
   test-docker-compose:
     needs: build-containers
     timeout-minutes: 10
@@ -54,6 +39,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: build docker containers
+        run: .github/docker-image-build.sh        
       - name: use images build by ci
         run: sed -i -e 's#VERSION=.*#VERSION=-ci-snapshot#g' < .env
       - name: pull container images
