@@ -64,4 +64,3 @@ jobs:
         run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad
       - name: run tests
         run: .github/tests.sh
-
