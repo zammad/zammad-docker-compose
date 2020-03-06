@@ -11,7 +11,7 @@ DOCKER_REGISTRY="index.docker.io"
 DOCKER_REPOSITORY="zammad-docker-compose"
 
 # dockerhub auth
-#echo "${DOCKER_PASSWORD}" | docker login --username="${DOCKER_USERNAME}" --password-stdin
+echo "${DOCKER_PASSWORD}" | docker login --username="${DOCKER_USERNAME}" --password-stdin
 
 # shellcheck disable=SC2153
 for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
