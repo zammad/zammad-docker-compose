@@ -20,3 +20,4 @@ for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
   docker build --pull --no-cache --build-arg BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')" -t "${DOCKER_REGISTRY}/${REPO_USER}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${DOCKER_IMAGE_TAG}" -f "containers/${DOCKER_IMAGE}/Dockerfile" .
   docker push "${DOCKER_REGISTRY}/${REPO_USER}/${DOCKER_REPOSITORY}:${DOCKER_IMAGE}-${DOCKER_IMAGE_TAG}"
 done
+
