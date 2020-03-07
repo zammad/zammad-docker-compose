@@ -52,18 +52,18 @@ if [ "$1" = 'zammad-init' ]; then
   # check if database exists / update to new version
   echo "initialising / updating database..."
   if ! (bundle exec rails r 'puts User.any?' 2> /dev/null | grep -q true); then
-        if [ "${POSTGRESQL_DB_CREATE}" == "true" ]; then
-          bundle exec rake db:create
-        fi
-        bundle exec rake db:migrate
-        bundle exec rake db:seed
+    if [ "${POSTGRESQL_DB_CREATE}" == "true" ]; then
+      bundle exec rake db:create
+    fi
+    bundle exec rake db:migrate
+    bundle exec rake db:seed
 
-        # create autowizard.json on first install
-        if [ -n "${AUTOWIZARD_JSON}" ]; then
-          echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
-        fi
+    # create autowizard.json on first install
+    if [ -n "${AUTOWIZARD_JSON}" ]; then
+      echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
+    fi
   else
-        bundle exec rake db:migrate
+    bundle exec rake db:migrate
   fi
  
   # es config
