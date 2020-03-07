@@ -32,10 +32,19 @@ jobs:
         with:
           dockerfile: containers/zammad-postgresql/Dockerfile                 
 
+  lint-docker-compose-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: lint zammad docker-compose file
+        run: docker-compose config
+
   build-and-run-docker-compose:
     needs: 
       - lint-bash-scripts
       - lint-docker-files
+      - lint-docker-compose-file
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
