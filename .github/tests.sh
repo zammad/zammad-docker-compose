@@ -32,12 +32,17 @@ sleep 10
 echo
 echo "create user via api"
 echo
-curl --fail --show-error -u info@zammad.org:Zammad -H "Content-Type: application/json" -X POST -d '{"firstname":"Bob","lastname":"Smith","email":"testuser@example.com","roles":["Customer"],"password":"some_password"}' http://localhost/api/v1/users
+curl --silent --fail --show-error -u info@zammad.org:Zammad -H "Content-Type: application/json" -X POST -d '{"firstname":"Bob","lastname":"Smith","email":"testuser@example.com","roles":["Customer"],"password":"some_password"}' 'http://localhost/api/v1/users'
+
+echo 
+echo "search user"
+echo
+curl --silent --fail --show-error -u info@zammad.org:Zammad 'http://localhost/api/v1/users/search?query=Smith&limit=10&expand=true'
 
 echo
 echo "create ticket"
 echo
-curl --fail --show-error -u info@zammad.org:Zammad -H "Content-Type: application/json" -X POST -d '{"title":"Help me!","group": "Users","article":{"subject":"some subject","body":"some message","type":"note","internal":false},"customer":"testuser@example.com","note": "some note"}' http://localhost/api/v1/tickets
+curl --silent --fail --show-error -u info@zammad.org:Zammad -H "Content-Type: application/json" -X POST -d '{"title":"Help me!","group": "Users","article":{"subject":"some subject","body":"some message","type":"note","internal":false},"customer":"testuser@example.com","note": "some note"}' 'http://localhost/api/v1/tickets'
 
 
 
