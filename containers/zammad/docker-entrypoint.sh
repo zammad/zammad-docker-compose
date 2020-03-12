@@ -103,6 +103,9 @@ fi
 if [ "$1" = 'zammad-nginx' ]; then
   check_zammad_ready
 
+  # configure nginx
+  sed -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
+
   echo "starting nginx..."
 
   exec /usr/sbin/nginx -g 'daemon off;'
