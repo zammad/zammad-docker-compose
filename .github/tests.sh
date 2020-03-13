@@ -29,7 +29,7 @@ echo
 
 sleep 10
 
-docker exec zammad-docker-compose_zammad-railsserver_1 rails 'r FillDB.load(agents: 50,customers: 1000,groups: 20,organizations: 40,overviews: 5,tickets: 100)'
+docker exec zammad-docker-compose_zammad-railsserver_1 rails 'r FillDB.load(agents: 10,customers: 10,groups: 10,organizations: 10,overviews: 10,tickets: 10)'
 
 echo
 echo "create user via api"
