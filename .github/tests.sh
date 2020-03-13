@@ -27,3 +27,12 @@ echo
 echo "Autowizard executed successful :)"
 echo 
 
+echo 
+echo "Fill db with some random data..."
+echo
+
+docker exec zammad-docker-compose_zammad-railsserver_1 rails r "FillDB.load(agents: 10,customers: 10,groups: 10,organizations: 10,overviews: 10,tickets: 10)"
+
+echo 
+echo "Fill DB executed successful :)"
+echo 
