@@ -27,9 +27,10 @@ echo
 echo "Autowizard executed successful :)"
 echo 
 
-sleep 10
 
-docker exec zammad-docker-compose_zammad-railsserver_1 rails r "FillDB.load(agents: 10,customers: 10,groups: 10,organizations: 10,overviews: 10,tickets: 10)"
+echo 
+echo "Fill db with some random data"
+docker exec zammad-docker-compose_zammad-railsserver_1 rails r "FillDB.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
 
 echo
 echo "create user via api"
