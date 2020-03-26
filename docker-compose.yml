@@ -32,6 +32,9 @@ services:
     command: ["zammad-init"]
     depends_on:
       - zammad-postgresql
+    environment:
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASSWORD=${POSTGRES_PASS}      
     image: ${IMAGE_REPO}:zammad${VERSION}
     links:
       - zammad-elasticsearch
