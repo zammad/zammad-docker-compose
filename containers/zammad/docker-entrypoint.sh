@@ -6,6 +6,7 @@ set -e
 : "${ELASTICSEARCH_HOST:=zammad-elasticsearch}"
 : "${ELASTICSEARCH_PORT:=9200}"
 : "${ELASTICSEARCH_SCHEMA:=http}"
+: "${ELASTICSEARCH_NAMESPACE:=zammad}"
 : "${ELASTICSEARCH_SSL_VERIFY:=true}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
@@ -69,6 +70,8 @@ if [ "$1" = 'zammad-init' ]; then
   # es config
   echo "changing settings..."
   bundle exec rails r "Setting.set('es_url', '${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
+
+  bundle exec rails r "Setting.set('es_index', '${ELASTICSEARCH_NAMESPACE}')"
 
   if [ -n "${ELASTICSEARCH_USER}" ] && [ -n "${ELASTICSEARCH_PASS}" ]; then
     bundle exec rails r "Setting.set('es_user', \"${ELASTICSEARCH_USER}\")"
