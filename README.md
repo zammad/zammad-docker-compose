@@ -51,7 +51,7 @@ Do the following to empty the ES docker volume:
 ```
 docker-compose stop
 set -o pipefail DOCKER_VOLUME="$(docker volume inspect zammaddockercompose_elasticsearch-data | grep Mountpoint | sed -e 's#.*": "##g' -e 's#",##')/*"
-echo "${DOCKER_VOLUME}" #check this is a valid docker volume path! if not do not proceed or you might loose data!
+echo "${DOCKER_VOLUME}" #check this is a valid docker volume path! if not do not proceed or you might lose data!
 docker-compose start
 ```
 
