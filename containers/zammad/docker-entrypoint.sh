@@ -19,7 +19,6 @@ set -e
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
 : "${ZAMMAD_WEBSOCKET_PORT:=6042}"
-: "${ZAMMAD_INSTALL_RSYNC_PARAMS:=--no-perms --no-owner}"
 : "${NGINX_SERVER_NAME:=_}"
 : "${RSYNC_PARAMS:='--no-perms --no-owner'}"
 
