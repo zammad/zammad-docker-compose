@@ -21,7 +21,7 @@ set -e
 : "${ZAMMAD_WEBSOCKET_PORT:=6042}"
 : "${ZAMMAD_INSTALL_RSYNC_PARAMS:=--no-perms --no-owner}"
 : "${NGINX_SERVER_NAME:=_}"
-: "${RSYNC_PARAMS:=--no-perms --no-owner}"
+: "${RSYNC_PARAMS:='--no-perms --no-owner'}"
 
 function check_zammad_ready {
   sleep 15
