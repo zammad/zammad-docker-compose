@@ -1,4 +1,4 @@
-FROM ruby:2.5.5-slim AS builder
+FROM ruby:2.6.5-slim AS builder
 # note: zammad is currently incompatible to alpine because of: 
 # https://github.com/docker-library/ruby/issues/113
 
@@ -24,7 +24,7 @@ RUN chmod +x /tmp/setup.sh; \
     /tmp/setup.sh install
 
 
-FROM ruby:2.5.5-slim
+FROM ruby:2.6.5-slim
 
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
@@ -37,7 +37,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.vcs-url="https://github.com/zammad/zammad" \
       org.label-schema.vcs-type="Git" \
       org.label-schema.vendor="Zammad" \
-      org.label-schema.schema-version="3.3.0" \
+      org.label-schema.schema-version="3.4.0" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
 ENV GIT_BRANCH stable
