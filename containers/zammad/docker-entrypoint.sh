@@ -19,7 +19,7 @@ set -e
 : "${POSTGRESQL_PASS:=zammad}"
 : "${POSTGRESQL_DB:=zammad_production}"
 : "${POSTGRESQL_DB_CREATE:=true}"
-: "${RAILS_TRUSTED_PROXIES:='['127.0.0.1', '::1']'}"
+: "${RAILS_TRUSTED_PROXIES:=['127.0.0.1', '::1']}"
 : "${RSYNC_ADDITIONAL_PARAMS:=--no-perms --no-owner}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
