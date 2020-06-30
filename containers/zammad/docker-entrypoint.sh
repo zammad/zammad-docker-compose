@@ -10,18 +10,20 @@ set -e
 : "${ELASTICSEARCH_SSL_VERIFY:=true}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
+: "${NGINX_SERVER_NAME:=_}"
+: "${NGINX_SERVER_SCHEME:=\$scheme}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
 : "${POSTGRESQL_PORT:=5432}"
 : "${POSTGRESQL_USER:=zammad}"
 : "${POSTGRESQL_PASS:=zammad}"
 : "${POSTGRESQL_DB:=zammad_production}"
 : "${POSTGRESQL_DB_CREATE:=true}"
+: "${RAILS_TRUSTED_PROXIES:=['127.0.0.1', '::1']}"
+: "${RSYNC_ADDITIONAL_PARAMS:=--no-perms --no-owner}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
 : "${ZAMMAD_WEBSOCKET_PORT:=6042}"
-: "${NGINX_SERVER_NAME:=_}"
-: "${RSYNC_ADDITIONAL_PARAMS:=--no-perms --no-owner}"
 
 function check_zammad_ready {
   sleep 15
@@ -52,6 +54,9 @@ if [ "$1" = 'zammad-init' ]; then
 
   # configure memcache
   sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'\\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'/" config/application.rb
+
+  # configure trusted proxies
+  sed -i -e "s#config.action_dispatch.trusted_proxies =.*#config.action_dispatch.trusted_proxies = ${RAILS_TRUSTED_PROXIES}#" config/environments/production.rb
 
   # check if database exists / update to new version
   echo "initialising / updating database..."
@@ -110,7 +115,11 @@ if [ "$1" = 'zammad-nginx' ]; then
   check_zammad_ready
 
   # configure nginx
-  sed -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
+  sed -e "s#proxy_set_header X-Forwarded-Proto .*;#proxy_set_header X-Forwarded-Proto ${NGINX_SERVER_SCHEME};#g" \
+      -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" \
+      -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" \
+      -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" \
+      -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
 
   echo "starting nginx..."
 
