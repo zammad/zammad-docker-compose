@@ -11,8 +11,7 @@ set -e
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
 : "${NGINX_SERVER_NAME:=_}"
-# shellcheck disable=SC2016
-: "${NGINX_SERVER_SCHEME:='$scheme'}"
+: "${NGINX_SERVER_SCHEME:=\$scheme}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
 : "${POSTGRESQL_PORT:=5432}"
 : "${POSTGRESQL_USER:=zammad}"
