@@ -40,6 +40,12 @@ Like this, you can add your `docker-compose.prod.yml` to a branch of your Git re
 
 * RANCHER_URL=http://RANCHER_HOST:8080 rancher-compose --env-file=.env up
 
+## Running without Elasticsearch
+
+Elasticsearch is an optional, but strongly recommended dependency for Zammad. More details can be found in the [documentation](https://docs.zammad.org/en/latest/prerequisites/software.html#elasticsearch-optional). There are however certain scenarios when running without Elasticsearch may be desired, e.g. for very small teams, for teams with limited budget or as a temporary solution for an unplanned Elasticsearch downtime or planned cluster upgrade.
+
+Elasticsearch is enabled by default in the example `docker-compose.yml` file. It is also by default required to run the "zammad-init" command. Disabling Elasticsearch is possible by setting a special environment variable: `ELASTICSEARCH_ENABLED=false` for the `zammad-init` container and removing all references to Elasticsearch everywhere else: the `zammad-elasticsearch` container, it's volume and links to it.
+
 ## Upgrading
 
 ### From =< 3.3.0-12
