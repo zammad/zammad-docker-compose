@@ -4,6 +4,7 @@ services:
   zammad-nginx:
     environment:
       - VIRTUAL_HOST=helpdesk.domain.tld
+      - NGINX_SERVER_SCHEME=https
     networks:
       - default
       - proxy_2_zammad
