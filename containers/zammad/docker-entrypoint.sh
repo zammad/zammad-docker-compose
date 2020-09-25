@@ -8,6 +8,7 @@ set -e
 : "${ELASTICSEARCH_PORT:=9200}"
 : "${ELASTICSEARCH_SCHEMA:=http}"
 : "${ELASTICSEARCH_NAMESPACE:=zammad}"
+: "${ELASTICSEARCH_REINDEX:=true}"
 : "${ELASTICSEARCH_SSL_VERIFY:=true}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
@@ -101,10 +102,12 @@ if [ "$1" = 'zammad-init' ]; then
       SSL_SKIP_VERIFY=""
     fi
 
-    if ! curl -s ${SSL_SKIP_VERIFY} ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
-      echo "rebuilding es searchindex..."
-      bundle exec rake searchindex:rebuild
-    fi
+    if [ "${ELASTICSEARCH_REINDEX}" == "true" ]; then
+      if ! curl -s ${SSL_SKIP_VERIFY} ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
+        echo "rebuilding es searchindex..."
+        bundle exec rake searchindex:rebuild
+      fi
+    fi  
   fi
 
   # chown everything to zammad user
