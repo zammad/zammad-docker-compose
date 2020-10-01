@@ -3,10 +3,12 @@
 set -e
 
 : "${AUTOWIZARD_JSON:=''}"
+: "${ELASTICSEARCH_ENABLED:=true}"
 : "${ELASTICSEARCH_HOST:=zammad-elasticsearch}"
 : "${ELASTICSEARCH_PORT:=9200}"
 : "${ELASTICSEARCH_SCHEMA:=http}"
 : "${ELASTICSEARCH_NAMESPACE:=zammad}"
+: "${ELASTICSEARCH_REINDEX:=true}"
 : "${ELASTICSEARCH_SSL_VERIFY:=true}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
@@ -74,32 +76,38 @@ if [ "$1" = 'zammad-init' ]; then
   else
     bundle exec rake db:migrate
   fi
- 
+
   # es config
   echo "changing settings..."
-  bundle exec rails r "Setting.set('es_url', '${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
-
-  bundle exec rails r "Setting.set('es_index', '${ELASTICSEARCH_NAMESPACE}')"
-
-  if [ -n "${ELASTICSEARCH_USER}" ] && [ -n "${ELASTICSEARCH_PASS}" ]; then
-    bundle exec rails r "Setting.set('es_user', \"${ELASTICSEARCH_USER}\")"
-    bundle exec rails r "Setting.set('es_password', \"${ELASTICSEARCH_PASS}\")"
-  fi
-
-  until (echo > /dev/tcp/${ELASTICSEARCH_HOST}/${ELASTICSEARCH_PORT}) &> /dev/null; do
-    echo "zammad railsserver waiting for elasticsearch server to be ready..."
-    sleep 5
-  done
-
-  if [ "${ELASTICSEARCH_SSL_VERIFY}" == "false" ]; then
-    SSL_SKIP_VERIFY="-k"
+  if [ "${ELASTICSEARCH_ENABLED}" == "false" ]; then
+    bundle exec rails r "Setting.set('es_url', '')"
   else
-    SSL_SKIP_VERIFY=""
-  fi
-  
-  if ! curl -s ${SSL_SKIP_VERIFY} ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
-    echo "rebuilding es searchindex..."
-    bundle exec rake searchindex:rebuild
+    bundle exec rails r "Setting.set('es_url', '${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}')"
+
+    bundle exec rails r "Setting.set('es_index', '${ELASTICSEARCH_NAMESPACE}')"
+
+    if [ -n "${ELASTICSEARCH_USER}" ] && [ -n "${ELASTICSEARCH_PASS}" ]; then
+      bundle exec rails r "Setting.set('es_user', \"${ELASTICSEARCH_USER}\")"
+      bundle exec rails r "Setting.set('es_password', \"${ELASTICSEARCH_PASS}\")"
+    fi
+
+    until (echo > /dev/tcp/${ELASTICSEARCH_HOST}/${ELASTICSEARCH_PORT}) &> /dev/null; do
+      echo "zammad railsserver waiting for elasticsearch server to be ready..."
+      sleep 5
+    done
+
+    if [ "${ELASTICSEARCH_SSL_VERIFY}" == "false" ]; then
+      SSL_SKIP_VERIFY="-k"
+    else
+      SSL_SKIP_VERIFY=""
+    fi
+
+    if [ "${ELASTICSEARCH_REINDEX}" == "true" ]; then
+      if ! curl -s ${SSL_SKIP_VERIFY} ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
+        echo "rebuilding es searchindex..."
+        bundle exec rake searchindex:rebuild
+      fi
+    fi  
   fi
 
   # chown everything to zammad user
