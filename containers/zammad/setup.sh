@@ -3,9 +3,9 @@ set -e
 
 # install dependencies
 if [ "$1" = 'install' ]; then
-  PACKAGES="build-essential curl git libimlib2-dev libpq-dev"
+  PACKAGES="build-essential curl git libpq-dev"
 elif [ "$1" = 'run' ]; then
-  PACKAGES="curl libimlib2 libpq5 nginx rsync"
+  PACKAGES="curl libpq5 nginx rsync"
 fi
 
 apt-get update
