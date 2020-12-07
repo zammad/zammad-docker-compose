@@ -27,27 +27,9 @@ jobs:
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_KUBERNETES_KUBEVAL: false
-          VALIDATE_YAML: false
-
-  # lint-docker-files:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v1
-  #     - name: lint zammad dockerfile
-  #       uses: brpaz/hadolint-action@master
-  #       with:
-  #         dockerfile: containers/zammad/Dockerfile
-  #     - name: lint elasticsearch dockerfile
-  #       uses: brpaz/hadolint-action@master
-  #       with:
-  #         dockerfile: containers/zammad-elasticsearch/Dockerfile
-  #     - name: lint postgresql dockerfile
-  #       uses: brpaz/hadolint-action@master
-  #       with:
-  #         dockerfile: containers/zammad-postgresql/Dockerfile
+          # VALIDATE_ALL_CODEBASE: false
+          # VALIDATE_KUBERNETES_KUBEVAL: false
+          # VALIDATE_YAML: true
 
   lint-docker-compose-file:
     runs-on: ubuntu-20.04
@@ -58,10 +40,10 @@ jobs:
         run: docker-compose config
 
   build-and-run-docker-compose:
-    # needs: 
-    #   - lint-bash-scripts
-    #   - lint-docker-files
-    #   - lint-docker-compose-file
+    needs:
+      - codespell
+      - lint-docker-compose-file
+      - superlinter
     timeout-minutes: 20
     runs-on: ubuntu-20.04
     steps:
@@ -79,10 +61,10 @@ jobs:
         run: .github/tests.sh
 
   run-remote-image-docker-compose:
-    # needs: 
-    #   - lint-bash-scripts
-    #   - lint-docker-files
-    #   - lint-docker-compose-file
+    needs:
+      - codespell
+      - lint-docker-compose-file
+      - superlinter
     timeout-minutes: 10
     runs-on: ubuntu-20.04
     steps:
