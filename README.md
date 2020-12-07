@@ -50,8 +50,8 @@ Elasticsearch is enabled by default in the example `docker-compose.yml` file. It
 
 ### From =< 3.3.0-12
 
-We've updated the Elasticsearch image from 5.6 to 7.6. 
-As there is no direct upgrade path we have to delete all Elasticsearch indicies and rebuild them.
+We've updated the Elasticsearch image from 5.6 to 7.6.
+As there is no direct upgrade path we have to delete all Elasticsearch indices and rebuild them.
 Do the following to empty the ES docker volume:
 
 ```

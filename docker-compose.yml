@@ -121,6 +121,3 @@ volumes:
     driver: local
   zammad-data:
     driver: local
-
-
-faillintertest?
