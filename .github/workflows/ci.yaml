@@ -17,6 +17,14 @@ jobs:
           check_filenames: true
           check_hidden: true
 
+  lint-docker-compose-file:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: lint zammad docker-compose file
+        run: docker-compose config
+
   super-linter:
     runs-on: ubuntu-20.04
     steps:
@@ -30,14 +38,6 @@ jobs:
           # VALIDATE_ALL_CODEBASE: false
           # VALIDATE_KUBERNETES_KUBEVAL: false
           # VALIDATE_YAML: true
-
-  lint-docker-compose-file:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: lint zammad docker-compose file
-        run: docker-compose config
 
   build-and-run-docker-compose:
     needs:
