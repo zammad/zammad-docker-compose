@@ -6,7 +6,7 @@ twitter, chat and e-mails. It is distributed under the GNU AFFERO General Public
  License (AGPL). Do you receive many e-mails and want to answer them with a team of agents?
 You're going to love Zammad!
 
-## What is zammad-docker-compose repo for?
+## Use case for this repo
 
 This repo is meant to be the starting point for somebody who likes to use dockerized multi-container Zammad in production.
 
