@@ -61,9 +61,9 @@ jobs:
 
   build-and-run-docker-compose:
     needs: 
-      - lint-bash-scripts
-      - lint-docker-files
-      - lint-docker-compose-file
+      # - lint-bash-scripts
+      # - lint-docker-files
+      # - lint-docker-compose-file
     timeout-minutes: 20
     runs-on: ubuntu-20.04
     steps:
@@ -82,9 +82,9 @@ jobs:
 
   run-remote-image-docker-compose:
     needs: 
-      - lint-bash-scripts
-      - lint-docker-files
-      - lint-docker-compose-file
+      # - lint-bash-scripts
+      # - lint-docker-files
+      # - lint-docker-compose-file
     timeout-minutes: 10
     runs-on: ubuntu-20.04
     steps:
