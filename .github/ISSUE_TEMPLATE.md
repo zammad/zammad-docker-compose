@@ -8,20 +8,20 @@ Hi there - thanks for filling an issue. Please ensure the following things befor
 * The upper textblock will be removed automatically when you submit your issue *
 -->
 
-### Infos
+# Infos
 
 * Docker version:
 * Docker-compose version:
 * Operating system (Docker host):
 
-### Expected behavior
+# Expected behavior
 
 *
 
-### Actual behavior
+# Actual behavior
 
 *
 
-### Steps to reproduce the behavior
+# Steps to reproduce the behavior
 
 *
