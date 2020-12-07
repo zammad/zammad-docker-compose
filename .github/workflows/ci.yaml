@@ -4,21 +4,40 @@ on:
   pull_request:
 
 jobs:
-  lint-bash-scripts:
-    runs-on: ubuntu-latest
+  codespell:
+    name: codespell
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Codespell
+        uses: codespell-project/actions-codespell@master
+        with:
+          skip: .git
+          #exclude_file: .github/kubeval.sh
+          #ignore_words_list: iam,aks
+          check_filenames: true
+          check_hidden: true
+
+  super-linter:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Lint Code Base
+        uses: github/super-linter@v3
+        env:
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_KUBERNETES_KUBEVAL: false
+          VALIDATE_YAML: false
+
+  lint-docker-files:
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Lint Bash scripts
-        uses: docker://koalaman/shellcheck-alpine:v0.7.0
-        with:
-          args: .github/lint-scripts.sh
-
-  lint-docker-files:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1    
       - name: lint zammad dockerfile
         uses: brpaz/hadolint-action@master
         with:
@@ -30,10 +49,10 @@ jobs:
       - name: lint postgresql dockerfile
         uses: brpaz/hadolint-action@master
         with:
-          dockerfile: containers/zammad-postgresql/Dockerfile                 
+          dockerfile: containers/zammad-postgresql/Dockerfile
 
   lint-docker-compose-file:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -46,12 +65,12 @@ jobs:
       - lint-docker-files
       - lint-docker-compose-file
     timeout-minutes: 20
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: build docker containers
-        run: .github/docker-image-build.sh        
+        run: .github/docker-image-build.sh
       - name: use images build by ci
         run: sed -i -e 's#${IMAGE_REPO}:##g' -e 's#${VERSION}##g' docker-compose.yml
       - name: run docker-compose up
@@ -67,12 +86,12 @@ jobs:
       - lint-docker-files
       - lint-docker-compose-file
     timeout-minutes: 10
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       - name: pull docker-compose images
-        run: docker-compose pull       
+        run: docker-compose pull
       - name: run docker-compose up
         run: docker-compose up --detach
       - name: add autowizard file
