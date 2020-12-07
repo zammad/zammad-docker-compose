@@ -43,7 +43,7 @@ jobs:
     needs:
       - codespell
       - lint-docker-compose-file
-      - superlinter
+      - super-linter
     timeout-minutes: 20
     runs-on: ubuntu-20.04
     steps:
@@ -64,7 +64,7 @@ jobs:
     needs:
       - codespell
       - lint-docker-compose-file
-      - superlinter
+      - super-linter
     timeout-minutes: 10
     runs-on: ubuntu-20.04
     steps:
