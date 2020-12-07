@@ -15,5 +15,3 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
 SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 
 RUN /usr/share/elasticsearch/bin/elasticsearch-plugin install --batch ingest-attachment
-
-testlint
