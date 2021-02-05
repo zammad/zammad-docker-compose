@@ -5,10 +5,10 @@ FROM ruby:2.6.6-slim AS builder
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV GIT_BRANCH stable
+ENV GIT_BRANCH colpari-develop
 ENV GIT_URL ${PROJECT_URL}.git
 ENV GOSU_VERSION 1.11
-ENV PROJECT_URL https://github.com/zammad/zammad
+ENV PROJECT_URL https://github.com/colpari/zammad
 ENV RAILS_ENV production
 ENV TAR_GZ_URL ${PROJECT_URL}/archive/${GIT_BRANCH}.tar.gz
 ENV ZAMMAD_DIR /opt/zammad
@@ -34,13 +34,13 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.license="AGPL-3.0" \
       org.label-schema.description="Docker container for Zammad - Data Container" \
       org.label-schema.url="https://zammad.org" \
-      org.label-schema.vcs-url="https://github.com/zammad/zammad" \
+      org.label-schema.vcs-url="https://github.com/colpari/zammad" \
       org.label-schema.vcs-type="Git" \
-      org.label-schema.vendor="Zammad" \
+      org.label-schema.vendor="colpari" \
       org.label-schema.schema-version="3.6.0" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
-ENV GIT_BRANCH stable
+ENV GIT_BRANCH colpari-develop
 ENV RAILS_ENV production
 ENV ZAMMAD_DIR /opt/zammad
 ENV ZAMMAD_READY_FILE ${ZAMMAD_DIR}/tmp/zammad.ready
