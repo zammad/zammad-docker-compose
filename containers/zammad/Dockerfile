@@ -53,11 +53,11 @@ RUN chmod +x /tmp/setup.sh; \
 COPY --from=builder ${ZAMMAD_TMP_DIR} ${ZAMMAD_TMP_DIR}
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 
-USER zammad
-
 # docker init
 COPY containers/zammad/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+USER zammad
 
 WORKDIR ${ZAMMAD_DIR}
