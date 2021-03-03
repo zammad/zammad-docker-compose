@@ -1,5 +1,5 @@
 FROM ruby:2.6.6-slim AS builder
-# note: zammad is currently incompatible to alpine because of: 
+# note: zammad is currently incompatible to alpine because of:
 # https://github.com/docker-library/ruby/issues/113
 
 ARG BUILD_DATE
@@ -7,7 +7,6 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ENV GIT_BRANCH stable
 ENV GIT_URL ${PROJECT_URL}.git
-ENV GOSU_VERSION 1.11
 ENV PROJECT_URL https://github.com/zammad/zammad
 ENV RAILS_ENV production
 ENV TAR_GZ_URL ${PROJECT_URL}/archive/${GIT_BRANCH}.tar.gz
@@ -21,7 +20,7 @@ SHELL ["/bin/bash", "-e", "-o", "pipefail", "-c"]
 # install zammad
 COPY containers/zammad/setup.sh /tmp
 RUN chmod +x /tmp/setup.sh; \
-    /tmp/setup.sh install
+    /tmp/setup.sh builder
 
 
 FROM ruby:2.6.6-slim
@@ -49,15 +48,16 @@ ENV ZAMMAD_USER zammad
 
 COPY containers/zammad/setup.sh /tmp
 RUN chmod +x /tmp/setup.sh; \
-    /tmp/setup.sh run
+    /tmp/setup.sh runner
 
 COPY --from=builder ${ZAMMAD_TMP_DIR} ${ZAMMAD_TMP_DIR}
-COPY --from=builder /usr/local/bin/gosu /usr/local/bin/gosu
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 
 # docker init
 COPY containers/zammad/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+USER zammad
 
 WORKDIR ${ZAMMAD_DIR}
