@@ -44,11 +44,6 @@ if [ "$1" = 'zammad-init' ]; then
   # shellcheck disable=SC2086
   rsync -a ${RSYNC_ADDITIONAL_PARAMS} "${ZAMMAD_TMP_DIR}"/public/assets/images/ "${ZAMMAD_DIR}"/public/assets/images
 
-  # # shellcheck disable=SC2086
-  # rsync -rltD ${RSYNC_ADDITIONAL_PARAMS} --delete --exclude 'public/assets/images/*' --exclude 'storage/fs/*' "${ZAMMAD_TMP_DIR}/" "${ZAMMAD_DIR}"
-  # # shellcheck disable=SC2086
-  # rsync -rltD ${RSYNC_ADDITIONAL_PARAMS} "${ZAMMAD_TMP_DIR}"/public/assets/images/ "${ZAMMAD_DIR}"/public/assets/images
-
   until (echo > /dev/tcp/"${POSTGRESQL_HOST}"/"${POSTGRESQL_PORT}") &> /dev/null; do
     echo "zammad railsserver waiting for postgresql server to be ready..."
     sleep 5
@@ -115,9 +110,6 @@ if [ "$1" = 'zammad-init' ]; then
     fi
   fi
 
-  # chown everything to zammad user
-  chown -R "${ZAMMAD_USER}":"${ZAMMAD_USER}" "${ZAMMAD_DIR}"
-
   # create install ready file
   echo 'zammad-init' > "${ZAMMAD_READY_FILE}"
 fi
@@ -128,6 +120,8 @@ if [ "$1" = 'zammad-nginx' ]; then
   check_zammad_ready
 
   # configure nginx
+  sed -i -e "s#user www-data;##g" -e 's#/var/log/nginx/\(access\|error\).log#/dev/stdout#g' /etc/nginx/nginx.conf
+
   sed -e "s#proxy_set_header X-Forwarded-Proto .*;#proxy_set_header X-Forwarded-Proto ${NGINX_SERVER_SCHEME};#g" \
       -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" \
       -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" \
