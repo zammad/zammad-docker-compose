@@ -38,5 +38,6 @@ fi
 
 # set nginx file permissions
 if [ "$1" = 'runner' ]; then
-  chown -R "${ZAMMAD_USER}":"${ZAMMAD_USER}" /etc/nginx
+  mkdir -p "${ZAMMAD_DIR}"
+  chown -R "${ZAMMAD_USER}":"${ZAMMAD_USER}" /etc/nginx "${ZAMMAD_DIR}"
 fi
