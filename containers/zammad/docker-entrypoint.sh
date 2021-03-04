@@ -107,14 +107,11 @@ if [ "$1" = 'zammad-init' ]; then
         echo "rebuilding es searchindex..."
         bundle exec rake searchindex:rebuild
       fi
-    fi  
+    fi
   fi
 
-  # chown everything to zammad user
-  chown -R "${ZAMMAD_USER}":"${ZAMMAD_USER}" "${ZAMMAD_DIR}"
-
   # create install ready file
-  su -c "echo 'zammad-init' > ${ZAMMAD_READY_FILE}" "${ZAMMAD_USER}"
+  echo 'zammad-init' > "${ZAMMAD_READY_FILE}"
 fi
 
 
@@ -146,7 +143,7 @@ if [ "$1" = 'zammad-railsserver' ]; then
   echo "starting railsserver..."
 
   #shellcheck disable=SC2101
-  exec gosu "${ZAMMAD_USER}":"${ZAMMAD_USER}" bundle exec rails server puma -b [::] -p "${ZAMMAD_RAILSSERVER_PORT}" -e "${RAILS_ENV}"
+  exec bundle exec rails server puma -b [::] -p "${ZAMMAD_RAILSSERVER_PORT}" -e "${RAILS_ENV}"
 fi
 
 
@@ -158,7 +155,7 @@ if [ "$1" = 'zammad-scheduler' ]; then
 
   echo "starting scheduler..."
 
-  exec gosu "${ZAMMAD_USER}":"${ZAMMAD_USER}" bundle exec script/scheduler.rb run
+  exec bundle exec script/scheduler.rb run
 fi
 
 
@@ -170,5 +167,5 @@ if [ "$1" = 'zammad-websocket' ]; then
 
   echo "starting websocket server..."
 
-  exec gosu "${ZAMMAD_USER}":"${ZAMMAD_USER}" bundle exec script/websocket-server.rb -b 0.0.0.0 -p "${ZAMMAD_WEBSOCKET_PORT}" start
+  exec bundle exec script/websocket-server.rb -b 0.0.0.0 -p "${ZAMMAD_WEBSOCKET_PORT}" start
 fi
