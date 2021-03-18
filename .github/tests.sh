@@ -8,7 +8,7 @@ set -o pipefail
 
 docker-compose logs --timestamps --follow &
 
-until (curl -I --silent --fail localhost | grep -iq "HTTP/1.1 200 OK"); do
+until (curl -I --silent --fail localhost:8080 | grep -iq "HTTP/1.1 200 OK"); do
     echo "wait for zammad to be ready..."
     sleep 15
 done
