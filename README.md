@@ -70,3 +70,9 @@ CREATE USER zammad;
 ALTER USER zammad WITH PASSWORD 'zammad';
 ALTER USER zammad WITH SUPERUSER CREATEDB;
 ```
+
+### From =< 3.6.0-65
+
+To be able to run Zammad container with an unpriviliged user we had to change the port Nginx uses from 80 to 8080, so Zammad needs to be accessed via <http://localhost:8080> instead of <http://localhost> now!
+
+This change will also affect you, if you use a reverse proxy, like Traefik or Haproxy, in front of Zammad as your reverse proxy configuration needs to be adapted to point to port 8080 now.
