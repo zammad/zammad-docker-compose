@@ -1,4 +1,4 @@
-name: ci
+name: ci-remote-image
 
 on:
   pull_request:
