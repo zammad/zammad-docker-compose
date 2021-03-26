@@ -8,8 +8,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV GIT_BRANCH stable
 ENV GIT_URL ${PROJECT_URL}.git
 ENV PROJECT_URL https://github.com/zammad/zammad
-ENV RAILS_LOG_TO_STDOUT true
 ENV RAILS_ENV production
+ENV RAILS_LOG_TO_STDOUT true
 ENV TAR_GZ_URL ${PROJECT_URL}/archive/${GIT_BRANCH}.tar.gz
 ENV ZAMMAD_DIR /opt/zammad
 ENV ZAMMAD_READY_FILE ${ZAMMAD_DIR}/tmp/zammad.ready
@@ -42,6 +42,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
 
 ENV GIT_BRANCH stable
 ENV RAILS_ENV production
+ENV RAILS_LOG_TO_STDOUT true
 ENV ZAMMAD_DIR /opt/zammad
 ENV ZAMMAD_READY_FILE ${ZAMMAD_DIR}/tmp/zammad.ready
 ENV ZAMMAD_TMP_DIR /tmp/zammad-${GIT_BRANCH}
