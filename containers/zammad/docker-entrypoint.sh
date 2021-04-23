@@ -120,17 +120,25 @@ fi
 if [ "$1" = 'zammad-nginx' ]; then
   check_zammad_ready
 
-  # configure nginx
-  sed -e "s#listen .*#listen ${NGINX_PORT};#g" \
-      -e "s#proxy_set_header X-Forwarded-Proto .*;#proxy_set_header X-Forwarded-Proto ${NGINX_SERVER_SCHEME};#g" \
-      -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" \
-      -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" \
-      -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" \
-      -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
+  # check if a customized nginx configuration is already available
+  CONF=/etc/nginx/sites-enabled/default
 
-  echo "starting nginx..."
+  if [ -f "$CONF" ]; then
+    echo "starting nginx..."
 
-  exec /usr/sbin/nginx -g 'daemon off;'
+    exec /usr/sbin/nginx -g 'daemon off;'
+  else
+    # configure nginx
+    sed -e "s#listen .*#listen ${NGINX_PORT};#g" \
+        -e "s#proxy_set_header X-Forwarded-Proto .*;#proxy_set_header X-Forwarded-Proto ${NGINX_SERVER_SCHEME};#g" \
+        -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" \
+        -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" \
+        -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" \
+        -e 's#/var/log/nginx/zammad.\(access\|error\).log#/dev/stdout#g' < contrib/nginx/zammad.conf > /etc/nginx/sites-enabled/default
+ 
+    echo "starting nginx..."
+
+    exec /usr/sbin/nginx -g 'daemon off;'
 fi
 
 
