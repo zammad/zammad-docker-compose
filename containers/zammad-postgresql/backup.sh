@@ -24,7 +24,7 @@ function zammad_backup {
 
   # delete old backups
   if [ -d "${BACKUP_DIR}" ] && [ -n "$(ls "${BACKUP_DIR}")" ]; then
-    find "${BACKUP_DIR}"/*_zammad_*.gz -type f -mtime +"${HOLD_DAYS}" -exec rm {} \;
+    find "${BACKUP_DIR}"/*_zammad_*.gz -type f -mtime +"${HOLD_DAYS}" -delete
   fi
 
   if [ "${NO_FILE_BACKUP}" != "yes" ]; then

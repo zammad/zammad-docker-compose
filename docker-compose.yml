@@ -51,7 +51,7 @@ services:
   zammad-nginx:
     command: ["zammad-nginx"]
     expose:
-      - "80"
+      - "8080"
     depends_on:
       - zammad-railsserver
     image: ${IMAGE_REPO}:zammad${VERSION}

@@ -3,7 +3,7 @@ set -e
 
 # install dependencies
 if [ "$1" = 'builder' ]; then
-  PACKAGES="build-essential curl git libimlib2-dev libpq-dev"
+  PACKAGES="build-essential curl git libimlib2-dev libpq-dev shared-mime-info"
 elif [ "$1" = 'runner' ]; then
   PACKAGES="curl libimlib2 libpq5 nginx rsync"
 fi
@@ -28,7 +28,6 @@ if [ "$1" = 'builder' ]; then
   contrib/packager.io/fetch_locales.rb
   sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: zammad-postgresql\n#g' < contrib/packager.io/database.yml.pkgr > config/database.yml
   sed -i "/require 'rails\/all'/a require\ 'nulldb'" config/application.rb
-  sed -i '/# Use a different logger for distributed setups./a \ \ config.logger = Logger.new(STDOUT)' config/environments/production.rb
   sed -i 's/.*scheduler_\(err\|out\).log.*//g' script/scheduler.rb
   touch db/schema.rb
   bundle exec rake assets:precompile
