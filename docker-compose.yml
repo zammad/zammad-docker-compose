@@ -9,7 +9,7 @@ services:
     entrypoint: /usr/local/bin/backup.sh
     environment:
       - BACKUP_SLEEP=86400
-      - HOLD_DAYS=1
+      - HOLD_DAYS=10
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
