@@ -152,7 +152,7 @@ if [ "$1" = 'zammad-railsserver' ]; then
   echo "starting railsserver... with WEB_CONCURRENCY=${ZAMMAD_WEB_CONCURRENCY}"
 
   #shellcheck disable=SC2101
-  exec bundle exec puma -b [::]:"${ZAMMAD_RAILSSERVER_PORT}" "${PUMA_OPTS}" -e "${RAILS_ENV}" -c "/opt/zammad/config.ru"
+  exec bundle exec puma -b [::]:"${ZAMMAD_RAILSSERVER_PORT}" "${PUMA_OPTS}" -e "${RAILS_ENV}" -C "/opt/zammad/config.ru"
 fi
 
 
