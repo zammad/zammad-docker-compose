@@ -140,6 +140,7 @@ fi
 if [ "$1" = 'zammad-railsserver' ]; then
   test -f /opt/zammad/tmp/pids/server.pid && rm /opt/zammad/tmp/pids/server.pid
 
+  PUMA_OPTS=''
   if (( ZAMMAD_WEB_CONCURRENCY > 1 )); then
     PUMA_OPTS=" -w $ZAMMAD_WEB_CONCURRENCY"
   fi
