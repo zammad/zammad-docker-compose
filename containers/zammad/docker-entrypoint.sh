@@ -27,6 +27,7 @@ set -e
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
 : "${ZAMMAD_WEBSOCKET_PORT:=6042}"
+: "${ZAMMAD_WEB_CONCURRENCY:=0}"
 
 function check_zammad_ready {
   sleep 15
@@ -142,10 +143,10 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   cd "${ZAMMAD_DIR}"
 
-  echo "starting railsserver..."
+  echo "starting railsserver... with WEB_CONCURRENCY=${ZAMMAD_WEB_CONCURRENCY}"
 
   #shellcheck disable=SC2101
-  exec bundle exec rails server puma -b [::] -p "${ZAMMAD_RAILSSERVER_PORT}" -e "${RAILS_ENV}"
+  exec bundle exec puma -b tcp://[::]:"${ZAMMAD_RAILSSERVER_PORT}" -w "${ZAMMAD_WEB_CONCURRENCY}" -e "${RAILS_ENV}"
 fi
 
 
