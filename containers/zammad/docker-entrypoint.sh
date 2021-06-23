@@ -27,7 +27,7 @@ set -e
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
 : "${ZAMMAD_WEBSOCKET_PORT:=6042}"
-: "${ZAMMAD_WEB_CONCURRENCY:=1}"
+: "${ZAMMAD_WEB_CONCURRENCY:=0}"
 
 function check_zammad_ready {
   sleep 15
