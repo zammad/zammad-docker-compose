@@ -12,6 +12,7 @@ set -e
 : "${ELASTICSEARCH_SSL_VERIFY:=true}"
 : "${MEMCACHED_HOST:=zammad-memcached}"
 : "${MEMCACHED_PORT:=11211}"
+: "${NGINX_PORT:=8080}"
 : "${NGINX_SERVER_NAME:=_}"
 : "${NGINX_SERVER_SCHEME:=\$scheme}"
 : "${POSTGRESQL_HOST:=zammad-postgresql}"
@@ -26,6 +27,7 @@ set -e
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 : "${ZAMMAD_WEBSOCKET_HOST:=zammad-websocket}"
 : "${ZAMMAD_WEBSOCKET_PORT:=6042}"
+: "${ZAMMAD_WEB_CONCURRENCY:=0}"
 
 function check_zammad_ready {
   sleep 15
@@ -103,18 +105,15 @@ if [ "$1" = 'zammad-init' ]; then
     fi
 
     if [ "${ELASTICSEARCH_REINDEX}" == "true" ]; then
-      if ! curl -s ${SSL_SKIP_VERIFY} ${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices | grep -q zammad; then
+      if ! curl -s "${SSL_SKIP_VERIFY}" "${ELASTICSEARCH_SCHEMA}://${ELASTICSEARCH_HOST}:${ELASTICSEARCH_PORT}/_cat/indices" | grep -q zammad; then
         echo "rebuilding es searchindex..."
         bundle exec rake searchindex:rebuild
       fi
-    fi  
+    fi
   fi
 
-  # chown everything to zammad user
-  chown -R "${ZAMMAD_USER}":"${ZAMMAD_USER}" "${ZAMMAD_DIR}"
-
   # create install ready file
-  su -c "echo 'zammad-init' > ${ZAMMAD_READY_FILE}" "${ZAMMAD_USER}"
+  echo 'zammad-init' > "${ZAMMAD_READY_FILE}"
 fi
 
 
@@ -123,7 +122,8 @@ if [ "$1" = 'zammad-nginx' ]; then
   check_zammad_ready
 
   # configure nginx
-  sed -e "s#proxy_set_header X-Forwarded-Proto .*;#proxy_set_header X-Forwarded-Proto ${NGINX_SERVER_SCHEME};#g" \
+  sed -e "s#\(listen\)\(.*\)80#\1\2${NGINX_PORT}#g" \
+      -e "s#proxy_set_header X-Forwarded-Proto .*;#proxy_set_header X-Forwarded-Proto ${NGINX_SERVER_SCHEME};#g" \
       -e "s#server .*:3000#server ${ZAMMAD_RAILSSERVER_HOST}:${ZAMMAD_RAILSSERVER_PORT}#g" \
       -e "s#server .*:6042#server ${ZAMMAD_WEBSOCKET_HOST}:${ZAMMAD_WEBSOCKET_PORT}#g" \
       -e "s#server_name .*#server_name ${NGINX_SERVER_NAME};#g" \
@@ -143,10 +143,10 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   cd "${ZAMMAD_DIR}"
 
-  echo "starting railsserver..."
+  echo "starting railsserver... with WEB_CONCURRENCY=${ZAMMAD_WEB_CONCURRENCY}"
 
   #shellcheck disable=SC2101
-  exec gosu "${ZAMMAD_USER}":"${ZAMMAD_USER}" bundle exec rails server puma -b [::] -p "${ZAMMAD_RAILSSERVER_PORT}" -e "${RAILS_ENV}"
+  exec bundle exec puma -b tcp://[::]:"${ZAMMAD_RAILSSERVER_PORT}" -w "${ZAMMAD_WEB_CONCURRENCY}" -e "${RAILS_ENV}"
 fi
 
 
@@ -158,7 +158,7 @@ if [ "$1" = 'zammad-scheduler' ]; then
 
   echo "starting scheduler..."
 
-  exec gosu "${ZAMMAD_USER}":"${ZAMMAD_USER}" bundle exec script/scheduler.rb run
+  exec bundle exec script/scheduler.rb run
 fi
 
 
@@ -170,5 +170,5 @@ if [ "$1" = 'zammad-websocket' ]; then
 
   echo "starting websocket server..."
 
-  exec gosu "${ZAMMAD_USER}":"${ZAMMAD_USER}" bundle exec script/websocket-server.rb -b 0.0.0.0 -p "${ZAMMAD_WEBSOCKET_PORT}" start
+  exec bundle exec script/websocket-server.rb -b 0.0.0.0 -p "${ZAMMAD_WEBSOCKET_PORT}" start
 fi

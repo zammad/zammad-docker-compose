@@ -34,7 +34,7 @@ services:
       - zammad-postgresql
     environment:
       - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}      
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
     image: ${IMAGE_REPO}:zammad${VERSION}
     links:
       - zammad-elasticsearch
@@ -45,13 +45,13 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:1.6.7-alpine
+    image: memcached:1.6.9-alpine
     restart: ${RESTART}
 
   zammad-nginx:
     command: ["zammad-nginx"]
     expose:
-      - "80"
+      - "8080"
     depends_on:
       - zammad-railsserver
     image: ${IMAGE_REPO}:zammad${VERSION}

@@ -4,78 +4,60 @@ on:
   pull_request:
 
 jobs:
-  lint-bash-scripts:
-    runs-on: ubuntu-latest
+  codespell:
+    name: codespell
+    runs-on: ubuntu-20.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Lint Bash scripts
-        uses: docker://koalaman/shellcheck-alpine:v0.7.0
-        with:
-          args: .github/lint-scripts.sh
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-  lint-docker-files:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1    
-      - name: lint zammad dockerfile
-        uses: brpaz/hadolint-action@master
+      - name: Codespell
+        uses: codespell-project/actions-codespell@master
         with:
-          dockerfile: containers/zammad/Dockerfile
-      - name: lint elasticsearch dockerfile
-        uses: brpaz/hadolint-action@master
-        with:
-          dockerfile: containers/zammad-elasticsearch/Dockerfile
-      - name: lint postgresql dockerfile
-        uses: brpaz/hadolint-action@master
-        with:
-          dockerfile: containers/zammad-postgresql/Dockerfile                 
+          skip: .git
+          check_filenames: true
+          check_hidden: true
 
   lint-docker-compose-file:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+
       - name: lint zammad docker-compose file
         run: docker-compose config
 
-  build-and-run-docker-compose:
-    needs: 
-      - lint-bash-scripts
-      - lint-docker-files
-      - lint-docker-compose-file
-    timeout-minutes: 20
-    runs-on: ubuntu-latest
+  super-linter:
+    runs-on: ubuntu-20.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: build docker containers
-        run: .github/docker-image-build.sh        
-      - name: use images build by ci
-        run: sed -i -e 's#${IMAGE_REPO}:##g' -e 's#${VERSION}##g' docker-compose.yml
-      - name: run docker-compose up
-        run: docker-compose up --detach
-      - name: add autowizard file
-        run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad
-      - name: run tests
-        run: .github/tests.sh
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-  run-remote-image-docker-compose:
-    needs: 
-      - lint-bash-scripts
-      - lint-docker-files
+      - name: Lint Code Base
+        uses: github/super-linter@v3
+        env:
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-and-run-docker-compose:
+    needs:
+      - codespell
       - lint-docker-compose-file
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
+      - super-linter
+    timeout-minutes: 20
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - name: pull docker-compose images
-        run: docker-compose pull       
+        uses: actions/checkout@v2
+
+      - name: build docker containers
+        run: .github/docker-image-build.sh
+
       - name: run docker-compose up
-        run: docker-compose up --detach
+        run: docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.override-local.yml up --detach
+
       - name: add autowizard file
         run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad
+
       - name: run tests
         run: .github/tests.sh
