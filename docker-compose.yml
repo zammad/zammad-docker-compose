@@ -17,8 +17,8 @@ services:
       - zammad-postgresql
     restart: ${RESTART}
     volumes:
-      - zammad-backup:/var/tmp/zammad
-      - zammad-data:/opt/zammad
+      - ${VOLUME_BASE_PATH}/zammad-backup:/var/tmp/zammad
+      - ${VOLUME_BASE_PATH}/zammad-data:/opt/zammad
 
   zammad-elasticsearch:
     environment:
@@ -26,7 +26,7 @@ services:
     image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
     restart: ${RESTART}
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - ${VOLUME_BASE_PATH}/elasticsearch-data:/usr/share/elasticsearch/data
 
   zammad-init:
     command: ["zammad-init"]
@@ -41,7 +41,7 @@ services:
       - zammad-postgresql
     restart: on-failure
     volumes:
-      - zammad-data:/opt/zammad
+      - ${VOLUME_BASE_PATH}/zammad-data:/opt/zammad
 
   zammad-memcached:
     command: memcached -m 256M
@@ -60,7 +60,7 @@ services:
       - zammad-websocket
     restart: ${RESTART}
     volumes:
-      - zammad-data:/opt/zammad
+      - ${VOLUME_BASE_PATH}/zammad-data:/opt/zammad
 
   zammad-postgresql:
     environment:
@@ -69,7 +69,7 @@ services:
     image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
     restart: ${RESTART}
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
+      - ${VOLUME_BASE_PATH}/postgresql-data:/var/lib/postgresql/data
 
   zammad-railsserver:
     command: ["zammad-railsserver"]
@@ -83,7 +83,7 @@ services:
       - zammad-postgresql
     restart: ${RESTART}
     volumes:
-      - zammad-data:/opt/zammad
+      - ${VOLUME_BASE_PATH}/zammad-data:/opt/zammad
 
   zammad-scheduler:
     command: ["zammad-scheduler"]
@@ -97,7 +97,7 @@ services:
       - zammad-postgresql
     restart: ${RESTART}
     volumes:
-      - zammad-data:/opt/zammad
+      - ${VOLUME_BASE_PATH}/zammad-data:/opt/zammad
 
   zammad-websocket:
     command: ["zammad-websocket"]
@@ -110,7 +110,7 @@ services:
       - zammad-memcached
     restart: ${RESTART}
     volumes:
-      - zammad-data:/opt/zammad
+      - ${VOLUME_BASE_PATH}/zammad-data:/opt/zammad
 
 volumes:
   elasticsearch-data:
