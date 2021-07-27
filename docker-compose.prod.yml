@@ -3,7 +3,7 @@ services:
 
   zammad-nginx:
     expose:
-      - "80"
+      - "80:8080"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.zammad.rule=Host(`helpdesk.wegi-gmbh.de`)"
