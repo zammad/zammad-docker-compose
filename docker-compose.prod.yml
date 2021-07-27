@@ -2,6 +2,8 @@ version: '2'
 services:
 
   zammad-nginx:
+    environment:
+      - RAILS_TRUSTED_PROXIES=['127.0.0.1', '::1', 'traefik']
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.zammad.rule=Host(`helpdesk.wegi-gmbh.de`)"
