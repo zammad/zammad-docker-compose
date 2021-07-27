@@ -4,6 +4,7 @@ services:
   zammad-nginx:
     environment:
       - RAILS_TRUSTED_PROXIES=['127.0.0.1', '::1', 'traefik']
+      - NGINX_SERVER_SCHEME=https
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.zammad.rule=Host(`helpdesk.wegi-gmbh.de`)"
