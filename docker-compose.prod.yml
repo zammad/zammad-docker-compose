@@ -2,15 +2,13 @@ version: '2'
 services:
 
   zammad-nginx:
-    expose:
-      - "80:8080"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.zammad.rule=Host(`helpdesk.wegi-gmbh.de`)"
       - "traefik.http.routers.zammad.service=zammad"
       - "traefik.http.routers.zammad.entrypoints=websecure"
       - "traefik.http.routers.zammad.tls.certresolver=le"
-      - "traefik.http.services.zammad.loadbalancer.server.port=80"
+      - "traefik.http.services.zammad.loadbalancer.server.port=8080"
     networks:
       - default
       - web
