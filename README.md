@@ -78,7 +78,12 @@ To be able to run Zammad container with an unprivileged user we had to change th
 This change will also affect you, if you use a reverse proxy, like Traefik or Haproxy, in front of Zammad as your reverse proxy configuration needs to be adapted to point to port 8080 now.
 
 ## build / run MWS-Helpdesk
-
+### Production
 * Execute `make start-prod` to build / run the production helpdesk.
 * Execute `make shutdown-prod` to shutdown the production helpdesk.
 * Execute `make build-prod` to build the production helpdesk.
+
+### Staging
+* Execute `make start-stg` to build / run the staging helpdesk.
+* Execute `make shutdown-stg` to shutdown the staging helpdesk.
+* Execute `make build-stg` to build the staging helpdesk.
