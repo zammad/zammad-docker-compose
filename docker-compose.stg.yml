@@ -1,0 +1,21 @@
+version: '2'
+services:
+
+  zammad-nginx:
+    environment:
+      - RAILS_TRUSTED_PROXIES=['127.0.0.1', '::1', 'traefik']
+      - NGINX_SERVER_SCHEME=https
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.zammad.rule=Host(`helpdesk.dev01.wegi-gmbh.net`)"
+      - "traefik.http.routers.zammad.service=zammad"
+      - "traefik.http.routers.zammad.entrypoints=websecure"
+      - "traefik.http.routers.zammad.tls.certresolver=le"
+      - "traefik.http.services.zammad.loadbalancer.server.port=8080"
+    networks:
+      - default
+      - web
+
+networks:
+  web:
+    external: true
