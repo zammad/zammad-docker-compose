@@ -81,6 +81,13 @@ if [ "$1" = 'zammad-init' ]; then
     bundle exec rake db:migrate
   fi
 
+  # ensure package DB and asset changes are applied
+  if [ -d "${ZAMMAD_DIR}/auto_install/" ]; then
+    echo "Performing package migrations and rebuilding assets..."
+    bundle exec rake zammad:package:migrate
+    bundle exec rake assets:precompile
+  fi
+
   # es config
   echo "changing settings..."
   if [ "${ELASTICSEARCH_ENABLED}" == "false" ]; then
