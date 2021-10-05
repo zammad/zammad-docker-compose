@@ -85,6 +85,24 @@ services:
     volumes:
       - zammad-data:/opt/zammad
 
+  zammad-redis:
+    image: 6.2.5-alpine
+    restart: ${RESTART}
+
+  zammad-nginx:
+    command: ["zammad-nginx"]
+    expose:
+      - "8080"
+    depends_on:
+      - zammad-railsserver
+    image: ${IMAGE_REPO}:zammad${VERSION}
+    links:
+      - zammad-railsserver
+      - zammad-websocket
+    restart: ${RESTART}
+    volumes:
+      - zammad-data:/opt/zammad
+
   zammad-scheduler:
     command: ["zammad-scheduler"]
     depends_on:
@@ -95,6 +113,7 @@ services:
       - zammad-elasticsearch
       - zammad-memcached
       - zammad-postgresql
+      - zammad-redis
     restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
@@ -108,6 +127,7 @@ services:
     links:
       - zammad-postgresql
       - zammad-memcached
+      - zammad-redis
     restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
