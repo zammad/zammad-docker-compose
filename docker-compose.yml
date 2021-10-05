@@ -86,7 +86,7 @@ services:
       - zammad-data:/opt/zammad
 
   zammad-redis:
-    image: 6.2.5-alpine
+    image: redis:6.2.5-alpine
     restart: ${RESTART}
 
   zammad-nginx:
