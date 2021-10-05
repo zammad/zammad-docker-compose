@@ -24,7 +24,7 @@ RUN chmod +x /tmp/setup.sh; \
     /tmp/setup.sh builder
 
 
-FROM ruby:2.7.3-slim
+FROM ruby:2.7.4-slim
 
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
