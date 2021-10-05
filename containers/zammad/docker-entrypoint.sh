@@ -76,7 +76,7 @@ if [ "$1" = 'zammad-init' ]; then
     # create autowizard.json on first install
     if base64 -d <<< ${AUTOWIZARD_JSON} &>> /dev/null; then
       echo "Saving autowizard json payload..."
-      echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
+      base64 -d <<< "${AUTOWIZARD_JSON}" > auto_wizard.json
     fi
   else
     bundle exec rake db:migrate
