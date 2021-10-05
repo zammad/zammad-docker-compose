@@ -29,6 +29,9 @@ set -e
 : "${ZAMMAD_WEBSOCKET_PORT:=6042}"
 : "${ZAMMAD_WEB_CONCURRENCY:=0}"
 
+export MEMCACHE_SERVERS="${MEMCACHE_SERVERS}"
+export REDIS_URL="${REDIS_URL}"
+
 function check_zammad_ready {
   sleep 15
   until [ -f "${ZAMMAD_READY_FILE}" ]; do
@@ -45,9 +48,6 @@ if [ "$1" = 'zammad-init' ]; then
   rsync -a ${RSYNC_ADDITIONAL_PARAMS} --delete --exclude 'public/assets/images/*' --exclude 'storage/fs/*' "${ZAMMAD_TMP_DIR}/" "${ZAMMAD_DIR}"
   # shellcheck disable=SC2086
   rsync -a ${RSYNC_ADDITIONAL_PARAMS} "${ZAMMAD_TMP_DIR}"/public/assets/images/ "${ZAMMAD_DIR}"/public/assets/images
-
-  export MEMCACHE_SERVERS="${MEMCACHE_SERVERS}"
-  export REDIS_URL="${REDIS_URL}"
 
   until (echo > /dev/tcp/"${POSTGRESQL_HOST}"/"${POSTGRESQL_PORT}") &> /dev/null; do
     echo "zammad railsserver waiting for postgresql server to be ready..."
@@ -147,9 +147,6 @@ if [ "$1" = 'zammad-railsserver' ]; then
 
   cd "${ZAMMAD_DIR}"
 
-  export MEMCACHE_SERVERS="${MEMCACHE_SERVERS}"
-  export REDIS_URL="${REDIS_URL}"
-
   echo "starting railsserver... with WEB_CONCURRENCY=${ZAMMAD_WEB_CONCURRENCY}"
 
   #shellcheck disable=SC2101
@@ -163,9 +160,6 @@ if [ "$1" = 'zammad-scheduler' ]; then
 
   cd "${ZAMMAD_DIR}"
 
-  export MEMCACHE_SERVERS="${MEMCACHE_SERVERS}"
-  export REDIS_URL="${REDIS_URL}"
-
   echo "starting scheduler..."
 
   exec bundle exec script/scheduler.rb run
@@ -177,9 +171,6 @@ if [ "$1" = 'zammad-websocket' ]; then
   check_zammad_ready
 
   cd "${ZAMMAD_DIR}"
-
-  export MEMCACHE_SERVERS="${MEMCACHE_SERVERS}"
-  export REDIS_URL="${REDIS_URL}"
 
   echo "starting websocket server..."
 
