@@ -75,3 +75,8 @@ ALTER USER zammad WITH SUPERUSER CREATEDB;
 To be able to run Zammad container with an unprivileged user we had to change the port Nginx uses from 80 to 8080, so Zammad needs to be accessed via <http://localhost:8080> instead of <http://localhost> now!
 
 This change will also affect you, if you use a reverse proxy, like Traefik or Haproxy, in front of Zammad as your reverse proxy configuration needs to be adapted to point to port 8080 now.
+
+### From =< 4.0.0 to 5.0.0
+
+Memchached config changed. If you use the old env vars `MEMCACHED_HOST` & `MEMCACHED_PORT` adapt to `MEMCACHE_SERVERS`.
+Redis is a dependency for the Websocket server now.
