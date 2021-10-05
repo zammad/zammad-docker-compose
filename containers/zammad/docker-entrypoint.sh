@@ -71,8 +71,9 @@ if [ "$1" = 'zammad-init' ]; then
     bundle exec rake db:seed
 
     # create autowizard.json on first install
-    if [ -n "${AUTOWIZARD_JSON}" ]; then
-      echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
+    if base64 -d <<< ${AUTOWIZARD_JSON} &>> /dev/null; then
+      echo "Saving autowizard json payload..."
+      base64 -d <<< "${AUTOWIZARD_JSON}" > auto_wizard.json
     fi
   else
     bundle exec rails r "Cache.clear"
