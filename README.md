@@ -78,5 +78,5 @@ This change will also affect you, if you use a reverse proxy, like Traefik or Ha
 
 ### From =< 4.0.0 to 5.0.0
 
-Memchached config changed. If you use the old env vars `MEMCACHED_HOST` & `MEMCACHED_PORT` addapt to `MEMCACHE_SERVERS`.
+Memchached config changed. If you use the old env vars `MEMCACHED_HOST` & `MEMCACHED_PORT` adapt to `MEMCACHE_SERVERS`.
 Redis is a dependency for the Websocket server now.
