@@ -89,20 +89,6 @@ services:
     image: redis:6.2.5-alpine
     restart: ${RESTART}
 
-  zammad-nginx:
-    command: ["zammad-nginx"]
-    expose:
-      - "8080"
-    depends_on:
-      - zammad-railsserver
-    image: ${IMAGE_REPO}:zammad${VERSION}
-    links:
-      - zammad-railsserver
-      - zammad-websocket
-    restart: ${RESTART}
-    volumes:
-      - zammad-data:/opt/zammad
-
   zammad-scheduler:
     command: ["zammad-scheduler"]
     depends_on:
