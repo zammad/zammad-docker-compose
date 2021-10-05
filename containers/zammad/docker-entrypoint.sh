@@ -54,7 +54,9 @@ if [ "$1" = 'zammad-init' ]; then
   cd "${ZAMMAD_DIR}"
 
   # configure database
-  sed -e "s#.*adapter:.*#  adapter: postgresql#g" -e "s#.*database:.*#  database: ${POSTGRESQL_DB}#g" -e "s#.*username:.*#  username: ${POSTGRESQL_USER}#g" -e "s#.*password:.*#  password: ${POSTGRESQL_PASS}\\n  host: ${POSTGRESQL_HOST}\\n  port: ${POSTGRESQL_PORT}#g" < contrib/packager.io/database.yml.pkgr > config/database.yml
+  # https://stackoverflow.com/questions/407523/escape-a-string-for-a-sed-replace-pattern
+  ESCAPED_POSTGRESQL_PASS=$(echo "$POSTGRESQL_PASS" | sed -e 's/[\/&]/\\&/g')
+  sed -e "s#.*adapter:.*#  adapter: postgresql#g" -e "s#.*database:.*#  database: ${POSTGRESQL_DB}#g" -e "s#.*username:.*#  username: ${POSTGRESQL_USER}#g" -e "s#.*password:.*#  password: ${ESCAPED_POSTGRESQL_PASS}\\n  host: ${POSTGRESQL_HOST}\\n  port: ${POSTGRESQL_PORT}#g" < contrib/packager.io/database.yml.pkgr > config/database.yml
 
   # configure memcache
   sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'\\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'/" config/application.rb
