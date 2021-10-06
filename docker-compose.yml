@@ -105,7 +105,7 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
-      image: ${IMAGE_REPO}:zammad${VERSION}
+    image: ${IMAGE_REPO}:zammad${VERSION}
     restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
