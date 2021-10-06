@@ -35,7 +35,7 @@ services:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - REDIS_URL=${REDIS_URL}      
+      - REDIS_URL=${REDIS_URL
     image: ${IMAGE_REPO}:zammad${VERSION}
     restart: on-failure
     volumes:
