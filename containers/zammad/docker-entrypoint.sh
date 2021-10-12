@@ -10,8 +10,6 @@ set -e
 : "${ELASTICSEARCH_NAMESPACE:=zammad}"
 : "${ELASTICSEARCH_REINDEX:=true}"
 : "${ELASTICSEARCH_SSL_VERIFY:=true}"
-: "${MEMCACHED_HOST:=zammad-memcached}"
-: "${MEMCACHED_PORT:=11211}"
 : "${NGINX_PORT:=8080}"
 : "${NGINX_SERVER_NAME:=_}"
 : "${NGINX_SERVER_SCHEME:=\$scheme}"
@@ -58,9 +56,6 @@ if [ "$1" = 'zammad-init' ]; then
   ESCAPED_POSTGRESQL_PASS=$(echo "$POSTGRESQL_PASS" | sed -e 's/[\/&]/\\&/g')
   sed -e "s#.*adapter:.*#  adapter: postgresql#g" -e "s#.*database:.*#  database: ${POSTGRESQL_DB}#g" -e "s#.*username:.*#  username: ${POSTGRESQL_USER}#g" -e "s#.*password:.*#  password: ${ESCAPED_POSTGRESQL_PASS}\\n  host: ${POSTGRESQL_HOST}\\n  port: ${POSTGRESQL_PORT}#g" < contrib/packager.io/database.yml.pkgr > config/database.yml
 
-  # configure memcache
-  sed -i -e "s/.*config.cache_store.*file_store.*cache_file_store.*/    config.cache_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'\\n    config.session_store = :dalli_store, '${MEMCACHED_HOST}:${MEMCACHED_PORT}'/" config/application.rb
-
   # configure trusted proxies
   sed -i -e "s#config.action_dispatch.trusted_proxies =.*#config.action_dispatch.trusted_proxies = ${RAILS_TRUSTED_PROXIES}#" config/environments/production.rb
 
@@ -74,10 +69,12 @@ if [ "$1" = 'zammad-init' ]; then
     bundle exec rake db:seed
 
     # create autowizard.json on first install
-    if [ -n "${AUTOWIZARD_JSON}" ]; then
-      echo "${AUTOWIZARD_JSON}" | base64 -d > auto_wizard.json
+    if base64 -d <<< ${AUTOWIZARD_JSON} &>> /dev/null; then
+      echo "Saving autowizard json payload..."
+      base64 -d <<< "${AUTOWIZARD_JSON}" > auto_wizard.json
     fi
   else
+    bundle exec rails r "Cache.clear"
     bundle exec rake db:migrate
   fi
 

@@ -19,20 +19,20 @@ echo
 echo "Success - Zammad is up :)"
 echo
 
-echo 
+echo
 echo "Execute autowizard..."
 echo
 
 docker exec zammad-docker-compose_zammad-railsserver_1 rake zammad:setup:auto_wizard
 
-echo 
+echo
 echo "Autowizard executed successful :)"
-echo 
+echo
 
 
-echo 
+echo
 echo "Fill DB with some random data"
-docker exec zammad-docker-compose_zammad-railsserver_1 rails r "FillDB.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
+docker exec zammad-docker-compose_zammad-railsserver_1 rails r "FillDb.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
 
 echo
 echo "DB fill successful :)"
