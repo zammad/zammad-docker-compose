@@ -24,6 +24,7 @@ if [ "$1" = 'builder' ]; then
   tar -xzf zammad-"${GIT_BRANCH}".tar.gz
   rm zammad-"${GIT_BRANCH}".tar.gz
   cd "${ZAMMAD_TMP_DIR}"
+  script/build/cleanup.sh
   bundle install --without test development mysql
   contrib/packager.io/fetch_locales.rb
   sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: zammad-postgresql\n#g' < contrib/packager.io/database.yml.pkgr > config/database.yml
