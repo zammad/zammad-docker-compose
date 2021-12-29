@@ -3,7 +3,7 @@ set -e
 
 # install dependencies
 if [ "$1" = 'builder' ]; then
-  PACKAGES="build-essential curl git libimlib2-dev libpq-dev shared-mime-info"
+  PACKAGES="build-essential curl git libimlib2-dev libpq-dev nodejs shared-mime-info"
 elif [ "$1" = 'runner' ]; then
   PACKAGES="curl libimlib2 libpq5 nginx rsync"
 fi
@@ -24,7 +24,8 @@ if [ "$1" = 'builder' ]; then
   tar -xzf zammad-"${GIT_BRANCH}".tar.gz
   rm zammad-"${GIT_BRANCH}".tar.gz
   cd "${ZAMMAD_TMP_DIR}"
-  bundle install --without test development mysql
+  bundle config set without 'test development mysql'
+  bundle install
   contrib/packager.io/fetch_locales.rb
   sed -e 's#.*adapter: postgresql#  adapter: nulldb#g' -e 's#.*username:.*#  username: postgres#g' -e 's#.*password:.*#  password: \n  host: zammad-postgresql\n#g' < contrib/packager.io/database.yml.pkgr > config/database.yml
   sed -i "/require 'rails\/all'/a require\ 'nulldb'" config/application.rb
@@ -32,6 +33,7 @@ if [ "$1" = 'builder' ]; then
   touch db/schema.rb
   bundle exec rake assets:precompile
   rm -r tmp/cache
+  script/build/cleanup.sh
   chown -R "${ZAMMAD_USER}":"${ZAMMAD_USER}" "${ZAMMAD_TMP_DIR}"
 fi
 
