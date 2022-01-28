@@ -6,7 +6,7 @@ twitter, chat and emails. It is distributed under the GNU AFFERO General Public
  License (AGPL). Do you receive many emails and want to answer them with a team of agents?
 You're going to love Zammad!
 
-## Use case for this repositorysitory
+## Use case for this repository
 
 This repository is meant to be the starting point for somebody who likes to use dockerized multi-container Zammad in production.
 
@@ -30,7 +30,7 @@ To run Zammad behind a revers proxy, we provide `docker-compose.proxy-example.ym
 
 See `.examples/proxy/docker-compose.yml` for an example proxy project.
 
-Like this, you can add your `docker-compose.prod.yml` to a branch of your Git repositorysitory and stay up to date by merging changes to your branch.
+Like this, you can add your `docker-compose.prod.yml` to a branch of your Git repository and stay up to date by merging changes to your branch.
 
 ## Using Rancher
 
