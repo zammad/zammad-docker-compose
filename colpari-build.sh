@@ -7,7 +7,12 @@ set -o pipefail
 
 . .env
 
-DOCKER_IMAGES="zammad zammad-elasticsearch zammad-postgresql"
+if -z "$*"
+then 
+    DOCKER_IMAGES="zammad zammad-elasticsearch zammad-postgresql"
+else
+    DOCKER_IMAGES="$@"
+fi
 
 # shellcheck disable=SC2153
 for DOCKER_IMAGE in ${DOCKER_IMAGES}; do
