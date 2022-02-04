@@ -42,7 +42,8 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.schema-version="5.0.3" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
-ENV GIT_BRANCH colpari-develop
+#ENV GIT_BRANCH colpari-develop
+ENV GIT_BRANCH stable
 ENV RAILS_ENV production
 ENV RAILS_LOG_TO_STDOUT true
 ENV ZAMMAD_DIR /opt/zammad
