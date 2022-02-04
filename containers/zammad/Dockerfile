@@ -5,9 +5,11 @@ FROM ruby:2.7.4-slim AS builder
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV GIT_BRANCH colpari-develop
+#ENV GIT_BRANCH colpari-develop
+ENV GIT_BRANCH stable
 ENV GIT_URL ${PROJECT_URL}.git
-ENV PROJECT_URL https://github.com/colpari/zammad
+#ENV PROJECT_URL https://github.com/colpari/zammad
+ENV PROJECT_URL https://github.com/zammad/zammad
 ENV RAILS_ENV production
 ENV RAILS_LOG_TO_STDOUT true
 ENV TAR_GZ_URL ${PROJECT_URL}/archive/${GIT_BRANCH}.tar.gz

@@ -20,6 +20,7 @@ useradd -M -d "${ZAMMAD_DIR}" -s /bin/bash -u 1000 -g 1000 "${ZAMMAD_USER}"
 
 if [ "$1" = 'builder' ]; then
   cd "$(dirname "${ZAMMAD_TMP_DIR}")"
+  echo "using ${TAR_GZ_URL}"
   curl -s -J -L -O "${TAR_GZ_URL}"
   tar -xzf zammad-"${GIT_BRANCH}".tar.gz
   rm zammad-"${GIT_BRANCH}".tar.gz
