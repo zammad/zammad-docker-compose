@@ -7,7 +7,7 @@ set -o pipefail
 
 . .env
 
-if -z "$*"
+if [ -z "$*" ]
 then 
     DOCKER_IMAGES="zammad zammad-elasticsearch zammad-postgresql"
 else
