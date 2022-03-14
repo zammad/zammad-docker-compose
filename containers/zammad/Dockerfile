@@ -37,7 +37,7 @@ LABEL org.label-schema.build-date="$BUILD_DATE" \
       org.label-schema.vcs-url="https://github.com/zammad/zammad" \
       org.label-schema.vcs-type="Git" \
       org.label-schema.vendor="Zammad" \
-      org.label-schema.schema-version="5.0.3" \
+    org.label-schema.schema-version="5.1.0" \
       org.label-schema.docker.cmd="sysctl -w vm.max_map_count=262144;docker-compose up"
 
 ENV GIT_BRANCH stable
