@@ -2,17 +2,17 @@
 
 Zammad is a web based open source helpdesk/ticket system with many features
 to manage customer communication via several channels like telephone, facebook,
-twitter, chat and e-mails. It is distributed under the GNU AFFERO General Public
- License (AGPL). Do you receive many e-mails and want to answer them with a team of agents?
+twitter, chat and emails. It is distributed under the GNU AFFERO General Public
+ License (AGPL). Do you receive many emails and want to answer them with a team of agents?
 You're going to love Zammad!
 
-## Use case for this repo
+## Use case for this repository
 
-This repo is meant to be the starting point for somebody who likes to use dockerized multi-container Zammad in production.
+This repository is meant to be the starting point for somebody who likes to use dockerized multi-container Zammad in production.
 
 ## Getting started with zammad-docker-compose
 
-<https://docs.zammad.org/en/latest/install-docker-compose.html>
+[Learn more on Zammads documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
 
 ## CI Status
 
