@@ -1,3 +1,4 @@
+---
 name: ci
 
 on:
@@ -56,10 +57,13 @@ jobs:
         run: .github/docker-image-build.sh
 
       - name: run docker-compose up
-        run: docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.override-local.yml up --detach
+        run: docker-compose -f docker-compose.yml\
+             -f docker-compose.override.yml\
+             -f docker-compose.override-local.yml up --detach
 
       - name: add autowizard file
-        run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad
+        run: docker cp .github/auto_wizard.json\
+             zammad-docker-compose_zammad-railsserver_1:/opt/zammad
 
       - name: run tests
         run: .github/tests.sh
