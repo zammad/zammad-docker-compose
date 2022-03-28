@@ -11,7 +11,7 @@ services:
       - ./certs:/etc/nginx/certs
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
-    - 2_apps
+      - 2_apps
 
 networks:
   2_apps:
