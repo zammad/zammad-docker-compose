@@ -28,7 +28,7 @@ jobs:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: .github/linters
-          # VALIDATE_ALL_CODEBASE: false
+          VALIDATE_ALL_CODEBASE: false
           VALIDATE_JSCPD: false
 
   build-and-run-docker-compose:
