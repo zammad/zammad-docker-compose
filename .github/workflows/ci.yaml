@@ -1,28 +1,15 @@
+---
 name: ci
 
 on:
   pull_request:
 
 jobs:
-  codespell:
-    name: codespell
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Codespell
-        uses: codespell-project/actions-codespell@master
-        with:
-          skip: .git
-          check_filenames: true
-          check_hidden: true
-
   lint-docker-compose-file:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: lint zammad docker-compose file
         run: docker-compose config
@@ -31,26 +18,28 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Lint Code Base
-        uses: github/super-linter@v4
+        uses: github/super-linter/slim@v4
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINTER_RULES_PATH: .github/linters
+          VALIDATE_ALL_CODEBASE: false
           VALIDATE_JSCPD: false
-
 
   build-and-run-docker-compose:
     needs:
-      - codespell
       - lint-docker-compose-file
       - super-linter
     timeout-minutes: 20
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: build docker containers
         run: .github/docker-image-build.sh

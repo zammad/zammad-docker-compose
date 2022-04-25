@@ -1,4 +1,4 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.16.3
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.3
 ARG BUILD_DATE
 
 LABEL org.label-schema.build-date="$BUILD_DATE" \
