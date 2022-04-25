@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Codespell
         uses: codespell-project/actions-codespell@master
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: lint zammad docker-compose file
         run: docker-compose config
@@ -31,10 +31,10 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Lint Code Base
-        uses: github/super-linter@v4
+        uses: github/super-linter/slim@v4
         env:
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: build docker containers
         run: .github/docker-image-build.sh
