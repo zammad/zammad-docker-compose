@@ -33,7 +33,6 @@ jobs:
 
   build-and-run-docker-compose:
     needs:
-      - codespell
       - lint-docker-compose-file
       - super-linter
     timeout-minutes: 20
