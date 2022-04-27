@@ -14,9 +14,9 @@ This repository is meant to be the starting point for somebody who likes to use 
 
 [Learn more on Zammads documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
 
-## CI Status
+## Status
 
-[![CI Status](https://github.com/zammad/zammad-docker-compose/workflows/ci/badge.svg)](https://github.com/zammad/zammad-docker-compose/actions)
+[![CI Status](https://github.com/zammad/zammad-docker-compose/workflows/ci/badge.svg)](https://github.com/zammad/zammad-docker-compose/actions) [![Docker Pulls](https://badgen.net/docker/pulls/zammad/zammad-docker-compose?icon=docker&label=pulls)](https://hub.docker.com/r/zammad/zammad-docker-compose/)
 
 ## Using a reverse proxy
 
