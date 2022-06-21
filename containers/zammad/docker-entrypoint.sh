@@ -157,7 +157,7 @@ if [ "$1" = 'zammad-scheduler' ]; then
 
   echo "starting background services..."
 
-  exec bundle exec script/background-services.rb start
+  exec bundle exec script/background-worker.rb start
 fi
 
 
