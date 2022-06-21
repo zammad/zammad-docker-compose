@@ -155,9 +155,9 @@ if [ "$1" = 'zammad-scheduler' ]; then
 
   cd "${ZAMMAD_DIR}"
 
-  echo "starting scheduler..."
+  echo "starting background services..."
 
-  exec bundle exec script/scheduler.rb run
+  exec bundle exec script/background-services.rb start
 fi
 
 
