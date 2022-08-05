@@ -1,21 +1,21 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: "docker-zammad"
+  - package-ecosystem: "docker"
     directory: "/containers/zammad"
     schedule:
       interval: "weekly"
       time: "09:00"
       timezone: "Europe/Berlin"
 
-  - package-ecosystem: "docker-zammad-elasticsearch"
-    directory: "/containers/zammad-elasticsearch/"
+  - package-ecosystem: "docker"
+    directory: "/containers/zammad-elasticsearch"
     schedule:
       interval: "weekly"
       time: "09:00"
       timezone: "Europe/Berlin"
 
-  - package-ecosystem: "docker-zammad-postgresql"
+  - package-ecosystem: "docker"
     directory: "/containers/zammad-postgresql"
     schedule:
       interval: "weekly"
