@@ -1,6 +1,6 @@
 # note: zammad is currently incompatible to alpine because of:
 # https://github.com/docker-library/ruby/issues/113
-FROM ruby:3.0.4-slim AS builder
+FROM ruby:3.1.2-slim AS builder
 
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
@@ -24,7 +24,7 @@ RUN chmod +x /tmp/setup.sh; \
     /tmp/setup.sh builder
 
 
-FROM ruby:3.0.4-slim
+FROM ruby:3.1.2-slim
 
 ARG BUILD_DATE
 ARG DEBIAN_FRONTEND=noninteractive
