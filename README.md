@@ -21,7 +21,7 @@ This repository is meant to be the starting point for somebody who likes to use 
 ## Using a reverse proxy
 
 In environments with more then one web applications it is necessary to use a reverse proxy to route connections to port 80 and 443 to the right application.
-To run Zammad behind a revers proxy, we provide `docker-compose.proxy-example.yml` as a starting point.
+To run Zammad behind a reverse proxy, we provide `docker-compose.proxy-example.yml` as a starting point.
 
 1. Copy `./.examples/proxy/docker-compose.proxy-example.yml` to your own configuration, e.g. `./docker-compose.prod.yml`
     `cp ./.examples/proxy/docker-compose.proxy-example.yml ./docker-compose.prod.yml`
