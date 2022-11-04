@@ -3,20 +3,11 @@ version: '3'
 
 services:
 
-  zammad-backup:
-    image: zammad-postgresql-local
-
-  zammad-elasticsearch:
-    image: zammad-elasticsearch-local
-
   zammad-init:
     image: zammad-local
 
   zammad-nginx:
     image: zammad-local
-
-  zammad-postgresql:
-    image: zammad-postgresql-local
 
   zammad-railsserver:
     image: zammad-local

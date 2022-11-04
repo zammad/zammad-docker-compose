@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint-docker-compose-file:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -15,7 +15,7 @@ jobs:
         run: docker-compose config
 
   super-linter:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -36,7 +36,7 @@ jobs:
       - lint-docker-compose-file
       - super-linter
     timeout-minutes: 20
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
