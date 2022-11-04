@@ -8,20 +8,6 @@ updates:
       time: "09:00"
       timezone: "Europe/Berlin"
 
-  - package-ecosystem: "docker"
-    directory: "/containers/zammad-elasticsearch"
-    schedule:
-      interval: "weekly"
-      time: "09:00"
-      timezone: "Europe/Berlin"
-
-  - package-ecosystem: "docker"
-    directory: "/containers/zammad-postgresql"
-    schedule:
-      interval: "weekly"
-      time: "09:00"
-      timezone: "Europe/Berlin"
-
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

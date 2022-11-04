@@ -14,19 +14,18 @@ services:
       - HOLD_DAYS=10
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
-    image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
+    image: postgres:15.0-alpine
     restart: ${RESTART}
     volumes:
       - zammad-backup:/var/tmp/zammad
-      - zammad-data:/opt/zammad
+      - zammad-data:/opt/zammad:ro
+      - ./scripts/backup.sh:/usr/local/bin/backup.sh:ro
 
   zammad-elasticsearch:
-    environment:
-      - discovery.type=single-node
-    image: ${IMAGE_REPO}:zammad-elasticsearch${VERSION}
+    image: bitnami/elasticsearch:8.5.0
     restart: ${RESTART}
     volumes:
-      - elasticsearch-data:/usr/share/elasticsearch/data
+      - elasticsearch-data:/bitnami/elasticsearch/data
 
   zammad-init:
     command: ["zammad-init"]
@@ -44,7 +43,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:1.6.10-alpine
+    image: memcached:1.6.17-alpine
     restart: ${RESTART}
 
   zammad-nginx:
@@ -62,7 +61,7 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASS}
-    image: ${IMAGE_REPO}:zammad-postgresql${VERSION}
+    image: postgres:15.0-alpine
     restart: ${RESTART}
     volumes:
       - postgresql-data:/var/lib/postgresql/data

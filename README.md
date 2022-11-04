@@ -46,6 +46,59 @@ Elasticsearch is enabled by default in the example `docker-compose.yml` file. It
 
 ## Upgrading
 
+### From =< to 5.0.0 to 5.2.3-32
+
+* Elasticsearch was updated from 7.17.3 to 8.5.0 using the Bitnami image
+  * We don't use a custom build of the docker image anymore as ingest-attachment is no longer a plugin but instead a module packaged with this distribution of Elasticsearch
+  * ELASTICSEARCH_REINDEX var should be set to true
+
+* PostgreSql was updated from 9.6.24 to 15.0.0
+  * We don't use a custom build of the docker image anymore as we just mount the backup script to the postgres container now
+  * backup / restore ins needed to update
+    * you can create a new backup (with your old postgres 9.6 version / still in previous git version) by:
+      * if you already have checked out the newest commit
+        * `git checkout cd424e98689b8dc49878a37b9aab67192c36fd24`
+      * docker-compose stop
+      * docker-compose up
+      * check docker logs until "backup finished :)" is shown as last(!) entry
+        * `docker logs -f zammad-docker-compose_zammad-backup_1`
+      * `docker-compose stop`
+    * you can restore the backup in postgres 15 like
+      * update git epository
+        * `git checkout master`
+        * `git pull`
+      * stop docker-compose if it's running
+        * `docker-compose stop`
+      * delete old zammad postgre container and volume (data is lost! get sure your backups are in place!)
+        * `docker container rm zammad-docker-compose_zammad-postgresql_1`
+        * `docker volume rm zammad-docker-compose_postgresql-data`
+      * recreate zammads postgres volume
+        * `docker volume create zammad-docker-compose_postgresql-data`
+      * start a temporary restore container (adjust username & password vars if needed)
+        * `docker run -it --rm --name postgres-restore -v zammad-docker-compose_zammad-backup:/var/tmp/zammad:ro -v zammad-docker-compose_postgresql-data:/var/lib/postgresql/data -e POSTGRES_USER=zammad -e POSTGRES_PASSWORD=zammad postgres:15.0-alpine`
+      * in a second bash shell run:
+        * show available backups
+          * `docker exec -it postgres-restore bash -c "ls -al /var/tmp/zammad/"`
+        * create zammad_production db
+          * `docker exec -it postgres-restore bash -c "psql -U zammad --command='CREATE DATABASE zammad_production'"`
+        * restore old data with adjusted filename you got from the ls command above
+          * `docker exec -it postgres-restore bash -c "gunzip -kc /var/tmp/zammad/!!!ENTER_PSQL_FILE_NAME_FROM_COMMAND_ABOVE!!!_zammad_db.psql.gz | psql -U zammad" -d zammad_production`
+        * stop the restore container
+          * `docker stop postgres-restore`
+      * in your first bash shell
+        * `docker-compose up`
+
+### From =< 4.0.0 to 5.0.0
+
+Memchached config changed. If you use the old env vars `MEMCACHED_HOST` & `MEMCACHED_PORT` adapt to `MEMCACHE_SERVERS`.
+Redis is a dependency for the Websocket server now.
+
+### From =< 3.6.0-65
+
+To be able to run Zammad container with an unprivileged user we had to change the port Nginx uses from 80 to 8080, so Zammad needs to be accessed via <http://localhost:8080> instead of <http://localhost> now!
+
+This change will also affect you, if you use a reverse proxy, like Traefik or Haproxy, in front of Zammad as your reverse proxy configuration needs to be adapted to point to port 8080 now.
+
 ### From =< 3.3.0-12
 
 We've updated the Elasticsearch image from 5.6 to 7.6.
@@ -69,14 +122,3 @@ CREATE USER zammad;
 ALTER USER zammad WITH PASSWORD 'zammad';
 ALTER USER zammad WITH SUPERUSER CREATEDB;
 ```
-
-### From =< 3.6.0-65
-
-To be able to run Zammad container with an unprivileged user we had to change the port Nginx uses from 80 to 8080, so Zammad needs to be accessed via <http://localhost:8080> instead of <http://localhost> now!
-
-This change will also affect you, if you use a reverse proxy, like Traefik or Haproxy, in front of Zammad as your reverse proxy configuration needs to be adapted to point to port 8080 now.
-
-### From =< 4.0.0 to 5.0.0
-
-Memchached config changed. If you use the old env vars `MEMCACHED_HOST` & `MEMCACHED_PORT` adapt to `MEMCACHE_SERVERS`.
-Redis is a dependency for the Websocket server now.
