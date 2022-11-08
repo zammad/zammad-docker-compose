@@ -30,25 +30,3 @@ jobs:
           LINTER_RULES_PATH: .github/linters
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JSCPD: false
-
-  build-and-run-docker-compose:
-    needs:
-      - lint-docker-compose-file
-      - super-linter
-    timeout-minutes: 20
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: build docker containers
-        run: .github/docker-image-build.sh
-
-      - name: run docker-compose up
-        run: docker-compose -f docker-compose.yml -f docker-compose.override.yml -f docker-compose.override-local.yml up --detach
-
-      - name: add autowizard file
-        run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad
-
-      - name: run tests
-        run: .github/tests.sh
