@@ -3,8 +3,6 @@ name: ci-remote-image
 
 on:
   pull_request:
-    paths:
-      - '.env'
 
 jobs:
   run-remote-image-docker-compose:
