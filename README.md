@@ -14,9 +14,15 @@ This repository is meant to be the starting point for somebody who likes to use 
 
 [Learn more on Zammads documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
 
+## Upgrading
+
+For upgrading instrcutions see our [Releases](https://github.com/zammad/zammad-docker-compose/releases).
+
+Please be aware that the zammad-cocker-compose repository versions and tags don't match the Zammad container tags!
+
 ## Status
 
-[![CI Status](https://github.com/zammad/zammad-docker-compose/workflows/ci/badge.svg)](https://github.com/zammad/zammad-docker-compose/actions) [![Docker Pulls](https://badgen.net/docker/pulls/zammad/zammad-docker-compose?icon=docker&label=pulls)](https://hub.docker.com/r/zammad/zammad-docker-compose/)
+[![ci-remote-image](https://github.com/zammad/zammad-docker-compose/actions/workflows/ci-remote-image.yaml/badge.svg)](https://github.com/zammad/zammad-docker-compose/actions/workflows/ci-remote-image.yaml) [![Docker Pulls](https://badgen.net/docker/pulls/zammad/zammad-docker-compose?icon=docker&label=pulls)](https://hub.docker.com/r/zammad/zammad-docker-compose/)
 
 ## Using a reverse proxy
 
@@ -43,82 +49,3 @@ RANCHER_URL=http://RANCHER_HOST:8080 rancher-compose --env-file=.env up
 Elasticsearch is an optional, but strongly recommended dependency for Zammad. More details can be found in the [documentation](https://docs.zammad.org/en/latest/prerequisites/software.html#elasticsearch-optional). There are however certain scenarios when running without Elasticsearch may be desired, e.g. for very small teams, for teams with limited budget or as a temporary solution for an unplanned Elasticsearch downtime or planned cluster upgrade.
 
 Elasticsearch is enabled by default in the example `docker-compose.yml` file. It is also by default required to run the "zammad-init" command. Disabling Elasticsearch is possible by setting a special environment variable: `ELASTICSEARCH_ENABLED=false` for the `zammad-init` container and removing all references to Elasticsearch everywhere else: the `zammad-elasticsearch` container, it's volume and links to it.
-
-## Upgrading
-
-### From =< to 5.0.0 to 5.2.3-32
-
-* Elasticsearch was updated from 7.17.3 to 8.5.0 using the Bitnami image
-  * We don't use a custom build of the docker image anymore as ingest-attachment is no longer a plugin but instead a module packaged with this distribution of Elasticsearch
-  * ELASTICSEARCH_REINDEX var should be set to true
-
-* PostgreSql was updated from 9.6.24 to 15.0.0
-  * We don't use a custom build of the docker image anymore as we just mount the backup script to the postgres container now
-  * backup / restore ins needed to update
-    * you can create a new backup (with your old postgres 9.6 version / still in previous git version) by:
-      * if you already have checked out the newest commit
-        * `git checkout cd424e98689b8dc49878a37b9aab67192c36fd24`
-      * docker-compose stop
-      * docker-compose up
-      * check docker logs until "backup finished :)" is shown as last(!) entry
-        * `docker logs -f zammad-docker-compose_zammad-backup_1`
-      * `docker-compose stop`
-    * you can restore the backup in postgres 15 like
-      * update git epository
-        * `git checkout master`
-        * `git pull`
-      * stop docker-compose if it's running
-        * `docker-compose stop`
-      * delete old zammad postgre container and volume (data is lost! get sure your backups are in place!)
-        * `docker container rm zammad-docker-compose_zammad-postgresql_1`
-        * `docker volume rm zammad-docker-compose_postgresql-data`
-      * recreate zammads postgres volume
-        * `docker volume create zammad-docker-compose_postgresql-data`
-      * start a temporary restore container (adjust username & password vars if needed)
-        * `docker run -it --rm --name postgres-restore -v zammad-docker-compose_zammad-backup:/var/tmp/zammad:ro -v zammad-docker-compose_postgresql-data:/var/lib/postgresql/data -e POSTGRES_USER=zammad -e POSTGRES_PASSWORD=zammad postgres:15.0-alpine`
-      * in a second bash shell run:
-        * show available backups
-          * `docker exec -it postgres-restore bash -c "ls -al /var/tmp/zammad/"`
-        * create zammad_production db
-          * `docker exec -it postgres-restore bash -c "psql -U zammad --command='CREATE DATABASE zammad_production'"`
-        * restore old data with adjusted filename you got from the ls command above
-          * `docker exec -it postgres-restore bash -c "gunzip -kc /var/tmp/zammad/!!!ENTER_PSQL_FILE_NAME_FROM_COMMAND_ABOVE!!!_zammad_db.psql.gz | psql -U zammad" -d zammad_production`
-        * stop the restore container
-          * `docker stop postgres-restore`
-      * in your first bash shell
-        * `docker-compose up`
-
-### From =< 4.0.0 to 5.0.0
-
-Memchached config changed. If you use the old env vars `MEMCACHED_HOST` & `MEMCACHED_PORT` adapt to `MEMCACHE_SERVERS`.
-Redis is a dependency for the Websocket server now.
-
-### From =< 3.6.0-65
-
-To be able to run Zammad container with an unprivileged user we had to change the port Nginx uses from 80 to 8080, so Zammad needs to be accessed via <http://localhost:8080> instead of <http://localhost> now!
-
-This change will also affect you, if you use a reverse proxy, like Traefik or Haproxy, in front of Zammad as your reverse proxy configuration needs to be adapted to point to port 8080 now.
-
-### From =< 3.3.0-12
-
-We've updated the Elasticsearch image from 5.6 to 7.6.
-As there is no direct upgrade path we have to delete all Elasticsearch indices and rebuild them.
-This will depend on the name of your docker container and volume, which depends on the checkout directory (`zammad-docker-compose` by default):
-
-```console
-docker-compose stop
-docker container rm zammad-docker-compose_zammad-elasticsearch_1
-docker volume rm zammad-docker-compose_elasticsearch-data
-docker-compose up --no-recreate
-```
-
-To workaround the [changes in the PostgreSQL 9.6 container](https://github.com/docker-library/postgres/commit/f1bc8782e7e57cc403d0b32c0e24599535859f76) do the following:
-
-```console
-docker-compose start
-docker exec -it zammaddockercompose_zammad-postgresql_1 bash
-psql --username postgres --dbname zammad_production
-CREATE USER zammad;
-ALTER USER zammad WITH PASSWORD 'zammad';
-ALTER USER zammad WITH SUPERUSER CREATEDB;
-```

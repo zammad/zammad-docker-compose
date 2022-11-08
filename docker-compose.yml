@@ -36,7 +36,7 @@ services:
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASS=${POSTGRES_PASS}
       - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: ${IMAGE_REPO}:${VERSION}
     restart: on-failure
     volumes:
       - zammad-data:/opt/zammad
@@ -52,7 +52,7 @@ services:
       - "8080"
     depends_on:
       - zammad-railsserver
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
@@ -75,7 +75,7 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
@@ -93,7 +93,7 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
@@ -107,7 +107,7 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:zammad${VERSION}
+    image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
       - zammad-data:/opt/zammad
