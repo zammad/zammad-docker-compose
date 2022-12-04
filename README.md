@@ -12,13 +12,13 @@ This repository is meant to be the starting point for somebody who likes to use 
 
 ## Getting started with zammad-docker-compose
 
-[Learn more on Zammads documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
+[Learn more on Zammad’s documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
 
 ## Upgrading
 
-For upgrading instrcutions see our [Releases](https://github.com/zammad/zammad-docker-compose/releases).
+For upgrading instructions see our [Releases](https://github.com/zammad/zammad-docker-compose/releases).
 
-Please be aware that the zammad-cocker-compose repository versions and tags don't match the Zammad container tags!
+Please be aware that the zammad-docker-compose repository versions and tags don't match the Zammad container tags!
 
 ## Status
 
