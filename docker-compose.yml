@@ -14,7 +14,7 @@ services:
       - HOLD_DAYS=10
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
-    image: postgres:15.0-alpine
+    image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
       - zammad-backup:/var/tmp/zammad
@@ -61,7 +61,7 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASS}
-    image: postgres:15.1-alpine
+    image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
