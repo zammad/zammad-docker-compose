@@ -6,19 +6,20 @@ twitter, chat and emails. It is distributed under the GNU AFFERO General Public
  License (AGPL). Do you receive many emails and want to answer them with a team of agents?
 You're going to love Zammad!
 
-## Use case for this repository
+## Use cases
 
-This repository is meant to be the starting point for somebody who likes to use dockerized multi-container Zammad in production.
+This repository is the starting point if you want to:
 
-## Getting started with zammad-docker-compose
+- deploy Zammad in a containerized production environment
+- test the current `stable` or `develop` versions of Zammad
+
+## Getting started
 
 [Learn more on Zammad’s documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
 
 ## Upgrading
 
 For upgrading instructions see our [Releases](https://github.com/zammad/zammad-docker-compose/releases).
-
-Please be aware that the zammad-docker-compose repository versions and tags don't match the Zammad container tags!
 
 ## Status
 
@@ -48,4 +49,4 @@ RANCHER_URL=http://RANCHER_HOST:8080 rancher-compose --env-file=.env up
 
 Elasticsearch is an optional, but strongly recommended dependency for Zammad. More details can be found in the [documentation](https://docs.zammad.org/en/latest/prerequisites/software.html#elasticsearch-optional). There are however certain scenarios when running without Elasticsearch may be desired, e.g. for very small teams, for teams with limited budget or as a temporary solution for an unplanned Elasticsearch downtime or planned cluster upgrade.
 
-Elasticsearch is enabled by default in the example `docker-compose.yml` file. It is also by default required to run the "zammad-init" command. Disabling Elasticsearch is possible by setting a special environment variable: `ELASTICSEARCH_ENABLED=false` for the `zammad-init` container and removing all references to Elasticsearch everywhere else: the `zammad-elasticsearch` container, it's volume and links to it.
+Elasticsearch is enabled by default in the example `docker-compose.yml` file. It is also by default required to run the "zammad-init" command. Disabling Elasticsearch is possible by setting a special environment variable: `ELASTICSEARCH_ENABLED=false` for the `zammad-init` container and removing all references to Elasticsearch everywhere else: the `zammad-elasticsearch` container, its volume and links to it.
