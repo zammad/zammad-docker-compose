@@ -38,6 +38,23 @@ function zammad_backup {
   echo "backup finished :)"
 }
 
+if [ "$1" = 'zammad-timed-backup' ]; then
+
+  check_railsserver_available
+
+  while true; do
+    NOW_TIMESTAMP=`date +%s`
+    TOMORROW_DATE=`date -d@"$(( $NOW_TIMESTAMP + 24*60*60 ))" +%Y-%m-%d`
+    
+    zammad_backup
+
+    NEXT_TIMESTAMP=`date -d "$TOMORROW_DATE $BACKUP_TIME" +%s`
+    NOW_TIMESTAMP=`date +%s`
+
+    sleep $(( ${NEXT_TIMESTAMP} - ${NOW_TIMESTAMP} ))
+  done
+fi
+
 if [ "$1" = 'zammad-backup' ]; then
 
   check_railsserver_available
