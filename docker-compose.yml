@@ -4,7 +4,7 @@ version: '3'
 services:
 
   zammad-backup:
-    command: ["zammad-timed-backup"]
+    command: ["zammad-backup"]
     depends_on:
       - zammad-railsserver
       - zammad-postgresql
