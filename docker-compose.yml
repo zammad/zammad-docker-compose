@@ -10,10 +10,11 @@ services:
       - zammad-postgresql
     entrypoint: /usr/local/bin/backup.sh
     environment:
-      - BACKUP_SLEEP=86400
+      - BACKUP_TIME=03:00
       - HOLD_DAYS=10
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
+      - TZ=Europe/Berlin
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
