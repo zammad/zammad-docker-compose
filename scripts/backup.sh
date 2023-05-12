@@ -11,7 +11,7 @@ set -e
 : "${POSTGRESQL_DB:=zammad_production}"
 
 function check_railsserver_available {
-  until (echo > /dev/tcp/${ZAMMAD_RAILSSERVER_HOST}/${ZAMMAD_RAILSSERVER_PORT}) &> /dev/null; do
+  until (echo > "/dev/tcp/$ZAMMAD_RAILSSERVER_HOST/$ZAMMAD_RAILSSERVER_PORT") &> /dev/null; do
     echo "waiting for railsserver to be ready..."
     sleep 60
   done
