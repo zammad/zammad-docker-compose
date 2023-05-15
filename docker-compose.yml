@@ -44,7 +44,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:1.6.17-alpine
+    image: memcached:1.6-alpine
     restart: ${RESTART}
 
   zammad-nginx:
@@ -82,8 +82,10 @@ services:
       - zammad-data:/opt/zammad
 
   zammad-redis:
-    image: redis:7.0.5-alpine
+    image: redis:7.0-alpine
     restart: ${RESTART}
+    volumes:
+      - redis-data:/data
 
   zammad-scheduler:
     command: ["zammad-scheduler"]
@@ -121,4 +123,6 @@ volumes:
   zammad-backup:
     driver: local
   zammad-data:
+    driver: local
+  redis-data:
     driver: local
