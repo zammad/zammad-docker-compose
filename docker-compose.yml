@@ -18,6 +18,7 @@ services:
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
+      - postgresql-data:/var/lib/postgresql/data
       - zammad-backup:/var/tmp/zammad
       - zammad-data:/opt/zammad:ro
       - ./scripts/backup.sh:/usr/local/bin/backup.sh:ro
