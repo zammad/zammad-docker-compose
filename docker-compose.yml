@@ -14,6 +14,7 @@ services:
       - HOLD_DAYS=10
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
       - TZ=Europe/Berlin
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
@@ -36,6 +37,7 @@ services:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
       - REDIS_URL=${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: on-failure
@@ -62,6 +64,7 @@ services:
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_DB=${POSTGRES_DB}
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
