@@ -12,9 +12,9 @@ services:
     environment:
       - BACKUP_TIME=03:00
       - HOLD_DAYS=10
+      - POSTGRESQL_DB=${POSTGRES_DB}
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
       - TZ=Europe/Berlin
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
@@ -35,9 +35,9 @@ services:
       - zammad-postgresql
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
       - REDIS_URL=${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: on-failure
@@ -62,9 +62,9 @@ services:
 
   zammad-postgresql:
     environment:
+      - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASS}
-      - POSTGRES_DB=${POSTGRES_DB}
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
