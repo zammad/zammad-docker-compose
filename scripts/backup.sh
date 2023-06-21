@@ -2,7 +2,7 @@
 
 set -e
 
-: "${ZAMMAD_DIR:=/opt/zammad}"
+: "${ZAMMAD_DIR:=/opt/zammad/var}"
 : "${BACKUP_DIR:=/var/tmp/zammad}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
