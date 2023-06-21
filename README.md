@@ -23,7 +23,7 @@ For upgrading instructions see our [Releases](https://github.com/zammad/zammad-d
 
 ## Status
 
-[![ci-remote-image](https://github.com/zammad/zammad-docker-compose/actions/workflows/ci-remote-image.yaml/badge.svg)](https://github.com/zammad/zammad-docker-compose/actions/workflows/ci-remote-image.yaml) [![Docker Pulls](https://badgen.net/docker/pulls/zammad/zammad-docker-compose?icon=docker&label=pulls)](https://hub.docker.com/r/zammad/zammad-docker-compose/)
+[![ci-remote-image](https://github.com/zammad/zammad-docker-compose/actions/workflows/ci-remote-image.yaml/badge.svg)](https://github.com/zammad/zammad-docker-compose/actions/workflows/ci-remote-image.yaml) [![Dockerhub Pulls](https://badgen.net/docker/pulls/zammad/zammad-docker-compose?icon=docker&label=pulls)](https://hub.docker.com/r/zammad/zammad-docker-compose/)
 
 ## Using a reverse proxy
 
