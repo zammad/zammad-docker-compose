@@ -36,6 +36,8 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
     image: ${IMAGE_REPO}:${VERSION}
     restart: on-failure
     user: 0:0
@@ -79,6 +81,8 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
@@ -99,6 +103,8 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
@@ -113,6 +119,8 @@ services:
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
       - REDIS_URL=${REDIS_URL}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
