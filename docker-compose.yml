@@ -35,6 +35,11 @@ services:
       - zammad-postgresql
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
+      - POSTGRESQL_HOST=${POSTGRES_HOST}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
       - REDIS_URL=${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: on-failure
@@ -54,6 +59,14 @@ services:
       - "8080"
     depends_on:
       - zammad-railsserver
+    environment:
+      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
+      - POSTGRESQL_HOST=${POSTGRES_HOST}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
+      - REDIS_URL=${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
@@ -78,6 +91,11 @@ services:
       - zammad-redis
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
+      - POSTGRESQL_HOST=${POSTGRES_HOST}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
       - REDIS_URL=${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
@@ -98,6 +116,11 @@ services:
       - zammad-redis
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
+      - POSTGRESQL_HOST=${POSTGRES_HOST}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
       - REDIS_URL=${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
@@ -112,6 +135,11 @@ services:
       - zammad-redis
     environment:
       - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
+      - POSTGRESQL_HOST=${POSTGRES_HOST}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
       - REDIS_URL=${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
