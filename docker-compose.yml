@@ -12,10 +12,12 @@ services:
     environment:
       - BACKUP_TIME=03:00
       - HOLD_DAYS=10
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASSWORD=${POSTGRES_PASS}
       - TZ=Europe/Berlin
+      - POSTGRESQL_DB=${POSTGRES_DB}
+      - POSTGRESQL_HOST=${POSTGRES_HOST}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
