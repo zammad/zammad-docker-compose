@@ -15,6 +15,10 @@ x-shared:
     restart: ${RESTART}
     volumes:
       - zammad-var:/opt/zammad/var
+    depends_on:
+      - zammad-memcached
+      - zammad-postgresql
+      - zammad-redis
 
 services:
 
@@ -85,10 +89,6 @@ services:
   zammad-railsserver:
     <<: *zammad-service
     command: ["zammad-railsserver"]
-    depends_on:
-      - zammad-memcached
-      - zammad-postgresql
-      - zammad-redis
 
   zammad-redis:
     image: redis:${REDIS_VERSION}
@@ -99,14 +99,10 @@ services:
   zammad-scheduler:
     <<: *zammad-service
     command: ["zammad-scheduler"]
-    depends_on:
-      - zammad-railsserver
 
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
-    depends_on:
-      - zammad-railsserver
 
 volumes:
   elasticsearch-data:
