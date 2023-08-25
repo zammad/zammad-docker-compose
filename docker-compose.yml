@@ -1,9 +1,25 @@
 ---
 version: '3.8'
 
+x-shared:
+  zammad-service: &zammad-service
+    environment:
+      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
+      - POSTGRESQL_DB=${POSTGRES_DB}
+      - POSTGRESQL_HOST=${POSTGRES_HOST}
+      - POSTGRESQL_USER=${POSTGRES_USER}
+      - POSTGRESQL_PASS=${POSTGRES_PASS}
+      - POSTGRESQL_PORT=${POSTGRES_PORT}
+      - REDIS_URL=${REDIS_URL}
+    image: ${IMAGE_REPO}:${VERSION}
+    restart: ${RESTART}
+    volumes:
+      - zammad-var:/opt/zammad/var
+
 services:
 
   zammad-backup:
+    <<: *zammad-service
     command: ["zammad-backup"]
     depends_on:
       - zammad-railsserver
@@ -18,8 +34,6 @@ services:
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASS=${POSTGRES_PASS}
       - POSTGRESQL_PORT=${POSTGRES_PORT}
-    image: postgres:${POSTGRES_VERSION}
-    restart: ${RESTART}
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-var:/opt/zammad/var:ro
@@ -32,18 +46,10 @@ services:
       - elasticsearch-data:/bitnami/elasticsearch/data
 
   zammad-init:
+    <<: *zammad-service
     command: ["zammad-init"]
     depends_on:
       - zammad-postgresql
-    environment:
-      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_HOST=${POSTGRES_HOST}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_PORT=${POSTGRES_PORT}
-      - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:${VERSION}
     restart: on-failure
     user: 0:0
     volumes:
@@ -56,21 +62,12 @@ services:
     restart: ${RESTART}
 
   zammad-nginx:
+    <<: *zammad-service
     command: ["zammad-nginx"]
     expose:
       - "8080"
     depends_on:
       - zammad-railsserver
-    environment:
-      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_HOST=${POSTGRES_HOST}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_PORT=${POSTGRES_PORT}
-      - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:${VERSION}
-    restart: ${RESTART}
     volumes:
       - zammad-config-nginx:/etc/nginx/sites-enabled:ro
       - zammad-var:/opt/zammad/var:ro
@@ -86,23 +83,12 @@ services:
       - postgresql-data:/var/lib/postgresql/data
 
   zammad-railsserver:
+    <<: *zammad-service
     command: ["zammad-railsserver"]
     depends_on:
       - zammad-memcached
       - zammad-postgresql
       - zammad-redis
-    environment:
-      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_HOST=${POSTGRES_HOST}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_PORT=${POSTGRES_PORT}
-      - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:${VERSION}
-    restart: ${RESTART}
-    volumes:
-      - zammad-var:/opt/zammad/var
 
   zammad-redis:
     image: redis:${REDIS_VERSION}
@@ -111,42 +97,16 @@ services:
       - redis-data:/data
 
   zammad-scheduler:
+    <<: *zammad-service
     command: ["zammad-scheduler"]
     depends_on:
-      - zammad-memcached
       - zammad-railsserver
-      - zammad-redis
-    environment:
-      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_HOST=${POSTGRES_HOST}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_PORT=${POSTGRES_PORT}
-      - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:${VERSION}
-    restart: ${RESTART}
-    volumes:
-      - zammad-var:/opt/zammad/var
 
   zammad-websocket:
+    <<: *zammad-service
     command: ["zammad-websocket"]
     depends_on:
-      - zammad-memcached
       - zammad-railsserver
-      - zammad-redis
-    environment:
-      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_HOST=${POSTGRES_HOST}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_PORT=${POSTGRES_PORT}
-      - REDIS_URL=${REDIS_URL}
-    image: ${IMAGE_REPO}:${VERSION}
-    restart: ${RESTART}
-    volumes:
-      - zammad-var:/opt/zammad/var
 
 volumes:
   elasticsearch-data:
