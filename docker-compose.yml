@@ -23,7 +23,6 @@ x-shared:
 services:
 
   zammad-backup:
-    <<: *zammad-service
     command: ["zammad-backup"]
     depends_on:
       - zammad-railsserver
@@ -38,6 +37,8 @@ services:
       - POSTGRESQL_USER=${POSTGRES_USER}
       - POSTGRESQL_PASS=${POSTGRES_PASS}
       - POSTGRESQL_PORT=${POSTGRES_PORT}
+    image: postgres:${POSTGRES_VERSION}
+    restart: ${RESTART}
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-var:/opt/zammad/var:ro
