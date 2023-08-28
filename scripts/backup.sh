@@ -5,6 +5,7 @@ set -e
 : "${ZAMMAD_DIR:=/opt/zammad/var}"
 : "${BACKUP_DIR:=/var/tmp/zammad}"
 : "${BACKUP_TIME:=03:00}"
+: "${HOLD_DAYS:=10}"
 : "${ZAMMAD_RAILSSERVER_HOST:=zammad-railsserver}"
 : "${ZAMMAD_RAILSSERVER_PORT:=3000}"
 : "${POSTGRESQL_DB:=zammad_production}"
@@ -57,16 +58,17 @@ if [ "$1" = 'zammad-backup' ]; then
 
     sleep $((NEXT_TIMESTAMP - NOW_TIMESTAMP))
   done
-fi
 
-if [ "$1" = 'zammad-backup-once' ]; then
+elif [ "$1" = 'zammad-backup-once' ]; then
   check_railsserver_available
 
   zammad_backup
-fi
 
-if [ "$1" = 'zammad-backup-db' ]; then
+elif [ "$1" = 'zammad-backup-db' ]; then
   NO_FILE_BACKUP="yes"
 
   zammad_backup
+
+else
+  exec "$@"
 fi
