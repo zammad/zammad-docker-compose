@@ -3,14 +3,14 @@ version: '3.8'
 
 x-shared:
   zammad-service: &zammad-service
-    environment:
-      - MEMCACHE_SERVERS=${MEMCACHE_SERVERS}
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_HOST=${POSTGRES_HOST}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_PORT=${POSTGRES_PORT}
-      - REDIS_URL=${REDIS_URL}
+    environment: &zammad-environment
+      MEMCACHE_SERVERS: ${MEMCACHE_SERVERS}
+      POSTGRESQL_DB: ${POSTGRES_DB}
+      POSTGRESQL_HOST: ${POSTGRES_HOST}
+      POSTGRESQL_USER: ${POSTGRES_USER}
+      POSTGRESQL_PASS: ${POSTGRES_PASS}
+      POSTGRESQL_PORT: ${POSTGRES_PORT}
+      REDIS_URL: ${REDIS_URL}
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
@@ -29,14 +29,10 @@ services:
       - zammad-postgresql
     entrypoint: /usr/local/bin/backup.sh
     environment:
-      - BACKUP_TIME=03:00
-      - HOLD_DAYS=10
-      - TZ=Europe/Berlin
-      - POSTGRESQL_DB=${POSTGRES_DB}
-      - POSTGRESQL_HOST=${POSTGRES_HOST}
-      - POSTGRESQL_USER=${POSTGRES_USER}
-      - POSTGRESQL_PASS=${POSTGRES_PASS}
-      - POSTGRESQL_PORT=${POSTGRES_PORT}
+      <<: *zammad-environment
+      BACKUP_TIME: "03:00"
+      HOLD_DAYS: "10"
+      TZ: Europe/Berlin
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
@@ -79,9 +75,9 @@ services:
 
   zammad-postgresql:
     environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
     image: postgres:${POSTGRES_VERSION}
     restart: ${RESTART}
     volumes:
