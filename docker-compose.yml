@@ -34,6 +34,7 @@ x-shared:
     image: ${IMAGE_REPO}:${VERSION}
     restart: ${RESTART}
     volumes:
+      - zammad-storage:/opt/zammad/storage
       - zammad-var:/opt/zammad/var
     depends_on:
       - zammad-memcached
@@ -57,6 +58,7 @@ services:
     restart: ${RESTART}
     volumes:
       - zammad-backup:/var/tmp/zammad
+      - zammad-storage:/opt/zammad/storage:ro
       - zammad-var:/opt/zammad/var:ro
       - ./scripts/backup.sh:/usr/local/bin/backup.sh:ro
 
@@ -75,6 +77,7 @@ services:
     user: 0:0
     volumes:
       - zammad-config-nginx:/etc/nginx/sites-enabled
+      - zammad-storage:/opt/zammad/storage
       - zammad-var:/opt/zammad/var
 
   zammad-memcached:
@@ -91,6 +94,7 @@ services:
       - zammad-railsserver
     volumes:
       - zammad-config-nginx:/etc/nginx/sites-enabled:ro
+      - zammad-storage:/opt/zammad/storage:ro
       - zammad-var:/opt/zammad/var:ro
 
   zammad-postgresql:
@@ -131,6 +135,8 @@ volumes:
   zammad-backup:
     driver: local
   zammad-config-nginx:
+    driver: local
+  zammad-storage:
     driver: local
   zammad-var:
     driver: local
