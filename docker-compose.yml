@@ -94,8 +94,7 @@ services:
       - zammad-railsserver
     volumes:
       - zammad-config-nginx:/etc/nginx/sites-enabled:ro
-      - zammad-storage:/opt/zammad/storage:ro
-      - zammad-var:/opt/zammad/var:ro
+      - zammad-var:/opt/zammad/var:ro # required for the zammad-ready check file
 
   zammad-postgresql:
     environment:
