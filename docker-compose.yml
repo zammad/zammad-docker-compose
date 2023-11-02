@@ -76,7 +76,6 @@ services:
     restart: on-failure
     user: 0:0
     volumes:
-      - zammad-config-nginx:/etc/nginx/sites-enabled
       - zammad-storage:/opt/zammad/storage
       - zammad-var:/opt/zammad/var
 
@@ -93,7 +92,6 @@ services:
     depends_on:
       - zammad-railsserver
     volumes:
-      - zammad-config-nginx:/etc/nginx/sites-enabled:ro
       - zammad-var:/opt/zammad/var:ro # required for the zammad-ready check file
 
   zammad-postgresql:
@@ -132,8 +130,6 @@ volumes:
   redis-data:
     driver: local
   zammad-backup:
-    driver: local
-  zammad-config-nginx:
     driver: local
   zammad-storage:
     driver: local
