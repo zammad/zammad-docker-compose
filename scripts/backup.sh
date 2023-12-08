@@ -2,7 +2,7 @@
 
 set -e
 
-: "${ZAMMAD_DIR:=/opt/zammad/var}"
+: "${ZAMMAD_DIR:=/opt/zammad}"
 : "${BACKUP_DIR:=/var/tmp/zammad}"
 : "${BACKUP_TIME:=03:00}"
 : "${HOLD_DAYS:=10}"
@@ -37,7 +37,7 @@ function zammad_backup {
     tar -czf "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_files.tar.gz "${ZAMMAD_DIR}"
   fi
 
-  #db backup
+  # db backup
   pg_dump --dbname=postgresql://"${POSTGRESQL_USER}:${POSTGRESQL_PASS}@${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB}" | gzip > "${BACKUP_DIR}"/"${TIMESTAMP}"_zammad_db.psql.gz
 
   echo "backup finished :)"
