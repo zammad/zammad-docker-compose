@@ -2,7 +2,7 @@
 
 set -e
 
-: "${ZAMMAD_DIR:=/opt/zammad/var}"
+: "${ZAMMAD_DIR:=/opt/zammad/storage}"
 : "${BACKUP_DIR:=/var/tmp/zammad}"
 : "${BACKUP_TIME:=03:00}"
 : "${HOLD_DAYS:=10}"
