@@ -1,6 +1,4 @@
 ---
-version: '2'
-
 services:
   frontend:
     image: jwilder/nginx-proxy:alpine
