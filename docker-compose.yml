@@ -1,4 +1,6 @@
 ---
+version: '3'
+
 x-shared:
   zammad-service: &zammad-service
     environment: &zammad-environment

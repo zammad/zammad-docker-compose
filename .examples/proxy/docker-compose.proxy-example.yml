@@ -1,4 +1,6 @@
 ---
+version: "2"
+
 services:
   zammad-nginx:
     environment:
