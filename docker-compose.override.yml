@@ -1,8 +1,8 @@
----
-version: '3.8'
+# ---
+# version: '3.8'
 
-services:
+# services:
 
-  zammad-nginx:
-    ports:
-      - "8080:8080"
+#   zammad-nginx:
+#     ports:
+#       - "8080:8080"
