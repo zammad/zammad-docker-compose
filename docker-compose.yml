@@ -13,6 +13,11 @@ x-shared:
       POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
       POSTGRESQL_DB_CREATE:
       REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
+      # Backup settings
+      BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
+      BACKUP_TIME: "${BACKUP_TIME:-03:00}"
+      HOLD_DAYS: "${HOLD_DAYS:-10}"
+      TZ: "${TZ:-Europe/Berlin}"
       # Allow passing in these variables via .env:
       AUTOWIZARD_JSON:
       AUTOWIZARD_RELATIVE_PATH:
@@ -31,7 +36,7 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1-38}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -43,22 +48,12 @@ x-shared:
 services:
 
   zammad-backup:
+    <<: *zammad-service
     command: ["zammad-backup"]
-    depends_on:
-      - zammad-railsserver
-      - zammad-postgresql
-    entrypoint: /usr/local/bin/backup.sh
-    environment:
-      <<: *zammad-environment
-      BACKUP_TIME: "03:00"
-      HOLD_DAYS: "10"
-      TZ: Europe/Berlin
-    image: postgres:${POSTGRES_VERSION:-15.6-alpine}
-    restart: ${RESTART:-always}
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-storage:/opt/zammad/storage:ro
-      - ./scripts/backup.sh:/usr/local/bin/backup.sh:ro
+    user: 0:0
 
   zammad-elasticsearch:
     image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.12.2}
