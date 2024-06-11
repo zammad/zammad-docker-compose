@@ -3,6 +3,9 @@ version: '3.8'
 
 services:
 
+  zammad-backup:
+    image: zammad-local
+
   zammad-init:
     image: zammad-local
 

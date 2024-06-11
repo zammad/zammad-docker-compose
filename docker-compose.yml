@@ -4,13 +4,20 @@ version: '3.8'
 x-shared:
   zammad-service: &zammad-service
     environment: &zammad-environment
-      MEMCACHE_SERVERS: ${MEMCACHE_SERVERS}
-      POSTGRESQL_DB: ${POSTGRES_DB}
-      POSTGRESQL_HOST: ${POSTGRES_HOST}
-      POSTGRESQL_USER: ${POSTGRES_USER}
-      POSTGRESQL_PASS: ${POSTGRES_PASS}
-      POSTGRESQL_PORT: ${POSTGRES_PORT}
-      REDIS_URL: ${REDIS_URL}
+      MEMCACHE_SERVERS: ${MEMCACHE_SERVERS:-zammad-memcached:11211}
+      POSTGRESQL_DB: ${POSTGRES_DB:-zammad_production}
+      POSTGRESQL_HOST: ${POSTGRES_HOST:-zammad-postgresql}
+      POSTGRESQL_USER: ${POSTGRES_USER:-zammad}
+      POSTGRESQL_PASS: ${POSTGRES_PASS:-zammad}
+      POSTGRESQL_PORT: ${POSTGRES_PORT:-5432}
+      POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
+      POSTGRESQL_DB_CREATE:
+      REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
+      # Backup settings
+      BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
+      BACKUP_TIME: "${BACKUP_TIME:-03:00}"
+      HOLD_DAYS: "${HOLD_DAYS:-10}"
+      TZ: "${TZ:-Europe/Berlin}"
       # Allow passing in these variables via .env:
       AUTOWIZARD_JSON:
       AUTOWIZARD_RELATIVE_PATH:
@@ -24,15 +31,13 @@ x-shared:
       NGINX_PORT:
       NGINX_SERVER_NAME:
       NGINX_SERVER_SCHEME:
-      POSTGRESQL_DB_CREATE:
-      POSTGRESQL_OPTIONS:
       RAILS_TRUSTED_PROXIES:
       ZAMMAD_WEB_CONCURRENCY:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO}:${VERSION}
-    restart: ${RESTART}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1-38}
+    restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
     depends_on:
@@ -43,26 +48,16 @@ x-shared:
 services:
 
   zammad-backup:
+    <<: *zammad-service
     command: ["zammad-backup"]
-    depends_on:
-      - zammad-railsserver
-      - zammad-postgresql
-    entrypoint: /usr/local/bin/backup.sh
-    environment:
-      <<: *zammad-environment
-      BACKUP_TIME: "03:00"
-      HOLD_DAYS: "10"
-      TZ: Europe/Berlin
-    image: postgres:${POSTGRES_VERSION}
-    restart: ${RESTART}
     volumes:
       - zammad-backup:/var/tmp/zammad
       - zammad-storage:/opt/zammad/storage:ro
-      - ./scripts/backup.sh:/usr/local/bin/backup.sh:ro
+    user: 0:0
 
   zammad-elasticsearch:
-    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION}
-    restart: ${RESTART}
+    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.12.2}
+    restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
 
@@ -73,29 +68,29 @@ services:
       - zammad-postgresql
     restart: on-failure
     user: 0:0
-    volumes:
-      - zammad-storage:/opt/zammad/storage
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION}
-    restart: ${RESTART}
+    image: memcached:${MEMCACHE_VERSION:-1.6.25-alpine}
+    restart: ${RESTART:-always}
 
   zammad-nginx:
     <<: *zammad-service
     command: ["zammad-nginx"]
     expose:
-      - "8080"
+      - "${NGINX_PORT:-8080}"
+    ports:
+      - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
     depends_on:
       - zammad-railsserver
 
   zammad-postgresql:
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASS}
-    image: postgres:${POSTGRES_VERSION}
-    restart: ${RESTART}
+      POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
+      POSTGRES_USER: ${POSTGRES_USER:-zammad}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
+    image: postgres:${POSTGRES_VERSION:-15.6-alpine}
+    restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
 
@@ -104,8 +99,8 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION}
-    restart: ${RESTART}
+    image: redis:${REDIS_VERSION:-7.2.4-alpine}
+    restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
 
