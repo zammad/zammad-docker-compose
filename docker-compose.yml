@@ -73,8 +73,6 @@ services:
       - zammad-postgresql
     restart: on-failure
     user: 0:0
-    volumes:
-      - zammad-storage:/opt/zammad/storage
 
   zammad-memcached:
     command: memcached -m 256M
