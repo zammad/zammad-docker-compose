@@ -1,0 +1,117 @@
+name: "Update Zammad version and dependency charts (patch and minor only)"
+
+sources:
+  zammad:
+    kind: dockerimage
+    spec:
+      image: "zammad/zammad-docker-compose"
+      architecture: "linux/amd64"
+      tagfilter: "6\\.3.*"
+  elasticsearch:
+    kind: dockerimage
+    spec:
+      image: "bitnami/elasticsearch"
+      architecture: "linux/amd64"
+      versionfilter:
+        kind: "semver"
+        pattern: "8.x.x"
+  memcached:
+    kind: dockerimage
+    spec:
+      image: "memcached"
+      architecture: "linux/amd64"
+      versionfilter:
+        kind: "semver"
+        pattern: "1.6.x"
+  postgresql:
+    kind: dockerimage
+    spec:
+      image: "postgres"
+      architecture: "linux/amd64"
+      versionfilter:
+        kind: "semver"
+        pattern: "15.x.x"
+  redis:
+    kind: dockerimage
+    spec:
+      image: "redis"
+      architecture: "linux/amd64"
+      versionfilter:
+        kind: "semver"
+        pattern: "7.x.x"
+
+conditions: {}
+
+targets:
+  zammad:
+    # we can't use yaml because it breaks our file structure
+    kind: file
+    sourceid: zammad
+    spec:
+      file: docker-compose.yml
+      matchpattern: \${VERSION:-(.*)\}
+      replacepattern: ${VERSION:-{{ source `zammad` }}}
+  zammad-env-dist:
+    # we can't use yaml because it breaks our file structure
+    kind: file
+    sourceid: zammad
+    spec:
+      file: .env.dist
+      matchpattern: ' VERSION=(\d+\.\d+.\d+.*)'
+      replacepattern: ' VERSION={{ source `zammad` }}'
+  elasticsearch:
+    kind: file
+    sourceid: elasticsearch
+    spec:
+      file: docker-compose.yml
+      matchpattern: ELASTICSEARCH_VERSION:-(.*)\}
+      replacepattern: ELASTICSEARCH_VERSION:-{{ source `elasticsearch`}}}
+  elasticsearch-env-dist:
+    kind: file
+    sourceid: elasticsearch
+    spec:
+      file: .env.dist
+      matchpattern: ELASTICSEARCH_VERSION=(.*)
+      replacepattern: ELASTICSEARCH_VERSION={{ source `elasticsearch`}}
+  memcached:
+    kind: file
+    sourceid: memcached
+    spec:
+      file: docker-compose.yml
+      matchpattern: MEMCACHE_VERSION:-(.*)-alpine\}
+      replacepattern: MEMCACHE_VERSION:-{{ source `memcached` }}-alpine}
+  memcached-env-dist:
+    kind: file
+    sourceid: memcached
+    spec:
+      file: .env.dist
+      matchpattern: MEMCACHE_VERSION=(.*)-alpine
+      replacepattern: MEMCACHE_VERSION={{ source `memcached` }}-alpine
+  postgresql:
+    kind: file
+    sourceid: postgresql
+    spec:
+      file: docker-compose.yml
+      matchpattern: POSTGRES_VERSION:-(.*)-alpine\}
+      replacepattern: POSTGRES_VERSION:-{{ source `postgresql` }}-alpine}
+  postgresql-env-dist:
+    kind: file
+    sourceid: postgresql
+    spec:
+      file: .env.dist
+      matchpattern: POSTGRES_VERSION=(.*)-alpine
+      replacepattern: POSTGRES_VERSION={{ source `postgresql` }}-alpine
+  redis:
+    kind: file
+    sourceid: redis
+    spec:
+      file: docker-compose.yml
+      matchpattern: REDIS_VERSION:-(.*)-alpine\}
+      replacepattern: REDIS_VERSION:-{{ source `redis` }}-alpine}
+  redis-env-dist:
+    kind: file
+    sourceid: redis
+    spec:
+      file: .env.dist
+      matchpattern: REDIS_VERSION=(.*)-alpine
+      replacepattern: REDIS_VERSION={{ source `redis` }}-alpine
