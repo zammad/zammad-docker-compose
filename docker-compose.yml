@@ -97,6 +97,8 @@ services:
   zammad-railsserver:
     <<: *zammad-service
     command: ["zammad-railsserver"]
+    labels:
+      io.portainer.commands.bash-via-entrypoint: "/docker-entrypoint.sh /bin/bash"
 
   zammad-redis:
     image: redis:${REDIS_VERSION:-7.2.5-alpine}
