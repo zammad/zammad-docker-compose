@@ -33,7 +33,7 @@ To run Zammad behind a reverse proxy, we provide `docker-compose.proxy-example.y
 1. Copy `./.examples/proxy/docker-compose.proxy-example.yml` to your own configuration, e.g. `./docker-compose.prod.yml`
     `cp ./.examples/proxy/docker-compose.proxy-example.yml ./docker-compose.prod.yml`
 2. Modify the environment variable `VIRTUAL_HOST` and the name of the external network in `./docker-compose.prod.yml` to fit your environment.
-3. Run docker-composer commands with the default and your configuration, e.g. `docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
+3. Run docker-composer commands with the default and your configuration, e.g. `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
 
 See `.examples/proxy/docker-compose.yml` for an example proxy project.
 

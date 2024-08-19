@@ -13,8 +13,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: lint zammad docker-compose file
-        run: docker-compose config
+      - name: lint zammad docker compose file
+        run: docker compose config
 
   super-linter:
     runs-on: ubuntu-22.04

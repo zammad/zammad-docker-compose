@@ -6,7 +6,7 @@
 set -o errexit
 set -o pipefail
 
-docker-compose logs --timestamps --follow &
+docker compose logs --timestamps --follow &
 
 until (curl -I --silent --fail localhost:8080 | grep -iq "HTTP/1.1 200 OK"); do
     echo "wait for zammad to be ready..."
