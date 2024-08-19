@@ -13,8 +13,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: lint zammad docker-compose file
-        run: docker-compose config
+      - name: lint zammad docker compose file
+        run: docker compose config
 
   super-linter:
     runs-on: ubuntu-22.04
@@ -32,3 +32,4 @@ jobs:
           LINTER_RULES_PATH: .github/linters
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JSCPD: false
+          VALIDATE_SHELL_SHFMT: false

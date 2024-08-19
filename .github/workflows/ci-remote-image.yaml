@@ -14,14 +14,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: pull docker-compose images
-        run: docker-compose pull
+      - name: pull docker compose images
+        run: docker compose pull
 
-      - name: run docker-compose up
-        run: docker-compose up --detach
+      - name: run docker compose up
+        run: docker compose up --detach
 
       - name: add autowizard file
-        run: docker cp .github/auto_wizard.json zammad-docker-compose_zammad-railsserver_1:/opt/zammad/tmp
+        run: docker cp .github/auto_wizard.json zammad-docker-compose-zammad-railsserver-1:/opt/zammad/tmp
 
       - name: run tests
         run: .github/tests.sh
