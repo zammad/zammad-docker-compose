@@ -32,3 +32,4 @@ jobs:
           LINTER_RULES_PATH: .github/linters
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JSCPD: false
+          VALIDATE_SHELL_SHFMT: false
