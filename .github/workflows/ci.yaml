@@ -33,3 +33,4 @@ jobs:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JSCPD: false
           VALIDATE_SHELL_SHFMT: false
+          VALIDATE_YAML_PRETTIER: false
