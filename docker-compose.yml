@@ -36,7 +36,7 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1-151}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1-185}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -56,7 +56,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.15.1}
+    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.15.2}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
@@ -71,7 +71,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.29-alpine}
+    image: memcached:${MEMCACHE_VERSION:-1.6.31-alpine}
     restart: ${RESTART:-always}
 
   zammad-nginx:
@@ -99,7 +99,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-7.4-alpine}
+    image: redis:${REDIS_VERSION:-7.4.0-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
