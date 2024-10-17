@@ -36,7 +36,7 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1-185}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1-196}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -99,7 +99,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-7.4.0-alpine}
+    image: redis:${REDIS_VERSION:-7.4.1-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
