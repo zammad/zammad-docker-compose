@@ -47,3 +47,13 @@ docker exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/z
 echo
 echo "DB fill successful :)"
 echo
+
+echo
+echo "Check if the Zammad user can write to FS storage"
+echo
+
+docker exec zammad-docker-compose-zammad-railsserver-1 touch storage/test.txt
+
+echo
+echo "Storage write successful :)"
+echo
