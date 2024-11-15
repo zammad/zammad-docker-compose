@@ -8,10 +8,11 @@ set -o pipefail
 
 docker compose logs --timestamps --follow &
 
-until (curl -I --silent --fail localhost:8080 | grep -iq "HTTP/1.1 200 OK"); do
-    echo "wait for zammad to be ready..."
-    sleep 5
-done
+echo
+echo "wait for zammad to be ready..."
+echo
+
+curl --silent --retry 120 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep "Zammad"
 
 echo
 echo "Success - Zammad is up :)"
@@ -21,18 +22,17 @@ echo
 echo "Execute autowizard..."
 echo
 
-docker exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-docker-compose-zammad-railsserver-1 bundle exec rake zammad:setup:auto_wizard
+docker compose exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rake zammad:setup:auto_wizard
 
 echo
 echo "Autowizard executed successful :)"
 echo
 
-
 echo
 echo "Check DB for AutoWizard user"
 echo
 
-docker exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-docker-compose-zammad-railsserver-1 bundle exec rails r "p User.find_by(email: 'info@zammad.org')" | grep 'info@zammad.org'
+docker compose exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rails r "p User.find_by(email: 'info@zammad.org')" | grep 'info@zammad.org'
 
 echo
 echo "Check DB for AutoWizard user successfull :)"
@@ -42,7 +42,7 @@ echo
 echo "Fill DB with some random data"
 echo
 
-docker exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-docker-compose-zammad-railsserver-1 bundle exec rails r "FillDb.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
+docker compose exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rails r "FillDb.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
 
 echo
 echo "DB fill successful :)"
@@ -52,7 +52,7 @@ echo
 echo "Check if the Zammad user can write to FS storage"
 echo
 
-docker exec zammad-docker-compose-zammad-railsserver-1 touch storage/test.txt
+docker compose exec zammad-railsserver touch storage/test.txt
 
 echo
 echo "Storage write successful :)"
