@@ -12,7 +12,8 @@ echo
 echo "wait for zammad to be ready..."
 echo
 
-curl --silent --retry 120 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep "Zammad"
+docker compose wait zammad-init
+curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep "Zammad"
 
 echo
 echo "Success - Zammad is up :)"
