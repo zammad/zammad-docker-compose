@@ -23,11 +23,11 @@ print_heading "Success - Zammad is up :)"
 
 print_heading "Execute autowizard..."
 docker compose exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rake zammad:setup:auto_wizard
-print_heading "Autowizard executed successful :)"
+print_heading "Autowizard executed successfully :)"
 
 print_heading "Check DB for AutoWizard user"
 docker compose exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rails r "p User.find_by(email: 'info@zammad.org')" | grep 'info@zammad.org'
-print_heading "Check DB for AutoWizard user successfull :)"
+print_heading "Check DB for AutoWizard user successful :)"
 
 print_heading "Fill DB with some random data"
 docker compose exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rails r "FillDb.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
@@ -38,6 +38,7 @@ docker compose exec zammad-railsserver touch storage/test.txt
 print_heading "Storage write successful :)"
 
 print_heading "Check if zammad-backup created a backup"
-docker compose exec zammad-backup sh -c "ls /var/tmp/zammad/* | grep zammad_db.psql.gz"
-docker compose exec zammad-backup sh -c "ls /var/tmp/zammad/* | grep zammad_files.tar.gz"
-print_heading "Zammad backup was created"
+docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_files.tar.gz\" | grep ."
+# Check that the db dump actually has content in the .gz file to catch cases where pg_dump fails.
+docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_db.psql.gz\" -size +1000000c | grep ."
+print_heading "Zammad backup was created successfully :)"
