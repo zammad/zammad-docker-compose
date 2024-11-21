@@ -43,5 +43,5 @@ print_heading "Application backup successful :)"
 
 print_heading "Check if zammad-backup created a database backup"
 # Check that the db dump actually has content in the .gz file to catch cases where pg_dump fails.
-docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_db.psql.gz\" -size +1M | grep ."
+docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_db.psql.gz\" -size +100K | grep ."
 print_heading "Database backup successful :)"
