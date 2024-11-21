@@ -37,8 +37,11 @@ print_heading "Check if the Zammad user can write to FS storage"
 docker compose exec zammad-railsserver touch storage/test.txt
 print_heading "Storage write successful :)"
 
-print_heading "Check if zammad-backup created a backup"
+print_heading "Check if zammad-backup created an application backup"
 docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_files.tar.gz\" | grep ."
+print_heading "Application backup successful :)"
+
+print_heading "Check if zammad-backup created a database backup"
 # Check that the db dump actually has content in the .gz file to catch cases where pg_dump fails.
 docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_db.psql.gz\" -size +1M | grep ."
-print_heading "Zammad backup was created successfully :)"
+print_heading "Database backup successful :)"
