@@ -11,9 +11,9 @@ docker compose logs --timestamps --follow &
 
 # Print empty lines before and after the heading to find it between the logs.
 print_heading() {
-  echo
-  echo "$1"
-  echo
+  echo ">"
+  echo "> $1"
+  echo ">"
 }
 
 print_heading "wait for zammad to be ready..."
