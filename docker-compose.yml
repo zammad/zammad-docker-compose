@@ -36,7 +36,7 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.0-17}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.0-26}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
