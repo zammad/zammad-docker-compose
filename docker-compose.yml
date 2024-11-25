@@ -13,6 +13,7 @@ x-shared:
       POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
       POSTGRESQL_DB_CREATE:
       REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
+      S3_URL:
       # Backup settings
       BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
       BACKUP_TIME: "${BACKUP_TIME:-03:00}"
