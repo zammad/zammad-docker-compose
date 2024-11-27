@@ -37,7 +37,7 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.0-26}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.0-34}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -57,7 +57,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.16.0}
+    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.16.1}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
@@ -90,7 +90,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${POSTGRES_USER:-zammad}
       POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
-    image: postgres:${POSTGRES_VERSION:-17.1-alpine}
+    image: postgres:${POSTGRES_VERSION:-17.2-alpine}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
