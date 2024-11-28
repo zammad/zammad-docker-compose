@@ -37,6 +37,10 @@ print_heading "Check if the Zammad user can write to FS storage"
 docker compose exec zammad-railsserver touch storage/test.txt
 print_heading "Storage write successful :)"
 
+print_heading "Check if the Zammad user can write /tmp"
+docker compose exec zammad-railsserver touch tmp/test.txt
+print_heading "Tmp write successful :)"
+
 print_heading "Check if zammad-backup created an application backup"
 docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_files.tar.gz\" | grep ."
 print_heading "Application backup successful :)"
