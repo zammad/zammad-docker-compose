@@ -79,7 +79,7 @@ services:
     <<: *zammad-service
     command: ["zammad-nginx"]
     expose:
-      - "${NGINX_PORT:-8080}"
+      - "${NGINX_PORT:-5555}"
     ports:
       - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
     depends_on:
