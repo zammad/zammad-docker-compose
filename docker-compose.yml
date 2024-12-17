@@ -30,6 +30,7 @@ x-shared:
       ELASTICSEARCH_REINDEX:
       ELASTICSEARCH_SSL_VERIFY:
       NGINX_PORT:
+      NGINX_CLIENT_MAX_BODY_SIZE:
       NGINX_SERVER_NAME:
       NGINX_SERVER_SCHEME:
       RAILS_TRUSTED_PROXIES:
@@ -37,7 +38,7 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1-11}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -57,7 +58,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.16.1}
+    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.17.0}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
@@ -72,7 +73,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.32-alpine}
+    image: memcached:${MEMCACHE_VERSION:-1.6.33-alpine}
     restart: ${RESTART:-always}
 
   zammad-nginx:
