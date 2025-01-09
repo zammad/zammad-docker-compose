@@ -49,6 +49,8 @@ docker compose exec zammad-railsserver touch tmp/test.txt
 print_heading "Tmp write successful :)"
 
 print_heading "Check if zammad-backup created an application backup"
+# Provide some debug output for backup tests.
+docker compose exec zammad-backup ls -lah /var/tmp/zammad/
 docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_files.tar.gz\" | grep ."
 print_heading "Application backup successful :)"
 
