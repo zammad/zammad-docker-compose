@@ -1,10 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 #
 # run zammad tests
 #
 
 set -o errexit
-set -o pipefail
 
 # Send the logs to STDOUT for debugging.
 docker compose logs --timestamps --follow &
@@ -16,12 +15,20 @@ print_heading() {
   echo ">"
 }
 
-print_heading "wait for zammad to be ready..."
+print_heading "wait for zammad to be ready…"
 docker compose wait zammad-init
-curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep "Zammad"
+docker compose exec zammad-nginx bash -c "curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep 'Zammad'"
 print_heading "Success - Zammad is up :)"
 
-print_heading "Execute autowizard..."
+# Checking for external connectivity may not always be possible, e.g. in GitLab CI.
+if [ -z "$DISABLE_EXTERNAL_TESTS" ]
+then
+  print_heading "Check external connectivity on exposed port…"
+  curl http://localhost:8080 | grep "Zammad"
+  print_heading "Zammad is available via external port :)"
+fi
+
+print_heading "Execute autowizard…"
 docker compose exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rake zammad:setup:auto_wizard
 print_heading "Autowizard executed successfully :)"
 
