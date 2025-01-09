@@ -6,9 +6,9 @@ sources:
     spec:
       image: "zammad/zammad-docker-compose"
       architecture: "linux/amd64"
-      tagfilter: "^6\\.4\\.1$"
+      # tagfilter: "^6\\.4\\.1$"
       # tagfilter: "^6\\.4\\.1-\\d{1}"
-      # tagfilter: "^6\\.4\\.1-\\d{2}"
+      tagfilter: "^6\\.4\\.1-\\d{2}"
       # tagfilter: "^6\\.4\\.1-\\d{3}"
   elasticsearch:
     kind: dockerimage
