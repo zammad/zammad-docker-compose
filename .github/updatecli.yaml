@@ -6,7 +6,10 @@ sources:
     spec:
       image: "zammad/zammad-docker-compose"
       architecture: "linux/amd64"
-      tagfilter: "6\\.3\\.1-\\d{3}"
+      # tagfilter: "^6\\.4\\.1$"
+      # tagfilter: "^6\\.4\\.1-\\d{1}"
+      tagfilter: "^6\\.4\\.1-\\d{2}"
+      # tagfilter: "^6\\.4\\.1-\\d{3}"
   elasticsearch:
     kind: dockerimage
     spec:
@@ -22,7 +25,7 @@ sources:
       architecture: "linux/amd64"
       versionfilter:
         kind: "semver"
-        pattern: "1.6.x"
+        pattern: "1.x.x"
   postgresql:
     kind: dockerimage
     spec:
@@ -30,7 +33,7 @@ sources:
       architecture: "linux/amd64"
       versionfilter:
         kind: "semver"
-        pattern: "15.x.x"
+        pattern: "17.x.x"
   redis:
     kind: dockerimage
     spec:

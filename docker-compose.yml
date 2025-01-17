@@ -13,6 +13,7 @@ x-shared:
       POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
       POSTGRESQL_DB_CREATE:
       REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
+      S3_URL:
       # Backup settings
       BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
       BACKUP_TIME: "${BACKUP_TIME:-03:00}"
@@ -30,6 +31,7 @@ x-shared:
       ELASTICSEARCH_SSL_VERIFY:
       LETSENCRYPT_HOST:
       NGINX_PORT:
+      NGINX_CLIENT_MAX_BODY_SIZE:
       NGINX_SERVER_NAME:
       NGINX_SERVER_SCHEME:
       RAILS_TRUSTED_PROXIES:
@@ -38,7 +40,7 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.3.1-151}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1-29}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -58,7 +60,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.15.1}
+    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.17.0}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
@@ -73,7 +75,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.29-alpine}
+    image: memcached:${MEMCACHE_VERSION:-1.6.34-alpine}
     restart: ${RESTART:-always}
 
   zammad-nginx:
@@ -91,7 +93,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${POSTGRES_USER:-zammad}
       POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
-    image: postgres:${POSTGRES_VERSION:-15.8-alpine}
+    image: postgres:${POSTGRES_VERSION:-17.2-alpine}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
@@ -101,7 +103,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-7.4-alpine}
+    image: redis:${REDIS_VERSION:-7.4.2-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
