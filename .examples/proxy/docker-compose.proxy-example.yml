@@ -12,5 +12,5 @@ services:
 
 networks:
   proxy_2_zammad:
-    external:
-      name: proxy_2_apps
+    external: true
+    name: proxy_2_apps
