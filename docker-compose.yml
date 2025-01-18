@@ -38,6 +38,15 @@ x-shared:
       ZAMMAD_SESSION_JOBS:
       ZAMMAD_PROCESS_SCHEDULED:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
+      # Variables used by ngingx-proxy container for reverse proxy creations
+      # for docs refer to https://github.com/nginx-proxy/nginx-proxy
+      VIRTUAL_HOST:
+      VIRTUAL_PORT:
+      # Variables used by acme-companion for retrieval of LetsEncrypt certificate
+      # for docs refer to https://github.com/nginx-proxy/acme-companion
+      LETSENCRYPT_HOST:
+      LETSENCRYPT_EMAIL:
+      
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1-29}
     restart: ${RESTART:-always}
     volumes:
