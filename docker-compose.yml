@@ -47,7 +47,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
       
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1-29}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1-45}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -67,7 +67,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.17.0}
+    image: bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.17.1}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
@@ -82,7 +82,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.34-alpine}
+    image: memcached:${MEMCACHE_VERSION:-1.6.36-alpine}
     restart: ${RESTART:-always}
 
   zammad-nginx:
