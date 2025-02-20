@@ -37,7 +37,7 @@ railsserver_run_command rails r "SearchIndexBackend.index_exists?('Ticket') || e
 print_heading "Elasticsearch index is present :)"
 
 print_heading "Check that translations are present…"
-railsserver_run_command rails r "Translations.any? || exit(1)"
+railsserver_run_command rails r "Translation.any? || exit(1)"
 print_heading "Translations are present :)"
 
 print_heading "Execute autowizard…"
