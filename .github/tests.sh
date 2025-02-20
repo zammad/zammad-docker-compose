@@ -28,6 +28,10 @@ then
   print_heading "Zammad is available via external port :)"
 fi
 
+print_heading "Check if elasticsearch index is present…"
+docker compose exec zammad-railsserver rails r "SearchIndexBackend.index_exists?('Ticket') || exit(1)"
+print_heading "Elasticsearch index is present :)"
+
 print_heading "Execute autowizard…"
 docker compose exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rake zammad:setup:auto_wizard
 print_heading "Autowizard executed successfully :)"
