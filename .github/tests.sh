@@ -15,6 +15,10 @@ print_heading() {
   echo ">"
 }
 
+railsserver_run_command() {
+  docker compose exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver "$@"
+}
+
 print_heading "wait for zammad to be ready…"
 docker compose wait zammad-init
 docker compose exec zammad-nginx bash -c "curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep 'Zammad'"
@@ -29,19 +33,23 @@ then
 fi
 
 print_heading "Check if elasticsearch index is present…"
-docker compose exec zammad-railsserver rails r "SearchIndexBackend.index_exists?('Ticket') || exit(1)"
+railsserver_run_command rails r "SearchIndexBackend.index_exists?('Ticket') || exit(1)"
 print_heading "Elasticsearch index is present :)"
 
+print_heading "Check that translations are present…"
+railsserver_run_command rails r "Translations.any? || exit(1)"
+print_heading "Translations are present :)"
+
 print_heading "Execute autowizard…"
-docker compose exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rake zammad:setup:auto_wizard
+railsserver_run_command bundle exec rake zammad:setup:auto_wizard
 print_heading "Autowizard executed successfully :)"
 
 print_heading "Check DB for AutoWizard user"
-docker compose exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rails r "p User.find_by(email: 'info@zammad.org')" | grep 'info@zammad.org'
+railsserver_run_command bundle exec rails r "p User.find_by(email: 'info@zammad.org')" | grep 'info@zammad.org'
 print_heading "Check DB for AutoWizard user successful :)"
 
 print_heading "Fill DB with some random data"
-docker compose exec --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver bundle exec rails r "FillDb.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
+railsserver_run_command bundle exec rails r "FillDb.load(agents: 1,customers: 1,groups: 1,organizations: 1,overviews: 1,tickets: 1)"
 print_heading "DB fill successful :)"
 
 print_heading "Check if the Zammad user can write to FS storage"
