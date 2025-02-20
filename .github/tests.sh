@@ -15,6 +15,7 @@ print_heading() {
   echo ">"
 }
 
+# Run commands in the zammad-railsserver container in a way that also allows the rails stack to start.
 railsserver_run_command() {
   docker compose exec --env=AUTOWIZARD_RELATIVE_PATH=tmp/auto_wizard.json --env=DATABASE_URL=postgres://zammad:zammad@zammad-postgresql:5432/zammad_production zammad-railsserver "$@"
 }
@@ -53,11 +54,11 @@ railsserver_run_command bundle exec rails r "FillDb.load(agents: 1,customers: 1,
 print_heading "DB fill successful :)"
 
 print_heading "Check if the Zammad user can write to FS storage"
-docker compose exec zammad-railsserver touch storage/test.txt
+railsserver_run_command touch storage/test.txt
 print_heading "Storage write successful :)"
 
 print_heading "Check if the Zammad user can write /tmp"
-docker compose exec zammad-railsserver touch tmp/test.txt
+railsserver_run_command touch tmp/test.txt
 print_heading "Tmp write successful :)"
 
 print_heading "Check if zammad-backup created an application backup"
