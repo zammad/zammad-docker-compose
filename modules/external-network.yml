@@ -1,0 +1,18 @@
+---
+version: "3.8"
+
+#
+# Adds an external network to Zammad's nginx container, for example to
+#   use it with an existing reverse proxy like nginx proxy manager.
+#
+
+services:
+  zammad-nginx:
+    networks:
+      - default
+      - zammad-external-network
+
+networks:
+  zammad-external-network:
+    external: true
+    name: ${EXTERNAL_NETWORK}
