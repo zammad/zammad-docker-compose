@@ -1,5 +1,5 @@
 ---
-name: "CI: Lint"
+name: CI
 
 permissions: read-all
 
@@ -7,7 +7,8 @@ on:
   pull_request:
 
 jobs:
-  lint-docker-compose-file:
+  docker-compose-lint:
+    name: "Docker Compose self-lint"
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -17,14 +18,15 @@ jobs:
         run: docker compose config
 
   super-linter:
+    name: "Super Linter"
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout Code
+      - name: checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Lint Code Base
+      - name: lint code base
         uses: github/super-linter/slim@v7
         env:
           DEFAULT_BRANCH: master
@@ -34,3 +36,23 @@ jobs:
           VALIDATE_JSCPD: false
           VALIDATE_SHELL_SHFMT: false
           VALIDATE_YAML_PRETTIER: false
+
+  tests:
+    name: "Run tests with remote docker image"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        module: ['default', 'external-network', 'cloudflare-tunnel']
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: pull docker compose images
+        run: docker compose pull
+
+      - name: set up test environment
+        run: .github/tests/setup/${{ matrix.module }}.sh
+
+      - name: run tests
+        run: .github/tests/${{ matrix.module }}.sh
