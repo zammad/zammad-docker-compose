@@ -40,7 +40,7 @@ jobs:
         run: docker network create zammad-ci-external-network
 
       - name: set required env
-        run: echo "EXTERNAL_NETWORK=zammad-ci-external-network"
+        run: echo "EXTERNAL_NETWORK=zammad-ci-external-network" > .env
 
       - name: run docker compose up
         run: docker compose -f docker-compose.yml -f modules/external-network.yml up --detach
