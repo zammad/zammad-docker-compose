@@ -68,4 +68,4 @@ jobs:
         run: docker compose -f docker-compose.yml -f modules/cloudflare-tunnel.yml up --detach
 
       - name: run tests
-        run: .github/tests/external-network.sh
+        run: .github/tests/cloudflare-tunnel.sh
