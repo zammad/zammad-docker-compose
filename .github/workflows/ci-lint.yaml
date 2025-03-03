@@ -1,5 +1,5 @@
 ---
-name: ci
+name: "CI: Lint"
 
 permissions: read-all
 

@@ -1,5 +1,5 @@
 ---
-name: ci-remote-image
+name: "CI: Tests"
 
 permissions: read-all
 
@@ -8,6 +8,9 @@ on:
 
 jobs:
   run-remote-image-docker-compose:
+    strategy:
+      matrix:
+        module: ['default', 'external-network', 'cloudflare-tunnel']
     timeout-minutes: 20
     runs-on: ubuntu-24.04
     steps:
@@ -17,55 +20,8 @@ jobs:
       - name: pull docker compose images
         run: docker compose pull
 
-      - name: run docker compose up
-        run: docker compose up --detach
-
-      - name: add autowizard file
-        run: docker cp .github/auto_wizard.json zammad-docker-compose-zammad-railsserver-1:/opt/zammad/tmp
+      - name: setup test environment
+        run: .github/tests/setup/${{ matrix.module }}.sh
 
       - name: run tests
-        run: .github/tests/default.sh
-
-  run-remote-image-docker-compose-modules-external-network:
-    timeout-minutes: 20
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: pull docker compose images
-        run: docker compose pull
-
-      - name: create external network for testing
-        run: docker network create zammad-ci-external-network
-
-      - name: set required env
-        run: echo "EXTERNAL_NETWORK=zammad-ci-external-network" > .env
-
-      - name: run docker compose up
-        run: docker compose -f docker-compose.yml -f modules/external-network.yml up --detach
-
-      - name: run tests
-        run: .github/tests/external-network.sh
-
-  run-remote-image-docker-compose-modules-cloudlflare-tunnel:
-    timeout-minutes: 20
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: pull docker compose images
-        run: docker compose pull
-
-      - name: create external network for testing
-        run: docker network create zammad-ci-external-network
-
-      - name: set required env
-        run: echo "CLOUDFLARE_TUNNEL_TOKEN=invalid-token" > .env
-
-      - name: run docker compose up
-        run: docker compose -f docker-compose.yml -f modules/cloudflare-tunnel.yml up --detach
-
-      - name: run tests
-        run: .github/tests/cloudflare-tunnel.sh
+        run: .github/tests/${{ matrix.module }}.sh
