@@ -24,7 +24,7 @@ jobs:
         run: docker cp .github/auto_wizard.json zammad-docker-compose-zammad-railsserver-1:/opt/zammad/tmp
 
       - name: run tests
-        run: .github/tests.sh
+        run: .github/tests/default.sh
 
   run-remote-image-docker-compose-modules-external-network:
     timeout-minutes: 20
