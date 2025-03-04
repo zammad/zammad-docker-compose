@@ -13,6 +13,6 @@ services:
       - zammad-elasticsearch-external-network
 
 networks:
-  zammad-elasticsearch_external-network:
+  zammad-elasticsearch-external-network:
     external: true
     name: ${ZAMMAD_ELASTICSEARCH_EXTERNAL_NETWORK}
