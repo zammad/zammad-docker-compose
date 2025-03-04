@@ -9,7 +9,7 @@ on:
 jobs:
   docker-compose-lint:
     name: "Docker Compose self-lint"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
 
   super-linter:
     name: "Super Linter"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: checkout code
         uses: actions/checkout@v4
@@ -45,8 +45,9 @@ jobs:
       matrix:
         module:
           - default
-          - add-external-network-to-nginx
           - add-cloudflare-tunnel
+          - add-nginx-proxy-manager
+          - add-external-network-to-nginx
           - disable-backup-service
           - disable-elasticsearch-service
     steps:
