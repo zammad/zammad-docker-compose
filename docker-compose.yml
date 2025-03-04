@@ -23,9 +23,11 @@ x-shared:
       AUTOWIZARD_JSON:
       AUTOWIZARD_RELATIVE_PATH:
       ELASTICSEARCH_ENABLED:
+      ELASTICSEARCH_SCHEMA:
       ELASTICSEARCH_HOST:
       ELASTICSEARCH_PORT:
-      ELASTICSEARCH_SCHEMA:
+      ELASTICSEARCH_USER:
+      ELASTICSEARCH_PASS:
       ELASTICSEARCH_NAMESPACE:
       ELASTICSEARCH_REINDEX:
       ELASTICSEARCH_SSL_VERIFY:
@@ -46,7 +48,7 @@ x-shared:
       # for docs refer to https://github.com/nginx-proxy/acme-companion
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
-      
+
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1-45}
     restart: ${RESTART:-always}
     volumes:

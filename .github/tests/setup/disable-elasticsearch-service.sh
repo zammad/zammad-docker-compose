@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -o errexit
+
+# Disable ES initialization in the test because we don't have an external ES service.
+echo "ELASTICSEARCH_DISABLED=true" > .env
+
+docker compose -f docker-compose.yml -f modules/disable-elasticsearch-service.yml up --detach
