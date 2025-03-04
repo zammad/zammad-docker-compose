@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: lint zammad docker compose file
+      - name: Lint zammad docker compose file
         run: docker compose config
 
   super-linter:
@@ -26,7 +26,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: lint code base
+      - name: Lint code base
         uses: github/super-linter/slim@v7
         env:
           DEFAULT_BRANCH: master
@@ -45,14 +45,14 @@ jobs:
       matrix:
         module: ['default', 'add-external-network-to-nginx', 'add-cloudflare-tunnel']
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: pull docker compose images
+      - name: Pull docker compose images
         run: docker compose pull
 
-      - name: set up test environment
+      - name: Set up test environment
         run: .github/tests/setup/${{ matrix.module }}.sh
 
-      - name: run tests
+      - name: Run tests
         run: .github/tests/${{ matrix.module }}.sh
