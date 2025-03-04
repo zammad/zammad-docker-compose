@@ -8,4 +8,5 @@ version: "3.8"
 
 services:
   zammad-elasticsearch:
-    ports: 9200:9200
+    ports:
+      - 9200:9200
