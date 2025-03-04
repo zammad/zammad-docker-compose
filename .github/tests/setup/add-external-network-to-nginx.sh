@@ -4,6 +4,6 @@ set -o errexit
 
 docker network create zammad-ci-external-network
 
-echo "EXTERNAL_NETWORK=zammad-ci-external-network" > .env
+echo "ZAMMAD_NGINX_EXTERNAL_NETWORK=zammad-ci-external-network" > .env
 
 docker compose -f docker-compose.yml -f scenarios/add-external-network-to-nginx.yml up --detach

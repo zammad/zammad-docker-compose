@@ -10,10 +10,10 @@ services:
   zammad-nginx:
     networks:
       - default
-      - zammad-external-network
+      - zammad-nginx-external-network
     ports: !reset []
 
 networks:
-  zammad-external-network:
+  zammad-nginx-external-network:
     external: true
-    name: ${EXTERNAL_NETWORK}
+    name: ${ZAMMAD_NGINX_EXTERNAL_NETWORK}

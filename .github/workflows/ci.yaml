@@ -47,6 +47,7 @@ jobs:
           - default
           - add-cloudflare-tunnel
           - add-nginx-proxy-manager
+          - add-external-network-to-elasticsearch
           - add-external-network-to-nginx
           - disable-backup-service
           - disable-elasticsearch-service
