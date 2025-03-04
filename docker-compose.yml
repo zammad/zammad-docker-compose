@@ -26,8 +26,8 @@ x-shared:
       ELASTICSEARCH_SCHEMA:
       ELASTICSEARCH_HOST:
       ELASTICSEARCH_PORT:
-      ELASTICSEARCH_USER:
-      ELASTICSEARCH_PASS:
+      ELASTICSEARCH_USER: ${ELASTICSEARCH_USER:-elastic}
+      ELASTICSEARCH_PASS: ${ELASTICSEARCH_PASS:-zammad}
       ELASTICSEARCH_NAMESPACE:
       ELASTICSEARCH_REINDEX:
       ELASTICSEARCH_SSL_VERIFY:
@@ -75,6 +75,14 @@ services:
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
+    environment:
+      # Enable authorization without HTTPS. For external access with
+      #   SSL termination, use solutions like nginx-proxy-manager.
+      ELASTICSEARCH_ENABLE_SECURITY: 'true'
+      ELASTICSEARCH_SKIP_TRANSPORT_TLS: 'true'
+      ELASTICSEARCH_ENABLE_REST_TLS: 'false'
+      # ELASTICSEARCH_USER is hardcoded to 'elastic' in the container.
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASS:-zammad}
 
   zammad-init:
     <<: *zammad-service
