@@ -11,6 +11,7 @@ services:
     networks:
       - default
       - zammad-external-network
+    ports: !reset []
 
 networks:
   zammad-external-network:

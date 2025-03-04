@@ -43,7 +43,7 @@ jobs:
     timeout-minutes: 20
     strategy:
       matrix:
-        module: ['default', 'external-network', 'cloudflare-tunnel']
+        module: ['default', 'add-external-network-to-nginx', 'add-cloudflare-tunnel']
     steps:
       - name: checkout
         uses: actions/checkout@v4
