@@ -9,4 +9,4 @@ version: "3.8"
 services:
   zammad-elasticsearch:
     ports:
-      - 9200:9200
+      - "${ELASTICSEARCH_EXPOSE_HTTP_PORT:-9200}:9200"
