@@ -1,5 +1,5 @@
 ---
-version: '3.8'
+version: "3.8"
 
 x-shared:
   zammad-service: &zammad-service
@@ -34,9 +34,9 @@ x-shared:
       NGINX_SERVER_NAME:
       NGINX_SERVER_SCHEME:
       RAILS_TRUSTED_PROXIES:
-      ZAMMAD_WEB_CONCURRENCY:
-      ZAMMAD_SESSION_JOBS:
-      ZAMMAD_PROCESS_SCHEDULED:
+      WEB_CONCURRENCY:
+      ZAMMAD_SESSION_JOBS_CONCURRENT:
+      ZAMMAD_PROCESS_SCHEDULED_JOBS_WORKERS:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
       # Variables used by ngingx-proxy container for reverse proxy creations
       # for docs refer to https://github.com/nginx-proxy/nginx-proxy
@@ -46,7 +46,7 @@ x-shared:
       # for docs refer to https://github.com/nginx-proxy/acme-companion
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
-      
+
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.1-45}
     restart: ${RESTART:-always}
     volumes:
@@ -57,7 +57,6 @@ x-shared:
       - zammad-redis
 
 services:
-
   zammad-backup:
     <<: *zammad-service
     command: ["zammad-backup"]
