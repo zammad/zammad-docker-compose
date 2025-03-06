@@ -23,9 +23,11 @@ x-shared:
       AUTOWIZARD_JSON:
       AUTOWIZARD_RELATIVE_PATH:
       ELASTICSEARCH_ENABLED:
+      ELASTICSEARCH_SCHEMA:
       ELASTICSEARCH_HOST:
       ELASTICSEARCH_PORT:
-      ELASTICSEARCH_SCHEMA:
+      ELASTICSEARCH_USER: ${ELASTICSEARCH_USER:-elastic}
+      ELASTICSEARCH_PASS: ${ELASTICSEARCH_PASS:-zammad}
       ELASTICSEARCH_NAMESPACE:
       ELASTICSEARCH_REINDEX:
       ELASTICSEARCH_SSL_VERIFY:
@@ -34,6 +36,8 @@ x-shared:
       NGINX_SERVER_NAME:
       NGINX_SERVER_SCHEME:
       RAILS_TRUSTED_PROXIES:
+      ZAMMAD_HTTP_TYPE:
+      ZAMMAD_FQDN:
       WEB_CONCURRENCY:
       ZAMMAD_SESSION_JOBS_CONCURRENT:
       ZAMMAD_PROCESS_SCHEDULED_JOBS_WORKERS:
@@ -70,6 +74,14 @@ services:
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
+    environment:
+      # Enable authorization without HTTPS. For external access with
+      #   SSL termination, use solutions like nginx-proxy-manager.
+      ELASTICSEARCH_ENABLE_SECURITY: 'true'
+      ELASTICSEARCH_SKIP_TRANSPORT_TLS: 'true'
+      ELASTICSEARCH_ENABLE_REST_TLS: 'false'
+      # ELASTICSEARCH_USER is hardcoded to 'elastic' in the container.
+      ELASTICSEARCH_PASSWORD: ${ELASTICSEARCH_PASS:-zammad}
 
   zammad-init:
     <<: *zammad-service

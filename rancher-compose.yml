@@ -1,6 +1,12 @@
 ---
 version: '2'
 
+#
+# Using Rancher
+#
+# RANCHER_URL=http://RANCHER_HOST:8080 rancher-compose --env-file=.env up
+#
+
 services:
 
   zammad-backup:

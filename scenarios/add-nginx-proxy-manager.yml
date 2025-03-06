@@ -1,0 +1,24 @@
+---
+version: "3.8"
+
+#
+# Adds an nginx-proxy-manager service to the stack, for example to
+#   expose Zammad publicly via HTTPS.
+#
+
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager
+    restart: ${RESTART:-always}
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - nginx-proxy-manager-data:/data
+      - nginx-proxy-manager-letsencrypt:/etc/letsencrypt
+volumes:
+  nginx-proxy-manager-data:
+    driver: local
+  nginx-proxy-manager-letsencrypt:
+    driver: local
