@@ -1,0 +1,12 @@
+---
+version: "3.8"
+
+#
+# Disable the built-in zammad-elasticsearch service, for example if
+#   an external elasticsearch is used.
+#
+
+services:
+  zammad-elasticsearch:
+    profiles:
+      - do-not-start

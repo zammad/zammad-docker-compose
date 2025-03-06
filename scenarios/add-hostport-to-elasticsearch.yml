@@ -1,0 +1,12 @@
+---
+version: "3.8"
+
+#
+# Exposes Zammad's elasticsearch container on the host, for example to
+#   connect to it from another host.
+#
+
+services:
+  zammad-elasticsearch:
+    ports:
+      - "${ELASTICSEARCH_EXPOSE_HTTP_PORT:-9200}:9200"
