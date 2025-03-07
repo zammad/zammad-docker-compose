@@ -1,5 +1,5 @@
 ---
-version: '3.8'
+version: "3.8"
 
 x-shared:
   zammad-service: &zammad-service
@@ -39,8 +39,8 @@ x-shared:
       ZAMMAD_HTTP_TYPE:
       ZAMMAD_FQDN:
       ZAMMAD_WEB_CONCURRENCY:
-      ZAMMAD_SESSION_JOBS:
-      ZAMMAD_PROCESS_SCHEDULED:
+      ZAMMAD_SESSION_JOBS_CONCURRENT:
+      ZAMMAD_PROCESS_SCHEDULED_JOBS_WORKERS:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
       # Variables used by ngingx-proxy container for reverse proxy creations
       # for docs refer to https://github.com/nginx-proxy/nginx-proxy
@@ -61,7 +61,6 @@ x-shared:
       - zammad-redis
 
 services:
-
   zammad-backup:
     <<: *zammad-service
     command: ["zammad-backup"]
