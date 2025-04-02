@@ -30,7 +30,6 @@ x-shared:
       ELASTICSEARCH_PASS: ${ELASTICSEARCH_PASS:-zammad}
       ELASTICSEARCH_NAMESPACE:
       ELASTICSEARCH_REINDEX:
-      ELASTICSEARCH_SSL_VERIFY:
       NGINX_PORT:
       NGINX_CLIENT_MAX_BODY_SIZE:
       NGINX_SERVER_NAME:
@@ -39,9 +38,11 @@ x-shared:
       ZAMMAD_HTTP_TYPE:
       ZAMMAD_FQDN:
       ZAMMAD_WEB_CONCURRENCY:
-      ZAMMAD_SESSION_JOBS_CONCURRENT:
+      ZAMMAD_PROCESS_SESSIONS_JOBS_WORKERS:
       ZAMMAD_PROCESS_SCHEDULED_JOBS_WORKERS:
       ZAMMAD_PROCESS_DELAYED_JOBS_WORKERS:
+      # ZAMMAD_SESSION_JOBS_CONCURRENT is deprecated, please use ZAMMAD_PROCESS_SESSIONS_JOBS_WORKERS instead.
+      ZAMMAD_SESSION_JOBS_CONCURRENT:
       # Variables used by ngingx-proxy container for reverse proxy creations
       # for docs refer to https://github.com/nginx-proxy/nginx-proxy
       VIRTUAL_HOST:
@@ -51,7 +52,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.4.2}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
