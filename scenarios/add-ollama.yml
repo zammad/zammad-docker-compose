@@ -8,6 +8,7 @@ version: "3.8"
 services:
   ollama:
     image: docker.io/ollama/ollama:latest
+    # Do not expose ports, in-stack connectivity from Zammad is sufficient.
     volumes:
       - ollama-data:/root/.ollama
     restart: ${RESTART:-always}
