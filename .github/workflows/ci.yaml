@@ -52,6 +52,7 @@ jobs:
           - add-external-network-to-nginx
           - add-hostport-to-elasticsearch
           - add-nginx-proxy-manager
+          - add-ollama
           - disable-backup-service
           - disable-elasticsearch-service
     steps:

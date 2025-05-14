@@ -1,0 +1,17 @@
+---
+version: "3.8"
+
+#
+# Adds an ollama service to the stack, for example for local AI tests.
+#
+
+services:
+  ollama:
+    image: docker.io/ollama/ollama:latest
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: ${RESTART:-always}
+
+volumes:
+  ollama-data:
+    driver: local
