@@ -1,0 +1,29 @@
+---
+version: "3.8"
+
+#
+# Adds an ollama service to the stack, for example for local AI tests.
+#
+
+services:
+  ollama-init:
+    image: alpine/curl
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Pulling model ${OLLAMA_PULL_MODEL:-llama3.2}…"
+        curl --location 'http://ollama:11434/api/pull' --data '{"name": "${OLLAMA_PULL_MODEL:-llama3.2}"}'
+    restart: "no"
+    depends_on:
+      - ollama
+
+  ollama:
+    image: docker.io/ollama/ollama:latest
+    # Do not expose ports, in-stack connectivity from Zammad via 'http://ollama:11434' is sufficient.
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: ${RESTART:-always}
+
+volumes:
+  ollama-data:
+    driver: local
