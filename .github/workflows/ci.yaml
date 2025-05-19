@@ -52,14 +52,12 @@ jobs:
           - add-external-network-to-nginx
           - add-hostport-to-elasticsearch
           - add-nginx-proxy-manager
+          - add-ollama
           - disable-backup-service
           - disable-elasticsearch-service
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Pull docker compose images
-        run: docker compose pull
 
       - name: Set up test environment
         run: .github/tests/setup/${{ matrix.module }}.sh
