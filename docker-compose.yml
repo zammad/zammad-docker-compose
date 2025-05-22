@@ -52,7 +52,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-53}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-75}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
@@ -112,7 +112,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${POSTGRES_USER:-zammad}
       POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
-    image: postgres:${POSTGRES_VERSION:-17.4-alpine}
+    image: postgres:${POSTGRES_VERSION:-17.5-alpine}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
