@@ -53,6 +53,7 @@ jobs:
           - add-hostport-to-elasticsearch
           - add-nginx-proxy-manager
           - add-ollama
+          - apply-resource-limits
           - disable-backup-service
           - disable-elasticsearch-service
     steps:
