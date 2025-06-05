@@ -56,7 +56,7 @@ print_heading "Stop the stack"
 docker compose down -t0
 
 print_heading "Copy backup files to restore folder"
-docker compose exec zammad-backup sh -c "mkdir /var/tmp/zammad && cp /var/tmp/zammad/* /var/tmp/zammad/restore/"
+docker compose run --rm zammad-backup sh -c "mkdir /var/tmp/zammad && cp /var/tmp/zammad/* /var/tmp/zammad/restore/"
 
 print_heading "Start the stack again"
 docker compose up -d
