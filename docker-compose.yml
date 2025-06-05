@@ -65,7 +65,7 @@ services:
     command: ["zammad-backup"]
     volumes:
       - zammad-backup:/var/tmp/zammad
-      - zammad-storage:/opt/zammad/storage:ro
+      - zammad-storage:/opt/zammad/storage
     user: 0:0
 
   zammad-elasticsearch:
