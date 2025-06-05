@@ -51,3 +51,17 @@ print_heading "Check if zammad-backup created a database backup"
 # Check that the db dump actually has content in the .gz file to catch cases where pg_dump fails.
 docker compose exec zammad-backup sh -c "find /var/tmp/zammad/ -name \"*zammad_db.psql.gz\" -size +1k | grep ."
 print_heading "Database backup successful :)"
+
+print_heading "Stop the stack"
+docker compose down -t0
+
+print_heading "Copy backup files to restore folder"
+docker compose exec zammad-backup sh -c "mkdir /var/tmp/zammad && cp /var/tmp/zammad/* /var/tmp/zammad/restore/"
+
+print_heading "Start the stack again"
+docker compose up -d
+check_stack_start
+
+print_heading "Check that restore folder was renamed after successful restore..."
+docker compose exec zammad-backup sh -c "[ ! -d /var/tmp/zammad/restore ]"
+print_heading "Restore folder was renamed after successful restore..."
