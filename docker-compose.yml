@@ -53,6 +53,7 @@ x-shared:
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.2-85}
     restart: ${RESTART:-always}
     volumes:
+      - zammad-backup:/var/tmp/zammad:ro  # needed for waiting on restore operations
       - zammad-storage:/opt/zammad/storage
     depends_on:
       - zammad-memcached
