@@ -1,0 +1,68 @@
+---
+version: "3.8"
+
+#
+# Apply resource limits to the Zammad services.
+#
+
+services:
+  zammad-backup:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_BACKUP_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_BACKUP_RESOURCES_LIMITS_MEMORY:-500m}"
+  zammad-elasticsearch:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_ELASTICSEARCH_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_ELASTICSEARCH_RESOURCES_LIMITS_MEMORY:-1G}"
+  zammad-init:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_INIT_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_INIT_RESOURCES_LIMITS_MEMORY:-500M}"
+  zammad-memcached:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_MEMCACHED_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_MEMCACHED_RESOURCES_LIMITS_MEMORY:-500M}"
+  zammad-nginx:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_NGINX_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_NGINX_RESOURCES_LIMITS_MEMORY:-500M}"
+  zammad-postgresql:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_POSTGRESQL_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_POSTGRESQL_RESOURCES_LIMITS_MEMORY:-500M}"
+  zammad-railsserver:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_RAILSSERVER_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_RAILSSERVER_RESOURCES_LIMITS_MEMORY:-500M}"
+  zammad-redis:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_REDIS_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_REDIS_RESOURCES_LIMITS_MEMORY:-500M}"
+  zammad-scheduler:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_SCHEDULER_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_SCHEDULER_RESOURCES_LIMITS_MEMORY:-500M}"
+  zammad-websocket:
+    deploy:
+      resources:
+        limits:
+          cpus: "${ZAMMAD_WEBSOCKET_RESOURCES_LIMITS_CPUS:-1.0}"
+          memory: "${ZAMMAD_WEBSOCKET_RESOURCES_LIMITS_MEMORY:-500M}"
