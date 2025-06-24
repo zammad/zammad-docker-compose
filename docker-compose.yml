@@ -76,6 +76,8 @@ services:
     volumes:
       - elasticsearch-data:/bitnami/elasticsearch/data
     environment:
+      # See https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch#environment-variables
+      #
       # Enable authorization without HTTPS. For external access with
       #   SSL termination, use solutions like nginx-proxy-manager.
       ELASTICSEARCH_ENABLE_SECURITY: 'true'
