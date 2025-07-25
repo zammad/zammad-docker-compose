@@ -155,7 +155,6 @@ services:
   zammad-init:
     image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:6.5.0-101'
     restart: on-failure
-
     exclude_from_hc: true
     labels:
       coolify.service.name: zammad-init
