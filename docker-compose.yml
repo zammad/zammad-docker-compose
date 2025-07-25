@@ -17,13 +17,12 @@ x-zammad-common-env: &zammad-common-env
   ELASTICSEARCH_PORT: '9200'
   ELASTICSEARCH_USER: elastic
   ELASTICSEARCH_PASS: '${SERVICE_PASSWORD_ELASTIC}'
-  TZ: '${TZ:-Europe/Dublin}'
+  TZ: '${TZ:-Europe/Berlin}'
 
 services:
   zammad-railsserver:
-    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-53}'
+    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:6.5.0-101'
     restart: unless-stopped
-
     labels:
       coolify.service.name: zammad-railsserver
       coolify.project: zammad
@@ -53,7 +52,7 @@ services:
       - zammad-railsserver
 
   zammad-scheduler:
-    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-53}'
+    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:6.5.0-101'
     restart: unless-stopped
 
     labels:
@@ -85,7 +84,7 @@ services:
       - zammad-scheduler
 
   zammad-websocket:
-    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-53}'
+    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:6.5.0-101'
     restart: unless-stopped
 
     labels:
@@ -117,7 +116,7 @@ services:
       - zammad-websocket
 
   zammad-nginx:
-    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-53}'
+    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:6.5.0-101'
     restart: unless-stopped
 
     labels:
@@ -154,7 +153,7 @@ services:
       - zammad-nginx
 
   zammad-init:
-    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.0-53}'
+    image: '${IMAGE_REPO:-ghcr.io/zammad/zammad}:6.5.0-101'
     restart: on-failure
 
     exclude_from_hc: true
@@ -180,7 +179,7 @@ services:
     user: '0:0'
 
   zammad-memcached:
-    image: 'memcached:${MEMCACHE_VERSION:-1.6.38-alpine}'
+    image: 'memcached:1.6.38-alpine'
     restart: unless-stopped
 
     labels:
@@ -198,7 +197,7 @@ services:
     command: 'memcached -m 256M'
 
   zammad-postgresql:
-    image: 'postgres:${POSTGRES_VERSION:-17.4-alpine}'
+    image: 'postgres:17.5-alpine'
     restart: unless-stopped
 
     labels:
@@ -236,7 +235,7 @@ services:
       -c effective_io_concurrency=200
 
   zammad-redis:
-    image: 'redis:${REDIS_VERSION:-7.4.3-alpine}'
+    image: 'redis:7.4.4-alpine'
     restart: unless-stopped
 
     labels:
@@ -265,7 +264,7 @@ services:
       --appendfsync everysec
 
   zammad-elasticsearch:
-    image: 'bitnami/elasticsearch:${ELASTICSEARCH_VERSION:-8.18.0}'
+    image: 'bitnami/elasticsearch:8.18.0'
     restart: unless-stopped
 
     labels:
