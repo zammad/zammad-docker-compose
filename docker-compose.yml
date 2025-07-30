@@ -78,7 +78,7 @@ services:
     environment:
       discovery.type: single-node
       xpack.security.enabled: 'false'
-      ES_JAVA_OPTS: '-Xms1g -Xmx1g'
+      ES_JAVA_OPTS: ${ELASTICSEARCH_JAVA_OPTS:--Xms1g -Xmx1g}
 
   zammad-init:
     <<: *zammad-service
