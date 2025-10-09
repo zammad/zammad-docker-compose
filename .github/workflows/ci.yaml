@@ -67,3 +67,5 @@ jobs:
 
       - name: Run tests
         run: .github/tests/${{ matrix.module }}.sh
+        env:
+          VERSION: 'develop' # TODO: revert before merging!
