@@ -12,7 +12,17 @@ x-shared:
       POSTGRESQL_PORT: ${POSTGRES_PORT:-5432}
       POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
       POSTGRESQL_DB_CREATE:
+
+      # Redis standalone
       REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
+      # Redis sentinel
+      REDIS_SENTINELS:
+      REDIS_SENTINEL_NAME:
+      REDIS_USERNAME:
+      REDIS_PASSWORD:
+      REDIS_SENTINEL_USERNAME:
+      REDIS_SENTINEL_PASSWORD:
+
       S3_URL:
       # Backup settings
       BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
