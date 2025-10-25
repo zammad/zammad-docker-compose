@@ -1,17 +1,37 @@
-# override.yml
 version: "3.9"
 
 volumes:
-  postgresql-data:                # Name wie im Upstream belassen
+  postgresql-data:
     driver: local
     driver_opts:
       type: none
       o: bind
       device: /data/nas/homeserver01/docker/zammad/postgres
 
-  zammad-storage:                 # Name wie im Upstream belassen
+  zammad-storage:
     driver: local
     driver_opts:
       type: none
       o: bind
       device: /data/nas/homeserver01/docker/zammad/storage
+
+  redis-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/nas/homeserver01/docker/zammad/redis
+
+  elasticsearch-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/nas/homeserver01/docker/zammad/elasticsearch
+
+  zammad-backup:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/nas/homeserver01/docker/zammad/backup
