@@ -1,8 +1,17 @@
+# override.yml
 version: "3.9"
+
 volumes:
-  postgresql-data:
+  postgresql-data:                # Name wie im Upstream belassen
     driver: local
-    driver_opts: { type: none, o: bind, device: /data/nas/homeserver01/docker/zammad/postgres }
-  zammad-storage:
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/nas/homeserver01/docker/zammad/postgres
+
+  zammad-storage:                 # Name wie im Upstream belassen
     driver: local
-    driver_opts: { type: none, o: bind, device: /data/nas/homeserver01/docker/zammad/storage }
+    driver_opts:
+      type: none
+      o: bind
+      device: /data/nas/homeserver01/docker/zammad/storage
