@@ -2,7 +2,7 @@ version: "3.9"
 volumes:
   postgresql-data:
     driver: local
-    driver_opts: { type: none, o: bind, device: /data/nas/homeserver01/zammad/postgres }
+    driver_opts: { type: none, o: bind, device: /data/nas/homeserver01/docker/zammad/postgres }
   zammad-storage:
     driver: local
-    driver_opts: { type: none, o: bind, device: /data/nas/homeserver01/zammad/storage }
+    driver_opts: { type: none, o: bind, device: /data/nas/homeserver01/docker/zammad/storage }
