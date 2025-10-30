@@ -55,7 +55,8 @@ x-shared:
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.2-22}
     restart: ${RESTART:-always}
     volumes:
-      - zammad-storage:/opt/zammad/storage
+      - ${DATA_PATH}/zammad-storage:/opt/zammad/storage
+      - ${DATA_PATH}/sms:/opt/zammad/app/models/channel/driver/sms
     depends_on:
       - zammad-memcached
       - zammad-postgresql
@@ -66,8 +67,8 @@ services:
     <<: *zammad-service
     command: ["zammad-backup"]
     volumes:
-      - zammad-backup:/var/tmp/zammad
-      - zammad-storage:/opt/zammad/storage:ro
+      - ${DATA_PATH}/zammad-backup:/var/tmp/zammad
+      - ${DATA_PATH}/zammad-storage:/opt/zammad/storage:ro
     user: 0:0
 
   zammad-elasticsearch:
@@ -111,7 +112,7 @@ services:
     image: postgres:${POSTGRES_VERSION:-17.6-alpine}
     restart: ${RESTART:-always}
     volumes:
-      - postgresql-data:/var/lib/postgresql/data
+      - ${DATA_PATH}/postgresql-data:/var/lib/postgresql/data
 
   zammad-railsserver:
     <<: *zammad-service
