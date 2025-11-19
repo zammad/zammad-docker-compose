@@ -93,16 +93,6 @@ services:
     image: memcached:${MEMCACHE_VERSION:-1.6.39-alpine}
     restart: ${RESTART:-always}
 
-  zammad-nginx:
-    <<: *zammad-service
-    command: ["zammad-nginx"]
-    expose:
-      - "${NGINX_PORT:-8080}"
-    ports:
-      - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
-    depends_on:
-      - zammad-railsserver
-
   zammad-postgresql:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
