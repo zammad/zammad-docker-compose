@@ -54,6 +54,8 @@ x-shared:
 
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.2-46}
     restart: ${RESTART:-always}
+    networks:
+      - zammad_internal_network
     volumes:
       - zammad-storage:/opt/zammad/storage
     depends_on:
@@ -73,6 +75,9 @@ services:
   zammad-elasticsearch:
     image: elasticsearch:${ELASTICSEARCH_VERSION:-8.19.8}
     restart: ${RESTART:-always}
+    networks:
+      - zammad_internal_network
+      - zammad_external_network
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     environment:
@@ -92,10 +97,15 @@ services:
     command: memcached -m 256M
     image: memcached:${MEMCACHE_VERSION:-1.6.39-alpine}
     restart: ${RESTART:-always}
+    networks:
+      - zammad_internal_network
 
   zammad-nginx:
     <<: *zammad-service
     command: ["zammad-nginx"]
+    networks:
+      - zammad_internal_network
+      - zammad_external_network
     expose:
       - "${NGINX_PORT:-8080}"
     ports:
@@ -120,16 +130,24 @@ services:
   zammad-redis:
     image: redis:${REDIS_VERSION:-7.4.7-alpine}
     restart: ${RESTART:-always}
+    networks:
+      - zammad_internal_network
     volumes:
       - redis-data:/data
 
   zammad-scheduler:
     <<: *zammad-service
     command: ["zammad-scheduler"]
+    networks:
+      - zammad_internal_network
+      - zammad_external_network
 
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
+    networks:
+      - zammad_internal_network
+      - zammad_external_network
 
 volumes:
   elasticsearch-data:
@@ -142,3 +160,8 @@ volumes:
     driver: local
   zammad-storage:
     driver: local
+
+networks:
+  zammad_external_network:
+  zammad_internal_network:
+    internal: true
