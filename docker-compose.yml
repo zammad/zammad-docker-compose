@@ -52,7 +52,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:develop}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-develop}
     restart: ${RESTART:-always}
     volumes:
       - zammad-storage:/opt/zammad/storage
