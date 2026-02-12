@@ -1,0 +1,23 @@
+---
+version: "3.8"
+
+#
+# Disable the nginx service, for example if there is already a reverse proxy handling
+# the connections and you want connect directly to rails from this reverse proxy
+#
+
+services:
+  zammad-nginx:
+    profiles:
+      - do-not-start
+
+  zammad-railsserver:
+    environment:
+      RAILS_SERVE_STATIC_FILES: true
+    ports:
+      - "${DOCKER_RAILS_BIND_HOST:-127.0.0.1}:${DOCKER_RAILS_BIND_PORT:-3100}:${ZAMMAD_RAILSSERVER_PORT:-3000}"
+
+  zammad-websocket:
+    ports:
+      - "${DOCKER_RAILS_BIND_HOST:-127.0.0.1}:${DOCKER_ZAMMAD_WEBSOCKET_BIND_PORT:-3100}:${ZAMMAD_WEBSOCKET_PORT:-6042}"
+
