@@ -1,6 +1,4 @@
 ---
-version: "3.8"
-
 #
 # Apply resource limits to the Zammad services.
 #

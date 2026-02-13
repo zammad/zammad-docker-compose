@@ -1,6 +1,4 @@
 ---
-version: "3.8"
-
 #
 # Adds an nginx-proxy-manager service to the stack, for example to
 #   expose Zammad publicly via HTTPS.
