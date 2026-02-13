@@ -1,6 +1,4 @@
 ---
-version: "3.8"
-
 #
 # Adds an ollama service to the stack, for example for local AI tests.
 #
