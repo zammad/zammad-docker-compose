@@ -18,8 +18,16 @@ railsserver_run_command() {
 }
 
 check_stack_start() {
+  dont_use_nginx="$1"
+
   print_heading "wait for zammad to be ready…"
   docker compose wait zammad-init
-  docker compose exec zammad-nginx bash -c "curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep 'Zammad'"
+
+  if [ -z "$dont_use_nginx" ]; then
+    docker compose exec zammad-nginx bash -c "curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep 'Zammad'"
+  else
+    docker compose exec zammad-railsserver bash -c "curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:3000 | grep 'Zammad'"
+  fi
+
   print_heading "Success - Zammad is up :)"
 }
