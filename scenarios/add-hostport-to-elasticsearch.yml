@@ -1,6 +1,4 @@
 ---
-version: "3.8"
-
 #
 # Exposes Zammad's elasticsearch container on the host, for example to
 #   connect to it from another host.
