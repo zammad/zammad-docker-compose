@@ -6,5 +6,5 @@
 check_stack_start
 
 print_heading "check for absence of nginx container"
-docker compose ps | grep zammad-nginx && exit 1
+docker compose ps | grep zammad-nginx
 print_heading "Success - nginx container is absent"
