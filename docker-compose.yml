@@ -10,7 +10,17 @@ x-shared:
       POSTGRESQL_PORT: ${POSTGRES_PORT:-5432}
       POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
       POSTGRESQL_DB_CREATE:
+
+      # Redis standalone
       REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
+      # Redis sentinel
+      REDIS_SENTINELS:
+      REDIS_SENTINEL_NAME:
+      REDIS_USERNAME:
+      REDIS_PASSWORD:
+      REDIS_SENTINEL_USERNAME:
+      REDIS_SENTINEL_PASSWORD:
+
       S3_URL:
       # Backup settings
       BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
@@ -53,6 +63,7 @@ x-shared:
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-6.5.2-85}
     restart: ${RESTART:-always}
     volumes:
+      - zammad-backup:/var/tmp/zammad:ro  # needed for waiting on restore operations
       - zammad-storage:/opt/zammad/storage
     depends_on:
       - zammad-memcached
@@ -65,11 +76,11 @@ services:
     command: ["zammad-backup"]
     volumes:
       - zammad-backup:/var/tmp/zammad
-      - zammad-storage:/opt/zammad/storage:ro
+      - zammad-storage:/opt/zammad/storage
     user: 0:0
 
   zammad-elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_VERSION:-8.19.11}
+    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.3.0}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -106,7 +117,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${POSTGRES_USER:-zammad}
       POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
-    image: postgres:${POSTGRES_VERSION:-17.7-alpine}
+    image: postgres:${POSTGRES_VERSION:-17.8-alpine}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
@@ -116,7 +127,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-7.4.7-alpine}
+    image: redis:${REDIS_VERSION:-8.6.0-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
