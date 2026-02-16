@@ -80,7 +80,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_VERSION:-8.19.11}
+    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.3.0}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -117,7 +117,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${POSTGRES_USER:-zammad}
       POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
-    image: postgres:${POSTGRES_VERSION:-17.7-alpine}
+    image: postgres:${POSTGRES_VERSION:-17.8-alpine}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
@@ -127,7 +127,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-7.4.7-alpine}
+    image: redis:${REDIS_VERSION:-8.6.0-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
