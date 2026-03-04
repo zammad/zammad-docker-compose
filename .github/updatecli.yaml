@@ -6,8 +6,8 @@ sources:
     spec:
       image: "zammad/zammad-docker-compose"
       architecture: "linux/amd64"
-      tagfilter: "^7\\.0\\.0$"
-      # tagfilter: "^7\\.0\\.0-\\d{1}"
+      # tagfilter: "^7\\.0\\.0$"
+      tagfilter: "^7\\.0\\.0-\\d{1}"
       # tagfilter: "^7\\.0\\.0-\\d{2}"
       # tagfilter: "^7\\.0\\.0-\\d{3}"
   elasticsearch:
