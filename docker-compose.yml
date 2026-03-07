@@ -67,7 +67,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.0.0-1}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.0.0-9}
     restart: ${RESTART:-always}
     volumes:
       - zammad-backup:/var/tmp/zammad:ro  # needed for waiting on restore operations
@@ -106,7 +106,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.40-alpine}
+    image: memcached:${MEMCACHE_VERSION:-1.6.41-alpine}
     restart: ${RESTART:-always}
 
   zammad-nginx:
