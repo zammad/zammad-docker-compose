@@ -94,7 +94,6 @@ services:
     environment:
       discovery.type: single-node
       xpack.security.enabled: 'false'
-      bootstrap.system_call_filter: 'false'
       ES_JAVA_OPTS: ${ELASTICSEARCH_JAVA_OPTS:--Xms1g -Xmx1g}
 
 
