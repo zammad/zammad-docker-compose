@@ -94,7 +94,9 @@ services:
     environment:
       discovery.type: single-node
       xpack.security.enabled: 'false'
+      bootstrap.system_call_filter: 'false'
       ES_JAVA_OPTS: ${ELASTICSEARCH_JAVA_OPTS:--Xms1g -Xmx1g}
+
 
   zammad-init:
     <<: *zammad-service
@@ -106,7 +108,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.41-alpine}
+    image: docker.io/memcached:${MEMCACHE_VERSION:-1.6}
     restart: ${RESTART:-always}
 
   zammad-nginx:
@@ -124,7 +126,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
       POSTGRES_USER: ${POSTGRES_USER:-zammad}
       POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
-    image: postgres:${POSTGRES_VERSION:-17.9-alpine}
+    image: docker.io/postgres:${POSTGRES_VERSION:-16}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
@@ -134,7 +136,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-8.6.1-alpine}
+    image: docker.io/redis:${REDIS_VERSION:-7}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
