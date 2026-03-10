@@ -9,12 +9,14 @@ services:
     image: jc21/nginx-proxy-manager
     restart: ${RESTART:-always}
     ports:
-      - '80:80'
-      - '81:81'
-      - '443:443'
+      - "80:80"
+      - "81:81"
+      - "443:443"
     volumes:
       - nginx-proxy-manager-data:/data
       - nginx-proxy-manager-letsencrypt:/etc/letsencrypt
+  zammad-nginx:
+    ports: !reset []
   zammad-railsserver:
     environment:
       RAILS_TRUSTED_PROXIES: ${RAILS_TRUSTED_PROXIES:-nginx-proxy-manager}
