@@ -141,6 +141,10 @@ services:
 
   zammad-scheduler:
     <<: *zammad-service
+    environment:
+      <<: *zammad-environment
+      ZAMMAD_OTRS_IMPORT_READ_TIMEOUT: ${ZAMMAD_OTRS_IMPORT_READ_TIMEOUT:-600}
+      ZAMMAD_OTRS_IMPORT_TOTAL_TIMEOUT: ${ZAMMAD_OTRS_IMPORT_TOTAL_TIMEOUT:-1200}
     command: ["zammad-scheduler"]
 
   zammad-websocket:
