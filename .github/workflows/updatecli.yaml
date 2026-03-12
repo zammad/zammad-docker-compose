@@ -9,12 +9,17 @@ on:
     - cron: '0 2 * * *' # Täglich um 02:00 Uhr
   workflow_dispatch: # Ermöglicht manuelles Starten
 
+permissions:
+  # Required by Updatecli to create Git Commit(s)
+  contents: "write"
+  # Required by Updatecli to open GitHub pull request
+  pull-requests: "write"
+  # Required by Updatecli to update GitHub action workflows
+  actions: "write"
+
 jobs:
   updatecli:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,7 +28,8 @@ jobs:
         uses: updatecli/updatecli-action@v2
 
       - name: Run Updatecli
-        run: updatecli pipeline apply --config .github/updatecli.yaml --values .github/updatecli-values-enable-github.yaml
+        run: |
+          updatecli pipeline apply --config .github/updatecli.yaml --values .github/updatecli-values-enable-github.yaml
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPDATECLI_GITHUB_ACTOR: ${{ github.actor }}
