@@ -115,3 +115,24 @@ targets:
       file: .env.dist
       matchpattern: REDIS_VERSION=(.*)-alpine
       replacepattern: REDIS_VERSION={{ source `redis` }}-alpine
+
+scms:
+  zammad-docker-compose:
+    kind: "github"
+    spec:
+      # user: "user"
+      # email: "updatecli@example."
+      owner: "zammad"
+      repository: "zammad-docker-compose"
+      token: '{{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}'
+      username: '{{ requiredEnv "UPDATECLI_GITHUB_ACTOR" }}'
+      branch: "main"
+
+actions:
+  github:
+    kind: github/pullrequest
+    scmid: zammad-docker-compose
+    spec:
+      automerge: false
+      labels:
+        - "dependencies"
