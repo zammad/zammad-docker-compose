@@ -25,8 +25,8 @@ jobs:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPDATECLI_GITHUB_ACTOR: ${{ github.actor }}
 
-      # - name: Run Updatecli
-      #   run: updatecli pipeline apply --config .github/updatecli.yaml
-      #   env:
-      #     UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     UPDATECLI_GITHUB_ACTOR: ${{ github.actor }}
+      - name: Run Updatecli
+        run: updatecli pipeline apply --config .github/updatecli.yaml
+        env:
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_ACTOR: ${{ github.actor }}

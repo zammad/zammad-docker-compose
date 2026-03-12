@@ -134,5 +134,8 @@ actions:
     scmid: zammad-docker-compose
     spec:
       automerge: false
+      title: "Patch-level image updates"
+      assignees:
+        - mgruner
       labels:
         - "dependencies"
