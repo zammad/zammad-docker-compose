@@ -44,73 +44,93 @@ conditions: {}
 
 targets:
   zammad:
+    name: zammad
     # we can't use yaml because it breaks our file structure
     kind: file
     sourceid: zammad
+    scmid: zammad-docker-compose
     spec:
       file: docker-compose.yml
       matchpattern: \${VERSION:-(.*)\}
       replacepattern: ${VERSION:-{{ source `zammad` }}}
   zammad-env-dist:
+    name: zammad-env-dist
     # we can't use yaml because it breaks our file structure
     kind: file
     sourceid: zammad
+    scmid: zammad-docker-compose
     spec:
       file: .env.dist
       matchpattern: ' VERSION=(\d+\.\d+.\d+.*)'
       replacepattern: ' VERSION={{ source `zammad` }}'
   elasticsearch:
+    name: elasticsearch
     kind: file
     sourceid: elasticsearch
+    scmid: zammad-docker-compose
     spec:
       file: docker-compose.yml
       matchpattern: ELASTICSEARCH_VERSION:-(.*)\}
       replacepattern: ELASTICSEARCH_VERSION:-{{ source `elasticsearch`}}}
   elasticsearch-env-dist:
+    name: elasticsearch-env-dist
     kind: file
     sourceid: elasticsearch
+    scmid: zammad-docker-compose
     spec:
       file: .env.dist
       matchpattern: ELASTICSEARCH_VERSION=(.*)
       replacepattern: ELASTICSEARCH_VERSION={{ source `elasticsearch`}}
   memcached:
+    name: memcached
     kind: file
     sourceid: memcached
+    scmid: zammad-docker-compose
     spec:
       file: docker-compose.yml
       matchpattern: MEMCACHE_VERSION:-(.*)-alpine\}
       replacepattern: MEMCACHE_VERSION:-{{ source `memcached` }}-alpine}
   memcached-env-dist:
+    name: memcached-env-dist
     kind: file
     sourceid: memcached
+    scmid: zammad-docker-compose
     spec:
       file: .env.dist
       matchpattern: MEMCACHE_VERSION=(.*)-alpine
       replacepattern: MEMCACHE_VERSION={{ source `memcached` }}-alpine
   postgresql:
+    name: postgresql
     kind: file
     sourceid: postgresql
+    scmid: zammad-docker-compose
     spec:
       file: docker-compose.yml
       matchpattern: POSTGRES_VERSION:-(.*)-alpine\}
       replacepattern: POSTGRES_VERSION:-{{ source `postgresql` }}-alpine}
   postgresql-env-dist:
+    name: postgresql-env-dist
     kind: file
     sourceid: postgresql
+    scmid: zammad-docker-compose
     spec:
       file: .env.dist
       matchpattern: POSTGRES_VERSION=(.*)-alpine
       replacepattern: POSTGRES_VERSION={{ source `postgresql` }}-alpine
   redis:
+    name: redis
     kind: file
     sourceid: redis
+    scmid: zammad-docker-compose
     spec:
       file: docker-compose.yml
       matchpattern: REDIS_VERSION:-(.*)-alpine\}
       replacepattern: REDIS_VERSION:-{{ source `redis` }}-alpine}
   redis-env-dist:
+    name: redis-env-dist
     kind: file
     sourceid: redis
+    scmid: zammad-docker-compose
     spec:
       file: .env.dist
       matchpattern: REDIS_VERSION=(.*)-alpine
@@ -126,7 +146,7 @@ scms:
       repository: "zammad-docker-compose"
       token: '{{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}'
       username: '{{ requiredEnv "UPDATECLI_GITHUB_ACTOR" }}'
-      branch: "main"
+      branch: "master"
 
 actions:
   github:
