@@ -167,8 +167,6 @@ scms:
   zammad-docker-compose:
     kind: "github"
     spec:
-      # user: "user"
-      # email: "updatecli@example."
       owner: "zammad"
       repository: "zammad-docker-compose"
       token: '{{ requiredEnv "UPDATECLI_GITHUB_TOKEN" }}'
