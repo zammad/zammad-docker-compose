@@ -6,7 +6,7 @@ on:
     branches: # TODO: drop
       - "*"
   schedule:
-    - cron: '0 2 * * *' # Täglich um 02:00 Uhr
+    - cron: '0 2 * * 2' # every Tuesday at 2:00 am
   workflow_dispatch: # Ermöglicht manuelles Starten
 
 permissions:
