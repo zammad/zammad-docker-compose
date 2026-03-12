@@ -1,13 +1,16 @@
+---
 name: "Update Zammad version and dependency charts (patch and minor only)"
 
 sources:
   zammad:
+    name: zammad
     kind: dockerimage
     spec:
       image: "zammad/zammad-docker-compose"
       architecture: "linux/amd64"
       tagfilter: "^7\\.0\\.\\d-\\d{4}"
   elasticsearch:
+    name: elasticsearch
     kind: dockerimage
     spec:
       image: "elasticsearch"
@@ -16,6 +19,7 @@ sources:
         kind: "semver"
         pattern: "9.x.x"
   memcached:
+    name: memcached
     kind: dockerimage
     spec:
       image: "memcached"
@@ -24,6 +28,7 @@ sources:
         kind: "semver"
         pattern: "1.x.x"
   postgresql:
+    name: postgresql
     kind: dockerimage
     spec:
       image: "postgres"
@@ -32,6 +37,7 @@ sources:
         kind: "semver"
         pattern: "17.x.x"
   redis:
+    name: redis
     kind: dockerimage
     spec:
       image: "redis"
@@ -48,7 +54,9 @@ targets:
     # we can't use yaml because it breaks our file structure
     kind: file
     sourceid: zammad
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: docker-compose.yml
       matchpattern: \${VERSION:-(.*)\}
@@ -58,7 +66,9 @@ targets:
     # we can't use yaml because it breaks our file structure
     kind: file
     sourceid: zammad
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: .env.dist
       matchpattern: ' VERSION=(\d+\.\d+.\d+.*)'
@@ -67,7 +77,9 @@ targets:
     name: elasticsearch
     kind: file
     sourceid: elasticsearch
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: docker-compose.yml
       matchpattern: ELASTICSEARCH_VERSION:-(.*)\}
@@ -76,7 +88,9 @@ targets:
     name: elasticsearch-env-dist
     kind: file
     sourceid: elasticsearch
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: .env.dist
       matchpattern: ELASTICSEARCH_VERSION=(.*)
@@ -85,7 +99,9 @@ targets:
     name: memcached
     kind: file
     sourceid: memcached
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: docker-compose.yml
       matchpattern: MEMCACHE_VERSION:-(.*)-alpine\}
@@ -94,7 +110,9 @@ targets:
     name: memcached-env-dist
     kind: file
     sourceid: memcached
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: .env.dist
       matchpattern: MEMCACHE_VERSION=(.*)-alpine
@@ -103,7 +121,9 @@ targets:
     name: postgresql
     kind: file
     sourceid: postgresql
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: docker-compose.yml
       matchpattern: POSTGRES_VERSION:-(.*)-alpine\}
@@ -112,7 +132,9 @@ targets:
     name: postgresql-env-dist
     kind: file
     sourceid: postgresql
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: .env.dist
       matchpattern: POSTGRES_VERSION=(.*)-alpine
@@ -121,7 +143,9 @@ targets:
     name: redis
     kind: file
     sourceid: redis
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: docker-compose.yml
       matchpattern: REDIS_VERSION:-(.*)-alpine\}
@@ -130,12 +154,15 @@ targets:
     name: redis-env-dist
     kind: file
     sourceid: redis
+    # {{ if .github.enabled }}
     scmid: zammad-docker-compose
+    # {{ end }}
     spec:
       file: .env.dist
       matchpattern: REDIS_VERSION=(.*)-alpine
       replacepattern: REDIS_VERSION={{ source `redis` }}-alpine
 
+# {{ if .github.enabled }}
 scms:
   zammad-docker-compose:
     kind: "github"
@@ -159,3 +186,4 @@ actions:
         - mgruner
       labels:
         - "dependencies"
+# {{ end }}

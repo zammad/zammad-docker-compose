@@ -23,7 +23,7 @@ jobs:
         uses: updatecli/updatecli-action@v2
 
       - name: Run Updatecli
-        run: updatecli pipeline apply --config .github/updatecli.yaml
+        run: updatecli pipeline apply --config .github/updatecli.yaml --values .github/updatecli-values-enable-github.yaml
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UPDATECLI_GITHUB_ACTOR: ${{ github.actor }}
