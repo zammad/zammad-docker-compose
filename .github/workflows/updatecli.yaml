@@ -24,9 +24,16 @@ jobs:
       - name: Install Updatecli
         uses: updatecli/updatecli-action@v2
 
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.UPDATECLI_APP_ID }}
+          private-key: ${{ secrets.UPDATECLI_APP_PRIVATE_KEY }}
+
       - name: Run Updatecli
         run: |
           updatecli pipeline apply --config .github/updatecli.yaml --values .github/updatecli-values-enable-github.yaml
         env:
-          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           UPDATECLI_GITHUB_ACTOR: ${{ github.actor }}
