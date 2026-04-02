@@ -3,12 +3,14 @@ x-shared:
   zammad-service: &zammad-service
     environment: &zammad-environment
       MEMCACHE_SERVERS: ${MEMCACHE_SERVERS:-zammad-memcached:11211}
-      POSTGRESQL_DB: ${POSTGRES_DB:-zammad_production}
-      POSTGRESQL_HOST: ${POSTGRES_HOST:-zammad-postgresql}
-      POSTGRESQL_USER: ${POSTGRES_USER:-zammad}
-      POSTGRESQL_PASS: ${POSTGRES_PASS:-zammad}
-      POSTGRESQL_PORT: ${POSTGRES_PORT:-5432}
-      POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
+      
+      # PostgreSQL
+      POSTGRESQL_DB: ${POSTGRESQL_DB:-${POSTGRES_DB:-zammad_production}}
+      POSTGRESQL_HOST: ${POSTGRESQL_HOST:-${POSTGRES_HOST:-zammad-postgresql}}
+      POSTGRESQL_USER: ${POSTGRESQL_USER:-${POSTGRES_USER:-zammad}}
+      POSTGRESQL_PASS: ${POSTGRESQL_PASS:-${POSTGRES_PASS:-${POSTGRES_PASSWORD:-zammad}}}
+      POSTGRESQL_PORT: ${POSTGRESQL_PORT:-${POSTGRES_PORT:-5432}}
+      POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-${POSTGRES_OPTIONS:-?pool=50}}
       POSTGRESQL_DB_CREATE:
 
       # Redis standalone
@@ -123,9 +125,9 @@ services:
 
   zammad-postgresql:
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
-      POSTGRES_USER: ${POSTGRES_USER:-zammad}
-      POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
+      POSTGRES_DB: ${POSTGRESQL_DB:-${POSTGRES_DB:-zammad_production}}
+      POSTGRES_USER: ${POSTGRESQL_USER:-${POSTGRES_USER:-zammad}}
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS:-${POSTGRES_PASS:-${POSTGRES_PASSWORD:-zammad}}}
     image: postgres:${POSTGRES_VERSION:-17.9-alpine}
     restart: ${RESTART:-always}
     volumes:
