@@ -148,7 +148,8 @@ services:
     ports:
       - "${NGINX_EXPOSE_PORT:-8080}:${NGINX_PORT:-8080}"
     depends_on:
-      - zammad-railsserver
+      zammad-railsserver:
+        condition: service_healthy
 
   zammad-postgresql:
     environment:
@@ -163,6 +164,12 @@ services:
   zammad-railsserver:
     <<: *zammad-service
     command: ["zammad-railsserver"]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:3000"]
+      interval: 30s
+      timeout: 5s
+      start_period: 120s
+      retries: 3
 
   zammad-redis:
     image: redis:${REDIS_VERSION:-8.6.3-alpine}
