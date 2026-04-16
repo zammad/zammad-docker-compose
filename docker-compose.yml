@@ -165,7 +165,7 @@ services:
     <<: *zammad-service
     command: ["zammad-railsserver"]
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://localhost:3000"]
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:${ZAMMAD_RAILSSERVER_PORT:-3000}"]
       interval: 30s
       timeout: 5s
       start_period: 120s
