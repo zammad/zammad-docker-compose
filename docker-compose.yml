@@ -136,7 +136,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-8.6.2-alpine}
+    image: redis:${REDIS_VERSION:-8.6.3-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
