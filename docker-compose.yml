@@ -69,7 +69,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.0.1-0031}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.0.1-0035}
     restart: ${RESTART:-always}
     volumes:
       - zammad-backup:/var/tmp/zammad:ro  # needed for waiting on restore operations
@@ -89,7 +89,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.3.4}
+    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.4.0}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -136,7 +136,7 @@ services:
     command: ["zammad-railsserver"]
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-8.6.2-alpine}
+    image: redis:${REDIS_VERSION:-8.6.3-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
