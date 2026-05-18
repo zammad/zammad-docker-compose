@@ -89,7 +89,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.4.0}
+    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.4.1}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
