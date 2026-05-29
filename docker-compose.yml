@@ -25,6 +25,7 @@ x-shared:
       # Backup settings
       BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
       BACKUP_TIME: "${BACKUP_TIME:-03:00}"
+      BACKUP_ON_START: "${BACKUP_ON_START:-true}"
       HOLD_DAYS: "${HOLD_DAYS:-10}"
       TZ: "${TZ:-Europe/Berlin}"
       # Allow passing in these variables via .env:
@@ -102,7 +103,7 @@ x-shared:
     image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.0.1-0048}
     restart: ${RESTART:-always}
     volumes:
-      - zammad-backup:/var/tmp/zammad:ro  # needed for waiting on restore operations
+      - zammad-backup:/var/tmp/zammad:ro # needed for waiting on restore operations
       - zammad-storage:/opt/zammad/storage
     depends_on:
       - zammad-memcached
@@ -125,7 +126,7 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     environment:
       discovery.type: single-node
-      xpack.security.enabled: 'false'
+      xpack.security.enabled: "false"
       ES_JAVA_OPTS: ${ELASTICSEARCH_JAVA_OPTS:--Xms1g -Xmx1g}
 
   zammad-init:
@@ -166,7 +167,13 @@ services:
     <<: *zammad-service
     command: ["zammad-railsserver"]
     healthcheck:
-      test: ["CMD", "curl", "-sf", "http://127.0.0.1:${ZAMMAD_RAILSSERVER_PORT:-3000}"]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-sf",
+          "http://127.0.0.1:${ZAMMAD_RAILSSERVER_PORT:-3000}",
+        ]
       interval: 30s
       timeout: 5s
       start_period: 120s
