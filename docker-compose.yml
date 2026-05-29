@@ -107,11 +107,11 @@ x-shared:
       - zammad-storage:/opt/zammad/storage
     depends_on:
       zammad-memcached:
-        condition: service_started
+        condition: service_healthy
       zammad-postgresql:
         condition: service_healthy
       zammad-redis:
-        condition: service_started
+        condition: service_healthy
 
 services:
   zammad-backup:
@@ -145,6 +145,12 @@ services:
     command: memcached -m 256M
     image: memcached:${MEMCACHE_VERSION:-1.6.42-alpine}
     restart: ${RESTART:-always}
+    healthcheck:
+      test: ["CMD-SHELL", "echo stats | nc 127.0.0.1 11211 | grep -q uptime"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 
   zammad-nginx:
     <<: *zammad-service
@@ -167,7 +173,7 @@ services:
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD", "pg_isready", "-U", "$${POSTGRES_USER}", "-d", "$${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       start_period: 30s
@@ -177,13 +183,7 @@ services:
     <<: *zammad-service
     command: ["zammad-railsserver"]
     healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-sf",
-          "http://127.0.0.1:${ZAMMAD_RAILSSERVER_PORT:-3000}",
-        ]
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:${ZAMMAD_RAILSSERVER_PORT:-3000}"]
       interval: 30s
       timeout: 5s
       start_period: 120s
@@ -194,6 +194,12 @@ services:
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 
   zammad-scheduler:
     <<: *zammad-service
