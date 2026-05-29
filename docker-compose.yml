@@ -106,9 +106,12 @@ x-shared:
       - zammad-backup:/var/tmp/zammad:ro # needed for waiting on restore operations
       - zammad-storage:/opt/zammad/storage
     depends_on:
-      - zammad-memcached
-      - zammad-postgresql
-      - zammad-redis
+      zammad-memcached:
+        condition: service_started
+      zammad-postgresql:
+        condition: service_healthy
+      zammad-redis:
+        condition: service_started
 
 services:
   zammad-backup:
@@ -133,7 +136,8 @@ services:
     <<: *zammad-service
     command: ["zammad-init"]
     depends_on:
-      - zammad-postgresql
+      zammad-postgresql:
+        condition: service_healthy
     restart: on-failure
     user: 0:0
 
@@ -162,6 +166,12 @@ services:
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
 
   zammad-railsserver:
     <<: *zammad-service
