@@ -146,7 +146,7 @@ services:
     image: memcached:${MEMCACHE_VERSION:-1.6.42-alpine}
     restart: ${RESTART:-always}
     healthcheck:
-      test: ["CMD-SHELL", "echo stats | nc 127.0.0.1 11211 | grep -q uptime"]
+      test: ["CMD", "nc", "-z", "127.0.0.1", "11211"]
       interval: 10s
       timeout: 5s
       start_period: 10s
