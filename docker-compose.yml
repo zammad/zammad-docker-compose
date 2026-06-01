@@ -106,9 +106,12 @@ x-shared:
       - zammad-backup:/var/tmp/zammad:ro # needed for waiting on restore operations
       - zammad-storage:/opt/zammad/storage
     depends_on:
-      - zammad-memcached
-      - zammad-postgresql
-      - zammad-redis
+      zammad-memcached:
+        condition: service_healthy
+      zammad-postgresql:
+        condition: service_healthy
+      zammad-redis:
+        condition: service_healthy
 
 services:
   zammad-backup:
@@ -133,7 +136,8 @@ services:
     <<: *zammad-service
     command: ["zammad-init"]
     depends_on:
-      - zammad-postgresql
+      zammad-postgresql:
+        condition: service_healthy
     restart: on-failure
     user: 0:0
 
@@ -141,6 +145,12 @@ services:
     command: memcached -m 256M
     image: memcached:${MEMCACHE_VERSION:-1.6.42-alpine}
     restart: ${RESTART:-always}
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "11211"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 
   zammad-nginx:
     <<: *zammad-service
@@ -162,18 +172,18 @@ services:
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      start_period: 60s
+      retries: 5
 
   zammad-railsserver:
     <<: *zammad-service
     command: ["zammad-railsserver"]
     healthcheck:
-      test:
-        [
-          "CMD",
-          "curl",
-          "-sf",
-          "http://127.0.0.1:${ZAMMAD_RAILSSERVER_PORT:-3000}",
-        ]
+      test: ["CMD", "curl", "-sf", "http://127.0.0.1:${ZAMMAD_RAILSSERVER_PORT:-3000}"]
       interval: 30s
       timeout: 5s
       start_period: 120s
@@ -184,6 +194,12 @@ services:
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
 
   zammad-scheduler:
     <<: *zammad-service
