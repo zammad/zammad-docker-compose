@@ -8,7 +8,7 @@ sources:
     spec:
       image: "zammad/zammad-docker-compose"
       architecture: "linux/amd64"
-      tagfilter: "^7\\.0\\.\\d-\\d{4}"
+      tagfilter: "^7\\.1\\.\\d-\\d{4}"
   elasticsearch:
     name: elasticsearch
     kind: dockerimage
