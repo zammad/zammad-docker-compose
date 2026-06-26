@@ -59,8 +59,6 @@ print_heading "Copy backup files to restore folder"
 docker compose run --rm zammad-backup sh -c "mkdir /var/tmp/zammad/restore && cp /var/tmp/zammad/*gz /var/tmp/zammad/restore/"
 
 print_heading "Start the stack again"
-# Seems that we need to start the log piping again.
-docker compose logs --timestamps --follow &
 docker compose up -d
 check_stack_start
 
