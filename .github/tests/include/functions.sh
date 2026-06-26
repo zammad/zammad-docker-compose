@@ -2,8 +2,11 @@
 
 set -o errexit
 
-# Send the logs to STDOUT for debugging.
-docker compose logs --timestamps --follow &
+start_stack_logs_capture() {
+  # Send the logs of the active stack to STDOUT for debugging.
+  # This will be active until the stack gets stopped.
+  docker compose logs --timestamps --follow &
+}
 
 # Print empty lines before and after the heading to find it between the logs.
 print_heading() {
@@ -18,6 +21,7 @@ railsserver_run_command() {
 }
 
 check_stack_start() {
+  start_stack_logs_capture
   print_heading "wait for zammad to be ready…"
   docker compose wait zammad-init
   docker compose exec zammad-nginx bash -c "curl --retry 30 --retry-delay 1 --retry-connrefused http://localhost:8080 | grep 'Zammad'"
