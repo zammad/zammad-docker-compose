@@ -143,7 +143,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.42-alpine}
+    image: memcached:${MEMCACHE_VERSION:-1.6.43-alpine}
     restart: ${RESTART:-always}
     healthcheck:
       test: ["CMD", "nc", "-z", "127.0.0.1", "11211"]
