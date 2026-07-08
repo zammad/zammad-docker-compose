@@ -100,7 +100,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.1.1-0012}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.1.1-0015}
     restart: ${RESTART:-always}
     volumes:
       - zammad-backup:/var/tmp/zammad:ro # needed for waiting on restore operations
@@ -123,7 +123,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.4.2}
+    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.4.3}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
@@ -143,7 +143,7 @@ services:
 
   zammad-memcached:
     command: memcached -m 256M
-    image: memcached:${MEMCACHE_VERSION:-1.6.42-alpine}
+    image: memcached:${MEMCACHE_VERSION:-1.6.43-alpine}
     restart: ${RESTART:-always}
     healthcheck:
       test: ["CMD", "nc", "-z", "127.0.0.1", "11211"]
