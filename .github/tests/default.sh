@@ -41,6 +41,11 @@ print_heading "Check if the Zammad user can write /tmp"
 railsserver_run_command touch tmp/test.txt
 print_heading "Tmp write successful :)"
 
+print_heading "Check that zammad-backup did not create an application backup yet, and create one"
+docker compose exec zammad-backup sh -c "! find /var/tmp/zammad/ -name \"*zammad_files.tar.gz\" | grep ."
+docker compose run --rm --env BACKUP_ONCE=true zammad-backup
+print_heading "Backup creation call succeeded :)"
+
 print_heading "Check if zammad-backup created an application backup"
 # Provide some debug output for backup tests.
 docker compose exec zammad-backup ls -lah /var/tmp/zammad/
