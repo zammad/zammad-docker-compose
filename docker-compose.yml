@@ -135,9 +135,6 @@ services:
   zammad-init:
     <<: *zammad-service
     command: ["zammad-init"]
-    depends_on:
-      zammad-postgresql:
-        condition: service_healthy
     restart: on-failure
     user: 0:0
 
