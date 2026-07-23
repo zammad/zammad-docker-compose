@@ -47,6 +47,7 @@ jobs:
       matrix:
         module:
           - default
+          - backup
           - add-cloudflare-tunnel
           - add-external-network-to-elasticsearch
           - add-external-network-to-nginx

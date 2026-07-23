@@ -25,7 +25,7 @@ x-shared:
       # Backup settings
       BACKUP_DIR: "${BACKUP_DIR:-/var/tmp/zammad}"
       BACKUP_TIME: "${BACKUP_TIME:-03:00}"
-      BACKUP_ON_START: "${BACKUP_ON_START:-true}"
+      BACKUP_ON_START: "${BACKUP_ON_START:-false}"
       HOLD_DAYS: "${HOLD_DAYS:-10}"
       TZ: "${TZ:-Europe/Berlin}"
       # Allow passing in these variables via .env:
@@ -135,9 +135,6 @@ services:
   zammad-init:
     <<: *zammad-service
     command: ["zammad-init"]
-    depends_on:
-      zammad-postgresql:
-        condition: service_healthy
     restart: on-failure
     user: 0:0
 
