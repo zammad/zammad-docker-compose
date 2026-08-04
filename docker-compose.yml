@@ -100,7 +100,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.1.1-0037}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.1.1-0045}
     init: true
     restart: ${RESTART:-always}
     volumes:
