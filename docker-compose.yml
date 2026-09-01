@@ -172,8 +172,8 @@ services:
       #   separate from the role Zammad connects with and only used for administration.
       POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASS:-zammad}
-      # Consumed by postgresql/initdb.d/10-create-zammad-role.sh to provision Zammad's
-      #   unprivileged role and the database it owns.
+      # Consumed by the initdb hook below, to provision Zammad's unprivileged role
+      #   and the database it owns.
       ZAMMAD_DB: ${POSTGRES_DB:-zammad_production}
       ZAMMAD_DB_USER: ${POSTGRES_USER:-zammad}
       ZAMMAD_DB_PASS: ${POSTGRES_PASS:-zammad}
