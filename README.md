@@ -44,11 +44,11 @@ The role is created while the `postgresql-data` volume is initialised, so this a
 # 1. Create a backup of the running installation.
 docker compose run --rm --env BACKUP_ONCE=true zammad-backup
 
-# 2. Stage that backup for the restore.
-docker compose run --rm zammad-backup sh -c "mkdir /var/tmp/zammad/restore && cp /var/tmp/zammad/*gz /var/tmp/zammad/restore/"
-
-# 3. Stop the stack. Do not pass --volumes here, it would delete the backup as well.
+# 2. Stop the stack. Do not pass --volumes here, it would delete the backup as well.
 docker compose down
+
+# 3. Stage that backup for the restore.
+docker compose run --rm --no-deps zammad-backup sh -c "mkdir /var/tmp/zammad/restore && cp /var/tmp/zammad/*gz /var/tmp/zammad/restore/"
 
 # 4. Discard the database volume, so that it gets initialised with the new role layout.
 #    It is named after your compose project, by default the name of this directory.
