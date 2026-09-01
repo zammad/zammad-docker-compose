@@ -9,7 +9,11 @@ x-shared:
       POSTGRESQL_PASS: ${POSTGRES_PASS:-zammad}
       POSTGRESQL_PORT: ${POSTGRES_PORT:-5432}
       POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
-      POSTGRESQL_DB_CREATE:
+      # The bundled zammad-postgresql service creates the database up front, and its
+      #   application role is deliberately not allowed to create databases. Set this to
+      #   'true' if you point Zammad at an external server and want it to create the
+      #   database itself - the configured role then needs the CREATEDB attribute.
+      POSTGRESQL_DB_CREATE: ${POSTGRESQL_DB_CREATE:-false}
 
       # Redis standalone
       REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
@@ -164,15 +168,25 @@ services:
 
   zammad-postgresql:
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
-      POSTGRES_USER: ${POSTGRES_USER:-zammad}
-      POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
+      # The bootstrap role of the postgres image is always a superuser, so it is kept
+      #   separate from the role Zammad connects with and only used for administration.
+      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASS:-zammad}
+      # Consumed by postgresql/initdb.d/10-create-zammad-role.sh to provision Zammad's
+      #   unprivileged role and the database it owns.
+      ZAMMAD_DB: ${POSTGRES_DB:-zammad_production}
+      ZAMMAD_DB_USER: ${POSTGRES_USER:-zammad}
+      ZAMMAD_DB_PASS: ${POSTGRES_PASS:-zammad}
     image: postgres:${POSTGRES_VERSION:-17.11-alpine}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
+    configs:
+      - source: postgresql-initdb
+        target: /docker-entrypoint-initdb.d/10-create-zammad-role.sh
+        mode: 0555
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${ZAMMAD_DB_USER} -d $${ZAMMAD_DB}"]
       interval: 10s
       timeout: 5s
       start_period: 60s
@@ -207,6 +221,10 @@ services:
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
+
+configs:
+  postgresql-initdb:
+    file: ./postgresql/initdb.d/10-create-zammad-role.sh
 
 volumes:
   elasticsearch-data:
