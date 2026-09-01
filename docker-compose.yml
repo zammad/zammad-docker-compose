@@ -189,6 +189,12 @@ services:
       # Refuse to become healthy if Zammad's role is the bootstrap role, which is always
       #   a superuser. The initdb hook cannot enforce this on its own, because the
       #   restart policy would bring the container back up with the role left uncreated.
+      #
+      # Connect over TCP as Zammad's own role rather than using pg_isready, which
+      #   reports success for an unknown role or database, and would also accept the
+      #   socket-only server that runs while the data directory is still initialising.
+      #   Dependent services wait for this healthcheck, so it has to prove that the
+      #   role and the database the initdb hook provisions are actually usable.
       test:
         - CMD-SHELL
         - |-
@@ -196,7 +202,9 @@ services:
             echo "POSTGRES_USER and POSTGRES_SUPERUSER must differ, the latter is a superuser."
             exit 1
           fi
-          pg_isready -U $${ZAMMAD_DB_USER} -d $${ZAMMAD_DB}
+          psql --no-password --quiet --output /dev/null --variable ON_ERROR_STOP=1 \
+               --host 127.0.0.1 --username "$${ZAMMAD_DB_USER}" \
+               --dbname "$${ZAMMAD_DB}" --command "SELECT 1"
       interval: 10s
       timeout: 5s
       start_period: 60s
