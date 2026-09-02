@@ -170,8 +170,10 @@ services:
     environment:
       # The bootstrap role of the postgres image is always a superuser, so it is kept
       #   separate from the role Zammad connects with and only used for administration.
+      #   Its password falls back to POSTGRES_PASS, so that hardening that one variable
+      #   does not silently leave a superuser behind on the default password.
       POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASS:-zammad}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASS:-${POSTGRES_PASS:-zammad}}
       # Consumed by the initdb hook below, to provision Zammad's unprivileged role
       #   and the database it owns.
       ZAMMAD_DB: ${POSTGRES_DB:-zammad_production}
