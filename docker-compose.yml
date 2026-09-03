@@ -9,7 +9,11 @@ x-shared:
       POSTGRESQL_PASS: ${POSTGRES_PASS:-zammad}
       POSTGRESQL_PORT: ${POSTGRES_PORT:-5432}
       POSTGRESQL_OPTIONS: ${POSTGRESQL_OPTIONS:-?pool=50}
-      POSTGRESQL_DB_CREATE:
+      # The bundled zammad-postgresql service creates the database up front, and its
+      #   application role is deliberately not allowed to create databases. Set this to
+      #   'true' if you point Zammad at an external server and want it to create the
+      #   database itself - the configured role then needs the CREATEDB attribute.
+      POSTGRESQL_DB_CREATE: ${POSTGRESQL_DB_CREATE:-false}
 
       # Redis standalone
       REDIS_URL: ${REDIS_URL:-redis://zammad-redis:6379}
@@ -164,15 +168,44 @@ services:
 
   zammad-postgresql:
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-zammad_production}
-      POSTGRES_USER: ${POSTGRES_USER:-zammad}
-      POSTGRES_PASSWORD: ${POSTGRES_PASS:-zammad}
+      # The bootstrap role of the postgres image is always a superuser, so it is kept
+      #   separate from the role Zammad connects with and only used for administration.
+      #   Its password falls back to POSTGRES_PASS, so that hardening that one variable
+      #   does not silently leave a superuser behind on the default password.
+      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASS:-${POSTGRES_PASS:-zammad}}
+      # Consumed by the initdb hook below, to provision Zammad's unprivileged role
+      #   and the database it owns.
+      ZAMMAD_DB: ${POSTGRES_DB:-zammad_production}
+      ZAMMAD_DB_USER: ${POSTGRES_USER:-zammad}
+      ZAMMAD_DB_PASS: ${POSTGRES_PASS:-zammad}
     image: postgres:${POSTGRES_VERSION:-17.11-alpine}
     restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
+    configs:
+      - source: postgresql-initdb
+        target: /docker-entrypoint-initdb.d/10-create-zammad-role.sh
+        mode: 0555
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      # Connect over TCP as Zammad's own role rather than using pg_isready, which
+      #   reports success for an unknown role or database, and would also accept the
+      #   socket-only server that runs while the data directory is still initialising.
+      #   Dependent services wait for this healthcheck, so it has to establish that
+      #   the role and the database the initdb hook provisions exist and accept
+      #   connections.
+      #
+      # The password is supplied so that this keeps working where host connections
+      #   require authentication, for example with
+      #   POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256. With the image default the
+      #   loopback address is trusted, so the credentials are not verified there.
+      test:
+        - CMD-SHELL
+        - |-
+          PGPASSWORD="$${ZAMMAD_DB_PASS}" \
+          psql --no-password --quiet --output /dev/null --variable ON_ERROR_STOP=1 \
+               --host 127.0.0.1 --username "$${ZAMMAD_DB_USER}" \
+               --dbname "$${ZAMMAD_DB}" --command "SELECT 1"
       interval: 10s
       timeout: 5s
       start_period: 60s
@@ -207,6 +240,71 @@ services:
   zammad-websocket:
     <<: *zammad-service
     command: ["zammad-websocket"]
+
+configs:
+  postgresql-initdb:
+    # Provisions the database that Zammad uses, owned by a dedicated login role.
+    #
+    # The postgres image unconditionally makes its bootstrap role a superuser. Zammad
+    #   does not need any superuser capability - it only owns its own database and
+    #   relies on the built-in plpgsql extension - so the application role is created
+    #   here as a plain login role, rather than reusing the bootstrap role.
+    #
+    # This runs only while an empty data directory is initialised. Installations whose
+    #   volume already exists keep the role layout they were created with, see the
+    #   README for how to migrate those.
+    #
+    # The content is inlined so that this file stays self-contained and can be
+    #   deployed as-is, for example by pasting it into Portainer. '$$' escapes Compose
+    #   interpolation, so those variables are expanded inside the container instead.
+    content: |
+      #!/bin/bash
+
+      set -o errexit
+      set -o pipefail
+
+      # initdb has already run by the time this hook does, so a rejected configuration
+      #   cannot be repaired by correcting it and starting again: the data directory is
+      #   populated and the entrypoint never processes this directory a second time.
+      #   Say so, rather than leaving the operator with a role or database that is
+      #   merely reported missing later on.
+      zammad_abort() {
+        echo "$1" >&2
+        echo "Correct this, then remove the postgresql-data volume and start again. The" >&2
+        echo "  database directory is already initialised, so this will not run twice." >&2
+        exit 1
+      }
+
+      # Zammad must not reuse the bootstrap role, which is always a superuser. This
+      #   cannot be enforced on later starts: the only reliable signal is this
+      #   comparison, and checking the role's actual attributes instead would mark
+      #   every installation predating this change as unhealthy.
+      if [ "$${ZAMMAD_DB_USER}" = "$${POSTGRES_USER}" ]; then
+        zammad_abort "POSTGRES_USER and POSTGRES_SUPERUSER must differ, the latter is a superuser."
+      fi
+
+      # The system databases exist already, so they would keep the bootstrap role as
+      #   their owner, and Zammad would run inside a database it does not own.
+      case "$${ZAMMAD_DB}" in
+        postgres | template0 | template1)
+          zammad_abort "POSTGRES_DB must not be one of PostgreSQL's system databases."
+          ;;
+      esac
+
+      echo "Creating the '$${ZAMMAD_DB_USER}' role and the '$${ZAMMAD_DB}' database…"
+
+      # The identifiers and the password are passed as psql variables, so that psql
+      #   quotes them and no shell quoting can leak into the statements. The role owns
+      #   the database, which already carries every privilege it needs on it.
+      psql --variable ON_ERROR_STOP=1 \
+           --username "$${POSTGRES_USER}" \
+           --dbname "$${POSTGRES_DB}" \
+           --variable role="$${ZAMMAD_DB_USER}" \
+           --variable pass="$${ZAMMAD_DB_PASS}" \
+           --variable db="$${ZAMMAD_DB}" <<'EOSQL'
+      CREATE ROLE :"role" LOGIN PASSWORD :'pass';
+      CREATE DATABASE :"db" OWNER :"role";
+      EOSQL
 
 volumes:
   elasticsearch-data:
