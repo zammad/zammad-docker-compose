@@ -271,21 +271,17 @@ configs:
 
       echo "Creating the '$${ZAMMAD_DB_USER}' role and the '$${ZAMMAD_DB}' database…"
 
-      # Identifiers and the password are quoted by format() with %I / %L, so that no
-      #   shell quoting can leak into the generated statements.
+      # The identifiers and the password are passed as psql variables, so that psql
+      #   quotes them and no shell quoting can leak into the statements. The role owns
+      #   the database, which already carries every privilege it needs on it.
       psql --variable ON_ERROR_STOP=1 \
            --username "$${POSTGRES_USER}" \
            --dbname "$${POSTGRES_DB}" \
            --variable role="$${ZAMMAD_DB_USER}" \
            --variable pass="$${ZAMMAD_DB_PASS}" \
            --variable db="$${ZAMMAD_DB}" <<'EOSQL'
-      SELECT format('CREATE ROLE %I LOGIN PASSWORD %L', :'role', :'pass')
-      WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = :'role')\gexec
-
-      SELECT format('CREATE DATABASE %I OWNER %I', :'db', :'role')
-      WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = :'db')\gexec
-
-      GRANT ALL PRIVILEGES ON DATABASE :"db" TO :"role";
+      CREATE ROLE :"role" LOGIN PASSWORD :'pass';
+      CREATE DATABASE :"db" OWNER :"role";
       EOSQL
 
 volumes:

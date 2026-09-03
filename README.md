@@ -30,6 +30,18 @@ has a bright and sustainable future, consider becoming a Zammad customer!
 
 [Learn more on Zammad’s documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
 
+## Requirements
+
+- **Docker Compose 2.23.1 or newer.** The stack inlines the PostgreSQL initialization
+  script with `configs.content`, which was
+  [introduced in Compose 2.23.1](https://docs.docker.com/reference/compose-file/configs/).
+  Distribution packages often lag behind, and older versions fail with a parse error
+  rather than degrading gracefully.
+- **Docker Swarm is not supported.** `docker stack deploy` does not support the
+  `depends_on` conditions that the services rely on for start-up ordering, and ignores
+  `depends_on` altogether. If you are looking for an orchestrated deployment, use the
+  [Zammad Helm chart](https://github.com/zammad/zammad-helm) on Kubernetes.
+
 ## Upgrading
 
 For upgrading instructions, see our [Releases](https://github.com/zammad/zammad-docker-compose/releases).
@@ -38,7 +50,13 @@ For upgrading instructions, see our [Releases](https://github.com/zammad/zammad-
 
 Zammad connects to PostgreSQL with the `zammad` role, which is a plain login role: it owns the `zammad_production` database and nothing else, and holds none of `SUPERUSER`, `CREATEDB`, `CREATEROLE`, `REPLICATION` or `BYPASSRLS`. This matches the role that the packaged Linux installation creates. Administrative access to the server is available through the separate `postgres` superuser, configurable via `POSTGRES_SUPERUSER` and `POSTGRES_SUPERUSER_PASS`.
 
-The role is created while the `postgresql-data` volume is initialised, so this applies to new installations only. Installations created before this change connect with the bootstrap role of the `postgres` image, which is a superuser. That is not a vulnerability - reaching those privileges requires valid database credentials and network access to the database in the first place - so migrating is optional. PostgreSQL does not allow the bootstrap role to be demoted, so the migration goes through a backup and restore into a fresh volume:
+Nothing has to be configured for this. The role is provisioned while the `postgresql-data` volume is initialised.
+
+### Hardening an existing installation
+
+> Only relevant if your installation predates this change. Installations created since then already run with the unprivileged role and need no action.
+
+Older installations connect with the bootstrap role of the `postgres` image, which is a superuser. That is not a vulnerability - reaching those privileges requires valid database credentials and network access to the database in the first place - so this is optional hardening, not a fix you need to apply. PostgreSQL does not allow the bootstrap role to be demoted, so there is no in-place path; it goes through a backup and restore into a fresh volume:
 
 ```sh
 # 1. Create a backup of the running installation.
