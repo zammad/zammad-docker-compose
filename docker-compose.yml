@@ -191,13 +191,14 @@ services:
       # Connect over TCP as Zammad's own role rather than using pg_isready, which
       #   reports success for an unknown role or database, and would also accept the
       #   socket-only server that runs while the data directory is still initialising.
-      #   Dependent services wait for this healthcheck, so it has to prove that the
-      #   role and the database the initdb hook provisions are actually usable.
+      #   Dependent services wait for this healthcheck, so it has to establish that
+      #   the role and the database the initdb hook provisions exist and accept
+      #   connections.
       #
       # The password is supplied so that this keeps working where host connections
       #   require authentication, for example with
       #   POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256. With the image default the
-      #   loopback address is trusted, so it is not consulted there.
+      #   loopback address is trusted, so the credentials are not verified there.
       test:
         - CMD-SHELL
         - |-
