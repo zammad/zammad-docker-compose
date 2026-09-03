@@ -262,12 +262,30 @@ configs:
       set -o errexit
       set -o pipefail
 
-      # Never let Zammad reuse the bootstrap role. Aborting here leaves the database
-      #   uncreated, so the healthcheck cannot pass either and the stack stays down.
-      if [ "$${ZAMMAD_DB_USER}" = "$${POSTGRES_USER}" ]; then
-        echo "POSTGRES_USER and POSTGRES_SUPERUSER must differ, the latter is a superuser." >&2
+      # initdb has already run by the time this hook does, so a rejected configuration
+      #   cannot be repaired by correcting it and starting again: the data directory is
+      #   populated and the entrypoint never processes this directory a second time.
+      #   Say so, rather than leaving the operator with a role or database that is
+      #   merely reported missing later on.
+      zammad_abort() {
+        echo "$1" >&2
+        echo "Correct this, then remove the postgresql-data volume and start again. The" >&2
+        echo "  database directory is already initialised, so this will not run twice." >&2
         exit 1
+      }
+
+      # Zammad must not reuse the bootstrap role, which is always a superuser.
+      if [ "$${ZAMMAD_DB_USER}" = "$${POSTGRES_USER}" ]; then
+        zammad_abort "POSTGRES_USER and POSTGRES_SUPERUSER must differ, the latter is a superuser."
       fi
+
+      # The system databases exist already, so they would keep the bootstrap role as
+      #   their owner, and Zammad would run inside a database it does not own.
+      case "$${ZAMMAD_DB}" in
+        postgres | template0 | template1)
+          zammad_abort "POSTGRES_DB must not be one of PostgreSQL's system databases."
+          ;;
+      esac
 
       echo "Creating the '$${ZAMMAD_DB_USER}' role and the '$${ZAMMAD_DB}' database…"
 
