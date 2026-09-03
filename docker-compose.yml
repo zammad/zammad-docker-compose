@@ -275,7 +275,10 @@ configs:
         exit 1
       }
 
-      # Zammad must not reuse the bootstrap role, which is always a superuser.
+      # Zammad must not reuse the bootstrap role, which is always a superuser. This
+      #   cannot be enforced on later starts: the only reliable signal is this
+      #   comparison, and checking the role's actual attributes instead would mark
+      #   every installation predating this change as unhealthy.
       if [ "$${ZAMMAD_DB_USER}" = "$${POSTGRES_USER}" ]; then
         zammad_abort "POSTGRES_USER and POSTGRES_SUPERUSER must differ, the latter is a superuser."
       fi
