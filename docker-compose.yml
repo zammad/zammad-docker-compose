@@ -188,10 +188,6 @@ services:
         target: /docker-entrypoint-initdb.d/10-create-zammad-role.sh
         mode: 0555
     healthcheck:
-      # Refuse to become healthy if Zammad's role is the bootstrap role, which is always
-      #   a superuser. The initdb hook cannot enforce this on its own, because the
-      #   restart policy would bring the container back up with the role left uncreated.
-      #
       # Connect over TCP as Zammad's own role rather than using pg_isready, which
       #   reports success for an unknown role or database, and would also accept the
       #   socket-only server that runs while the data directory is still initialising.
@@ -200,10 +196,6 @@ services:
       test:
         - CMD-SHELL
         - |-
-          if [ "$${ZAMMAD_DB_USER}" = "$${POSTGRES_USER}" ]; then
-            echo "POSTGRES_USER and POSTGRES_SUPERUSER must differ, the latter is a superuser."
-            exit 1
-          fi
           psql --no-password --quiet --output /dev/null --variable ON_ERROR_STOP=1 \
                --host 127.0.0.1 --username "$${ZAMMAD_DB_USER}" \
                --dbname "$${ZAMMAD_DB}" --command "SELECT 1"
@@ -264,7 +256,8 @@ configs:
       set -o errexit
       set -o pipefail
 
-      # The healthcheck rejects this too, which is what actually keeps the stack down.
+      # Never let Zammad reuse the bootstrap role. Aborting here leaves the database
+      #   uncreated, so the healthcheck cannot pass either and the stack stays down.
       if [ "$${ZAMMAD_DB_USER}" = "$${POSTGRES_USER}" ]; then
         echo "POSTGRES_USER and POSTGRES_SUPERUSER must differ, the latter is a superuser." >&2
         exit 1
