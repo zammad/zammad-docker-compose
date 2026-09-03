@@ -193,9 +193,15 @@ services:
       #   socket-only server that runs while the data directory is still initialising.
       #   Dependent services wait for this healthcheck, so it has to prove that the
       #   role and the database the initdb hook provisions are actually usable.
+      #
+      # The password is supplied so that this keeps working where host connections
+      #   require authentication, for example with
+      #   POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256. With the image default the
+      #   loopback address is trusted, so it is not consulted there.
       test:
         - CMD-SHELL
         - |-
+          PGPASSWORD="$${ZAMMAD_DB_PASS}" \
           psql --no-password --quiet --output /dev/null --variable ON_ERROR_STOP=1 \
                --host 127.0.0.1 --username "$${ZAMMAD_DB_USER}" \
                --dbname "$${ZAMMAD_DB}" --command "SELECT 1"
