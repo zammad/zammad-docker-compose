@@ -10,6 +10,9 @@ services:
     command: tunnel --no-autoupdate run
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+  zammad-railsserver:
+    environment:
+      RAILS_TRUSTED_PROXIES: ${RAILS_TRUSTED_PROXIES:-cloudflare-tunnel}
   zammad-nginx:
     environment:
       # The tunnel terminates TLS at Cloudflare's edge and forwards plain HTTP, so the
