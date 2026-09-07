@@ -3,6 +3,13 @@
 # Expose Zammad via cloudflare.
 #
 
+# Both the railsserver and the websocket server need to know the proxy, because they
+#   determine the client IP independently of each other: the websocket server does its own
+#   X-Forwarded-For walk in lib/sessions/event/base.rb without going through rack, and the
+#   chat's geo-IP lookup and its IP/country blocking rely on the result.
+x-trusted-proxies: &trusted-proxies
+  RAILS_TRUSTED_PROXIES: ${RAILS_TRUSTED_PROXIES:-cloudflare-tunnel}
+
 services:
   cloudflare-tunnel:
     image: cloudflare/cloudflared
@@ -10,6 +17,10 @@ services:
     command: tunnel --no-autoupdate run
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+  zammad-railsserver:
+    environment: *trusted-proxies
+  zammad-websocket:
+    environment: *trusted-proxies
   zammad-nginx:
     environment:
       # The tunnel terminates TLS at Cloudflare's edge and forwards plain HTTP, so the
