@@ -18,8 +18,10 @@ print_heading "check trusted proxy configuration for cloudflare-tunnel"
 #   nginx-proxy-manager test: CI runs the tunnel with an invalid token, so the container
 #   exits immediately and never becomes resolvable via docker DNS, which would make
 #   Zammad::TrustedProxies.fetch legitimately come back empty.
-docker compose exec -T zammad-railsserver printenv RAILS_TRUSTED_PROXIES
-docker compose exec -T zammad-railsserver printenv RAILS_TRUSTED_PROXIES | grep -qx cloudflare-tunnel
+for service in zammad-railsserver zammad-websocket; do
+  docker compose exec -T "$service" printenv RAILS_TRUSTED_PROXIES
+  docker compose exec -T "$service" printenv RAILS_TRUSTED_PROXIES | grep -qx cloudflare-tunnel
+done
 print_heading "Success - trusted proxy configuration for cloudflare-tunnel"
 
 print_heading "check forwarded scheme in the generated nginx configuration"
