@@ -18,3 +18,7 @@ print_heading "check trusted proxy configuration for nginx-proxy-manager"
 railsserver_run_command bundle exec rails r 'puts "Trusted Proxies configured as: #{Zammad::TrustedProxies.fetch.inspect}"'
 railsserver_run_command bundle exec rails r "Zammad::TrustedProxies.fetch == [Resolv.getaddress('nginx-proxy-manager').to_s] || abort('nginx-proxy-manager is not in trusted proxies')"
 print_heading "Success- check trusted proxy configuration for nginx-proxy-manager"
+
+print_heading "check forwarded scheme in the generated nginx configuration"
+docker compose exec zammad-nginx grep 'proxy_set_header X-Forwarded-Proto https;' /etc/nginx/sites-enabled/default
+print_heading "Success - nginx forwards the https scheme"
