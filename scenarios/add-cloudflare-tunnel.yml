@@ -11,4 +11,9 @@ services:
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
   zammad-nginx:
+    environment:
+      # The tunnel terminates TLS at Cloudflare's edge and forwards plain HTTP, so the
+      #   browser-facing scheme must be configured here. Without it, Zammad does not write
+      #   its 'Secure' session cookie and login fails with "CSRF token verification failed!".
+      NGINX_SERVER_SCHEME: ${NGINX_SERVER_SCHEME:-https}
     ports: !reset []

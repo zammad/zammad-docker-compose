@@ -6,6 +6,12 @@
 
 services:
   zammad-nginx:
+    environment:
+      # Assumes the external reverse proxy terminates TLS and forwards plain HTTP, so the
+      #   browser-facing scheme must be configured here. Without it, Zammad does not write
+      #   its 'Secure' session cookie and login fails with "CSRF token verification failed!".
+      #   Set NGINX_SERVER_SCHEME=http in .env if your proxy does not use TLS.
+      NGINX_SERVER_SCHEME: ${NGINX_SERVER_SCHEME:-https}
     networks:
       - default
       - zammad-nginx-external-network

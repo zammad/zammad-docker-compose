@@ -1,7 +1,7 @@
 ---
 #
 # Adds an external network to Zammad's elasticsearch container, for example to
-#   use it with an existing reverse proxy like nginx proxy manager.
+#   share it with services from another stack.
 #
 
 services:
