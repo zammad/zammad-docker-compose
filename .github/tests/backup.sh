@@ -34,3 +34,6 @@ check_stack_start
 print_heading "Check that restore folder was renamed after successful restore..."
 docker compose exec zammad-backup sh -c "[ ! -d /var/tmp/zammad/restore ]"
 print_heading "Restore folder was renamed after successful restore..."
+
+# Backup and restore must work without any superuser privilege.
+check_database_role_is_unprivileged

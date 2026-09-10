@@ -5,6 +5,8 @@
 
 check_stack_start
 
+check_database_role_is_unprivileged
+
 # Checking for external connectivity may not always be possible, e.g. in GitLab CI.
 if [ -z "$DISABLE_EXTERNAL_TESTS" ]
 then
