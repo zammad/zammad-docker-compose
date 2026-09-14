@@ -31,9 +31,5 @@
 #   zammad-elasticsearch:
 #     environment:
 #       ES_JAVA_OPTS: -Xms2g -Xmx2g
-#   zammad-nginx:
-#     # !override replaces the list from docker-compose.yml instead of merging with it
-#     ports: !override
-#       - "8081:8080"
 
 services: {}
