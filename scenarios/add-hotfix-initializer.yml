@@ -1,0 +1,28 @@
+#
+# Mounts a Rails initializer from the host into the Zammad containers, for example
+#   to apply a hotfix or a small customization without building a custom image.
+#
+# The file is mounted read-only into config/initializers/ of every service that runs
+#   Zammad code. The zzz_ prefix makes sure it loads after Zammad's own initializers.
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f scenarios/add-hotfix-initializer.yml up -d
+#   docker compose logs -f zammad-railsserver | grep HOTFIX
+#
+# When pulled in via include: from docker-compose.override.yml, relative paths resolve
+#   against the scenarios/ directory, so set the project directory explicitly:
+#   include:
+#     - path: scenarios/add-hotfix-initializer.yml
+#       project_directory: .
+#
+
+x-hotfix-volumes: &hotfix-volumes
+  - ${HOTFIX_FILE:-./hotfixes/log_ticket_create.rb}:/opt/zammad/config/initializers/zzz_hotfix.rb:ro
+
+services:
+  zammad-railsserver:
+    volumes: *hotfix-volumes
+  zammad-scheduler:
+    volumes: *hotfix-volumes
+  zammad-websocket:
+    volumes: *hotfix-volumes
