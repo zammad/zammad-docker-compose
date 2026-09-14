@@ -46,6 +46,49 @@ has a bright and sustainable future, consider becoming a Zammad customer!
 
 For upgrading instructions, see our [Releases](https://github.com/zammad/zammad-docker-compose/releases).
 
+## Scenarios
+
+The [scenarios/](scenarios/) directory contains optional compose files that extend or modify
+the stack. Load a scenario by passing it in addition to the base file (on every command):
+
+```bash
+docker compose -f docker-compose.yml -f scenarios/apply-resource-limits.yml up -d
+```
+
+The variables a scenario supports are documented in the scenario file itself and listed
+commented out in [.env.dist](.env.dist).
+
+| Scenario | Purpose |
+| --- | --- |
+| [add-cloudflare-tunnel.yml](scenarios/add-cloudflare-tunnel.yml) | Expose Zammad through a Cloudflare tunnel |
+| [add-external-network-to-elasticsearch.yml](scenarios/add-external-network-to-elasticsearch.yml) | Attach Elasticsearch to an external docker network |
+| [add-external-network-to-nginx.yml](scenarios/add-external-network-to-nginx.yml) | Attach nginx to an external docker network, e.g. for your own reverse proxy |
+| [add-hostport-to-elasticsearch.yml](scenarios/add-hostport-to-elasticsearch.yml) | Expose the Elasticsearch HTTP port on the host |
+| [add-nginx-proxy-manager.yml](scenarios/add-nginx-proxy-manager.yml) | TLS-terminating nginx-proxy-manager in front of Zammad |
+| [add-ollama.yml](scenarios/add-ollama.yml) | Bundled Ollama service for the AI features |
+| [apply-resource-limits.yml](scenarios/apply-resource-limits.yml) | CPU and memory limits for all services |
+| [disable-backup-service.yml](scenarios/disable-backup-service.yml) | Run without the backup service |
+| [disable-elasticsearch-service.yml](scenarios/disable-elasticsearch-service.yml) | Run without Elasticsearch (see below) |
+| [tune-postgresql.yml](scenarios/tune-postgresql.yml) | PostgreSQL server tuning via environment variables |
+
+## Local overrides
+
+Instead of typing the `-f` chain on every command, put local adjustments into a
+`docker-compose.override.yml` - compose picks it up automatically next to
+`docker-compose.yml`, and git ignores it, so `git pull` never conflicts with your changes.
+Copy the inactive example to get started:
+
+```bash
+cp docker-compose.override.yml.dist docker-compose.override.yml
+```
+
+Scenarios can be pulled in there via `include:` (needs Compose 2.20+, covered by the
+required version above) instead of `-f`. One gotcha to know: a scenario that bind-mounts
+host files must be included with the long form and `project_directory: .`, otherwise its
+relative paths resolve against `scenarios/` and Docker silently creates empty directories
+instead of mounting your files. See the comments in
+[docker-compose.override.yml.dist](docker-compose.override.yml.dist) for examples.
+
 ## PostgreSQL privileges
 
 Zammad connects to PostgreSQL with the `zammad` role, which is a plain login role: it owns the `zammad_production` database and nothing else, and holds none of `SUPERUSER`, `CREATEDB`, `CREATEROLE`, `REPLICATION` or `BYPASSRLS`. This matches the role that the packaged Linux installation creates. Administrative access to the server is available through the separate `postgres` superuser, configurable via `POSTGRES_SUPERUSER` and `POSTGRES_SUPERUSER_PASS`.
