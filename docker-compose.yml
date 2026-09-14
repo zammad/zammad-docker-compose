@@ -183,24 +183,25 @@ services:
     restart: ${RESTART:-always}
     # PostgreSQL tuning: dedicated variables for the settings the Zammad documentation
     #   recommends to tune, plus POSTGRES_EXTRA_OPTS for any other setting as raw
-    #   -c flags. All defaults are the PostgreSQL defaults, so nothing changes while
-    #   the variables are unset - see .env.dist. The shell wrapper is needed for the
-    #   free-form POSTGRES_EXTRA_OPTS; calling the image entrypoint again keeps its
-    #   database initialisation logic.
+    #   -c flags - see .env.dist. Only variables that are set are passed to the server,
+    #   unset ones leave it completely untouched (including manual tuning in the data
+    #   volume). The shell wrapper is needed for the free-form POSTGRES_EXTRA_OPTS;
+    #   calling the image entrypoint again keeps its database initialisation logic.
     command:
       - sh
       - -c
       - >-
         exec docker-entrypoint.sh postgres
-        -c max_connections=${POSTGRES_MAX_CONNECTIONS:-100}
-        -c shared_buffers=${POSTGRES_SHARED_BUFFERS:-128MB}
-        -c temp_buffers=${POSTGRES_TEMP_BUFFERS:-8MB}
-        -c work_mem=${POSTGRES_WORK_MEM:-4MB}
-        -c max_stack_depth=${POSTGRES_MAX_STACK_DEPTH:-2MB}
+        ${POSTGRES_MAX_CONNECTIONS:+-c max_connections=${POSTGRES_MAX_CONNECTIONS}}
+        ${POSTGRES_SHARED_BUFFERS:+-c shared_buffers=${POSTGRES_SHARED_BUFFERS}}
+        ${POSTGRES_TEMP_BUFFERS:+-c temp_buffers=${POSTGRES_TEMP_BUFFERS}}
+        ${POSTGRES_WORK_MEM:+-c work_mem=${POSTGRES_WORK_MEM}}
+        ${POSTGRES_MAX_STACK_DEPTH:+-c max_stack_depth=${POSTGRES_MAX_STACK_DEPTH}}
         ${POSTGRES_EXTRA_OPTS:-}
     # Docker limits /dev/shm to 64MB, which is too small for PostgreSQL's dynamic
-    #   shared memory (parallel queries) once shared_buffers grows.
-    shm_size: ${POSTGRES_SHM_SIZE:-1g}
+    #   shared memory (parallel queries) once shared_buffers grows - raise it together
+    #   with POSTGRES_SHARED_BUFFERS.
+    shm_size: ${POSTGRES_SHM_SIZE:-64m}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     configs:
