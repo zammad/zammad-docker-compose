@@ -70,7 +70,6 @@ commented out in [.env.dist](.env.dist).
 | [apply-resource-limits.yml](scenarios/apply-resource-limits.yml)                                 | CPU and memory limits for all services                                                 |
 | [disable-backup-service.yml](scenarios/disable-backup-service.yml)                               | Run without the backup service                                                         |
 | [disable-elasticsearch-service.yml](scenarios/disable-elasticsearch-service.yml)                 | Run without Elasticsearch (see below)                                                  |
-| [tune-postgresql.yml](scenarios/tune-postgresql.yml)                                             | PostgreSQL server tuning via environment variables                                     |
 
 ## Local overrides
 
