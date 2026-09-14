@@ -6,13 +6,14 @@
 #   can be overridden here without touching postgresql.conf inside the data volume.
 #   Every -c flag has the same effect as a line in postgresql.conf.
 #
-# All defaults below are the PostgreSQL defaults, so loading this scenario without
-#   setting any variable changes nothing. Put the values for your instance into .env,
-#   e.g. from https://pgtune.leopard.in.ua:
+# Dedicated variables exist for the four settings the Zammad documentation recommends
+#   to tune. Their defaults are the PostgreSQL defaults, so loading this scenario
+#   without setting any variable changes nothing. Put the values for your instance
+#   into .env, e.g. from https://pgtune.leopard.in.ua:
 #     POSTGRES_SHARED_BUFFERS=2GB
-#     POSTGRES_WORK_MEM=16MB
-#   Settings without a dedicated variable go into POSTGRES_EXTRA_OPTS as -c flags:
-#     POSTGRES_EXTRA_OPTS="-c io_method=io_uring -c io_workers=4"
+#     POSTGRES_WORK_MEM=10MB
+#   Every other setting goes into POSTGRES_EXTRA_OPTS as -c flags:
+#     POSTGRES_EXTRA_OPTS="-c effective_cache_size=6GB -c max_connections=200"
 #
 # Usage:
 #   docker compose -f docker-compose.yml -f scenarios/tune-postgresql.yml up -d
@@ -30,29 +31,10 @@ services:
       - -c
       - >-
         exec docker-entrypoint.sh postgres
-        -c max_connections=${POSTGRES_MAX_CONNECTIONS:-100}
         -c shared_buffers=${POSTGRES_SHARED_BUFFERS:-128MB}
         -c temp_buffers=${POSTGRES_TEMP_BUFFERS:-8MB}
         -c work_mem=${POSTGRES_WORK_MEM:-4MB}
-        -c maintenance_work_mem=${POSTGRES_MAINTENANCE_WORK_MEM:-64MB}
-        -c autovacuum_work_mem=${POSTGRES_AUTOVACUUM_WORK_MEM:--1}
-        -c autovacuum_max_workers=${POSTGRES_AUTOVACUUM_MAX_WORKERS:-3}
         -c max_stack_depth=${POSTGRES_MAX_STACK_DEPTH:-2MB}
-        -c effective_cache_size=${POSTGRES_EFFECTIVE_CACHE_SIZE:-4GB}
-        -c effective_io_concurrency=${POSTGRES_EFFECTIVE_IO_CONCURRENCY:-1}
-        -c random_page_cost=${POSTGRES_RANDOM_PAGE_COST:-4.0}
-        -c default_statistics_target=${POSTGRES_DEFAULT_STATISTICS_TARGET:-100}
-        -c checkpoint_completion_target=${POSTGRES_CHECKPOINT_COMPLETION_TARGET:-0.9}
-        -c wal_buffers=${POSTGRES_WAL_BUFFERS:--1}
-        -c wal_compression=${POSTGRES_WAL_COMPRESSION:-off}
-        -c min_wal_size=${POSTGRES_MIN_WAL_SIZE:-80MB}
-        -c max_wal_size=${POSTGRES_MAX_WAL_SIZE:-1GB}
-        -c huge_pages=${POSTGRES_HUGE_PAGES:-try}
-        -c jit=${POSTGRES_JIT:-on}
-        -c max_worker_processes=${POSTGRES_MAX_WORKER_PROCESSES:-8}
-        -c max_parallel_workers=${POSTGRES_MAX_PARALLEL_WORKERS:-8}
-        -c max_parallel_workers_per_gather=${POSTGRES_MAX_PARALLEL_WORKERS_PER_GATHER:-2}
-        -c max_parallel_maintenance_workers=${POSTGRES_MAX_PARALLEL_MAINTENANCE_WORKERS:-2}
         ${POSTGRES_EXTRA_OPTS:-}
     # Docker limits /dev/shm to 64MB by default, which is too small for PostgreSQL's
     #   dynamic shared memory (parallel queries) once shared_buffers grows. Raise it.
