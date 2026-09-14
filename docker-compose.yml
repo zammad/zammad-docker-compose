@@ -198,10 +198,6 @@ services:
         ${POSTGRES_WORK_MEM:+-c work_mem=${POSTGRES_WORK_MEM}}
         ${POSTGRES_MAX_STACK_DEPTH:+-c max_stack_depth=${POSTGRES_MAX_STACK_DEPTH}}
         ${POSTGRES_EXTRA_OPTS:-}
-    # Docker limits /dev/shm to 64MB, which is too small for PostgreSQL's dynamic
-    #   shared memory (parallel queries) once shared_buffers grows - raise it together
-    #   with POSTGRES_SHARED_BUFFERS.
-    shm_size: ${POSTGRES_SHM_SIZE:-64m}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     configs:
