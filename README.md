@@ -64,6 +64,7 @@ commented out in [.env.dist](.env.dist).
 | [add-external-network-to-elasticsearch.yml](scenarios/add-external-network-to-elasticsearch.yml) | Attach Elasticsearch to an external docker network |
 | [add-external-network-to-nginx.yml](scenarios/add-external-network-to-nginx.yml) | Attach nginx to an external docker network, e.g. for your own reverse proxy |
 | [add-hostport-to-elasticsearch.yml](scenarios/add-hostport-to-elasticsearch.yml) | Expose the Elasticsearch HTTP port on the host |
+| [add-hotfix-initializer.yml](scenarios/add-hotfix-initializer.yml) | Mount a Rails initializer from the host, e.g. to apply a hotfix without a custom image |
 | [add-nginx-proxy-manager.yml](scenarios/add-nginx-proxy-manager.yml) | TLS-terminating nginx-proxy-manager in front of Zammad |
 | [add-ollama.yml](scenarios/add-ollama.yml) | Bundled Ollama service for the AI features |
 | [apply-resource-limits.yml](scenarios/apply-resource-limits.yml) | CPU and memory limits for all services |
