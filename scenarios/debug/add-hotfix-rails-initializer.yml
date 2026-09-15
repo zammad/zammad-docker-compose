@@ -26,13 +26,13 @@
 #   docker compose logs -f zammad-railsserver | grep HOTFIX
 #
 # Usage:
-#   docker compose -f docker-compose.yml -f scenarios/add-hotfix-initializer.yml up -d
+#   docker compose -f docker-compose.yml -f scenarios/debug/add-hotfix-rails-initializer.yml up -d
 #
 # When pulled in via include: from docker-compose.override.yml, relative paths resolve
 #   against the scenarios/ directory, so set the project directory explicitly -
 #   otherwise Docker silently mounts an empty directory and Rails fails to boot:
 #   include:
-#     - path: scenarios/add-hotfix-initializer.yml
+#     - path: scenarios/debug/add-hotfix-rails-initializer.yml
 #       project_directory: .
 #
 
