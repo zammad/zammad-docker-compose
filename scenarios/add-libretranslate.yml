@@ -31,6 +31,20 @@ services:
     # Do not expose ports, in-stack connectivity from Zammad via 'http://libretranslate:5000' is sufficient.
     restart: ${RESTART:-always}
 
+    # Report the service as healthy only once its API answers. On startup the service first
+    #   downloads and loads the translation models, and only then starts the HTTP server, so
+    #   probes which fail during a generous start period are not counted.
+    healthcheck:
+      test:
+        - CMD
+        - ./venv/bin/python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=5)"
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 15m
+
 volumes:
   libretranslate-data:
     driver: local
