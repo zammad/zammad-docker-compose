@@ -1,0 +1,35 @@
+# Local adjustments to the stack. Compose picks up a docker-compose.override.yml
+#   automatically next to docker-compose.yml, and git ignores it - so your changes
+#   survive every `git pull` without conflicts. Copy this example to get started:
+#
+#     cp docker-compose.override.yml.dist docker-compose.override.yml
+#
+# Everything in this file is an inactive example - uncomment what you need.
+# The empty services mapping at the bottom only keeps the file valid YAML.
+
+# Load optional scenarios (needs Compose 2.20+), instead of passing them with
+#   `-f docker-compose.yml -f scenarios/...` on every command:
+#
+# include:
+#   - scenarios/apply-resource-limits.yml
+#   - scenarios/disable-backup-service.yml
+#
+# Scenarios that bind-mount host files must be included with the long form -
+#   otherwise their relative paths resolve against scenarios/ and Docker silently
+#   creates empty directories instead of mounting your files:
+#
+# include:
+#   - path: scenarios/my-scenario.yml
+#     project_directory: .
+
+# Override single service settings. Note: a service that an included scenario
+#   already modifies cannot also be overridden here, compose rejects that with
+#   "conflicts with imported resource" - put the change into the scenario copy
+#   or drop the include instead.
+#
+# services:
+#   zammad-elasticsearch:
+#     environment:
+#       ES_JAVA_OPTS: -Xms2g -Xmx2g
+
+services: {}

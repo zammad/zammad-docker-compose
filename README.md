@@ -28,7 +28,9 @@ has a bright and sustainable future, consider becoming a Zammad customer!
 
 ## Getting Started - Documentation
 
-[Learn more on Zammad’s documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
+[Learn more on Zammad’s documentation](https://docs.zammad.org/en/latest/install/docker-compose.html).
+
+It also describes how to [use scenarios or customize the stack locally for special use cases](https://docs.zammad.org/en/latest/install/docker-compose/docker-compose-scenarios.html).
 
 ## Requirements
 
