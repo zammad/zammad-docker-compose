@@ -25,7 +25,8 @@ services:
     # command: ['--require-api-key-secret']
 
     # To issue an API key, first uncomment relevant lines above, then you can use the container's CLI:
-    #   docker compose -f docker-compose.yml -f scenarios/add-libretranslate.yml exec -it libretranslate ltmanage keys add 120
+    #   docker compose -f docker-compose.yml -f scenarios/add-libretranslate.yml \
+    #     exec -it libretranslate ltmanage keys add 120
 
     # Do not expose ports, in-stack connectivity from Zammad via 'http://libretranslate:5000' is sufficient.
     restart: ${RESTART:-always}
