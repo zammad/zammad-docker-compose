@@ -167,20 +167,6 @@ services:
         condition: service_healthy
 
   zammad-postgresql:
-    environment:
-      # The bootstrap role of the postgres image is always a superuser, so it is kept
-      #   separate from the role Zammad connects with and only used for administration.
-      #   Its password falls back to POSTGRES_PASS, so that hardening that one variable
-      #   does not silently leave a superuser behind on the default password.
-      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASS:-${POSTGRES_PASS:-zammad}}
-      # Consumed by the initdb hook below, to provision Zammad's unprivileged role
-      #   and the database it owns.
-      ZAMMAD_DB: ${POSTGRES_DB:-zammad_production}
-      ZAMMAD_DB_USER: ${POSTGRES_USER:-zammad}
-      ZAMMAD_DB_PASS: ${POSTGRES_PASS:-zammad}
-    image: postgres:${POSTGRES_VERSION:-17.11-alpine}
-    restart: ${RESTART:-always}
     # PostgreSQL tuning: dedicated variables for the settings the Zammad documentation
     #   recommends to tune, plus POSTGRES_EXTRA_OPTS for any other setting as raw
     #   -c flags - see .env.dist. Only variables that are set are passed to the server,
@@ -199,6 +185,20 @@ services:
     #   reach. Raise it together with shared_buffers/work_mem, otherwise parallel query
     #   workers can fail with "could not resize shared memory segment".
     shm_size: ${POSTGRES_SHM_SIZE:-64mb}
+    environment:
+      # The bootstrap role of the postgres image is always a superuser, so it is kept
+      #   separate from the role Zammad connects with and only used for administration.
+      #   Its password falls back to POSTGRES_PASS, so that hardening that one variable
+      #   does not silently leave a superuser behind on the default password.
+      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASS:-${POSTGRES_PASS:-zammad}}
+      # Consumed by the initdb hook below, to provision Zammad's unprivileged role
+      #   and the database it owns.
+      ZAMMAD_DB: ${POSTGRES_DB:-zammad_production}
+      ZAMMAD_DB_USER: ${POSTGRES_USER:-zammad}
+      ZAMMAD_DB_PASS: ${POSTGRES_PASS:-zammad}
+    image: postgres:${POSTGRES_VERSION:-17.11-alpine}
+    restart: ${RESTART:-always}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     configs:
