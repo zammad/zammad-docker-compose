@@ -12,7 +12,7 @@
 #
 # include:
 #   - scenarios/apply-resource-limits.yml
-#   - scenarios/tune-postgresql.yml
+#   - scenarios/disable-backup-service.yml
 #
 # Scenarios that bind-mount host files must be included with the long form -
 #   otherwise their relative paths resolve against scenarios/ and Docker silently
