@@ -28,7 +28,9 @@ has a bright and sustainable future, consider becoming a Zammad customer!
 
 ## Getting Started - Documentation
 
-[Learn more on Zammad’s documentation](https://docs.zammad.org/en/latest/install/docker-compose.html)
+[Learn more on Zammad’s documentation](https://docs.zammad.org/en/latest/install/docker-compose.html).
+
+It also describes how to [use scenarios or customize the stack locally for special use cases](https://docs.zammad.org/en/latest/install/docker-compose/docker-compose-scenarios.html).
 
 ## Requirements
 
@@ -45,25 +47,6 @@ has a bright and sustainable future, consider becoming a Zammad customer!
 ## Upgrading
 
 For upgrading instructions, see our [Releases](https://github.com/zammad/zammad-docker-compose/releases).
-
-## Local overrides
-
-Instead of typing the `-f` chain for
-[scenarios](https://docs.zammad.org/en/latest/install/docker-compose/docker-compose-scenarios.html)
-on every command, put local adjustments into a `docker-compose.override.yml` - compose
-picks it up automatically next to `docker-compose.yml`, and Git ignores it, so `git pull`
-never conflicts with your changes. Copy the inactive example to get started:
-
-```bash
-cp docker-compose.override.yml.dist docker-compose.override.yml
-```
-
-Scenarios can be pulled in there via `include:` (needs Compose 2.20+, covered by the
-required version above) instead of `-f`. One gotcha to know: a scenario that bind-mounts
-host files must be included with the long form and `project_directory: .`, otherwise its
-relative paths resolve against `scenarios/` and Docker silently creates empty directories
-instead of mounting your files. See the comments in
-[docker-compose.override.yml.dist](docker-compose.override.yml.dist) for examples.
 
 ## PostgreSQL privileges
 
