@@ -1,0 +1,48 @@
+#
+# Mounts a Rails initializer from the host into the Zammad containers, for example
+#   to apply a hotfix or a small customization without building a custom image.
+#
+# The file is mounted read-only into config/initializers/ of every service that runs
+#   Zammad code. The zzz_ prefix makes sure it loads after Zammad's own initializers.
+#
+# HOTFIX_FILE in .env selects the host file to mount, e.g.:
+#   HOTFIX_FILE=./hotfixes/my_hotfix.rb
+#
+# Always patch inside a to_prepare block - initializers run before the models are
+#   loaded, patching a model at the top level breaks production eager loading.
+#   Full example that logs a line on every ticket creation:
+#
+#   Rails.application.config.to_prepare do
+#     Ticket.class_eval do
+#       after_create :hotfix_log_ticket_create
+#
+#       def hotfix_log_ticket_create
+#         Rails.logger.error "HOTFIX EXAMPLE: Ticket ##{number} (id #{id}) was created by user id #{created_by_id}"
+#       end
+#     end
+#   end
+#
+#   Verify it is active:
+#   docker compose logs -f zammad-railsserver | grep HOTFIX
+#
+# Usage:
+#   docker compose -f docker-compose.yml -f scenarios/debug/add-hotfix-rails-initializer.yml up -d
+#
+# When pulled in via include: from docker-compose.override.yml, relative paths resolve
+#   against the scenarios/ directory, so set the project directory explicitly -
+#   otherwise Docker silently mounts an empty directory and Rails fails to boot:
+#   include:
+#     - path: scenarios/debug/add-hotfix-rails-initializer.yml
+#       project_directory: .
+#
+
+x-hotfix-volumes: &hotfix-volumes
+  - ${HOTFIX_FILE:?Set HOTFIX_FILE in .env}:/opt/zammad/config/initializers/zzz_hotfix.rb:ro
+
+services:
+  zammad-railsserver:
+    volumes: *hotfix-volumes
+  zammad-scheduler:
+    volumes: *hotfix-volumes
+  zammad-websocket:
+    volumes: *hotfix-volumes
