@@ -1,0 +1,52 @@
+---
+#
+# Adds a LibreTranslate service to the stack, for usage as a local translation service.
+#
+#   Note that starting this service for the first time will take a while (multiple minutes),
+#   as it needs to download the translation models.
+#
+
+services:
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+
+    # Uncomment following lines to enable model updates on startup and/or API key support.
+    # environment:
+    #   - LT_API_KEYS=true
+    #   - LT_UPDATE_MODELS=true
+
+    volumes:
+      # Keep the models in a docker volume, to avoid re-downloading on startup.
+      - libretranslate-data:/home/libretranslate/.local:rw
+      # Uncomment the following line to persist API keys in a docker volume.
+      # - libretranslate-api-keys:/app/db
+
+    # Uncomment the following line to require an API key for usage.
+    # command: ['--require-api-key-secret']
+
+    # To issue an API key, first uncomment relevant lines above, then you can use the container's CLI:
+    #   docker compose -f docker-compose.yml -f scenarios/add-libretranslate.yml \
+    #     exec -it libretranslate ltmanage keys add 120
+
+    # Do not expose ports, in-stack connectivity from Zammad via 'http://libretranslate:5000' is sufficient.
+    restart: ${RESTART:-always}
+
+    # Report the service as healthy only once its API answers. On startup the service first
+    #   downloads and loads the translation models, and only then starts the HTTP server, so
+    #   probes which fail during a generous start period are not counted.
+    healthcheck:
+      test:
+        - CMD
+        - ./venv/bin/python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=5)"
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 15m
+
+volumes:
+  libretranslate-data:
+    driver: local
+  # libretranslate-api-keys:
+  #   driver: local
