@@ -11,18 +11,18 @@ services:
     image: libretranslate/libretranslate:latest
 
     # Uncomment following lines to enable model updates on startup and/or API key support.
-    environment:
-      - LT_API_KEYS=true
+    # environment:
+    #   - LT_API_KEYS=true
     #   - LT_UPDATE_MODELS=true
 
     volumes:
       # Keep the models in a docker volume, to avoid re-downloading on startup.
       - libretranslate-data:/home/libretranslate/.local:rw
       # Uncomment the following line to persist API keys in a docker volume.
-      - libretranslate-api-keys:/app/db
+      # - libretranslate-api-keys:/app/db
 
     # Uncomment the following line to require an API key for usage.
-    command: ['--require-api-key-secret']
+    # command: ['--require-api-key-secret']
 
     # To issue an API key, first uncomment relevant lines above, then you can use the container's CLI:
     #   docker compose -f docker-compose.yml -f scenarios/add-libretranslate.yml exec -it libretranslate ltmanage keys add 120
@@ -33,5 +33,5 @@ services:
 volumes:
   libretranslate-data:
     driver: local
-  libretranslate-api-keys:
-    driver: local
+  # libretranslate-api-keys:
+  #   driver: local
