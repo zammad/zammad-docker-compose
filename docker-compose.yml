@@ -185,19 +185,20 @@ services:
     #   recommends to tune, plus POSTGRES_EXTRA_OPTS for any other setting as raw
     #   -c flags - see .env.dist. Only variables that are set are passed to the server,
     #   unset ones leave it completely untouched (including manual tuning in the data
-    #   volume). The shell wrapper is needed for the free-form POSTGRES_EXTRA_OPTS;
-    #   calling the image entrypoint again keeps its database initialisation logic.
-    command:
-      - sh
-      - -c
-      - >-
-        exec docker-entrypoint.sh postgres
-        ${POSTGRES_MAX_CONNECTIONS:+-c max_connections=${POSTGRES_MAX_CONNECTIONS}}
-        ${POSTGRES_SHARED_BUFFERS:+-c shared_buffers=${POSTGRES_SHARED_BUFFERS}}
-        ${POSTGRES_TEMP_BUFFERS:+-c temp_buffers=${POSTGRES_TEMP_BUFFERS}}
-        ${POSTGRES_WORK_MEM:+-c work_mem=${POSTGRES_WORK_MEM}}
-        ${POSTGRES_MAX_STACK_DEPTH:+-c max_stack_depth=${POSTGRES_MAX_STACK_DEPTH}}
-        ${POSTGRES_EXTRA_OPTS:-}
+    #   volume). Compose word-splits the string into argv like a shell, so the
+    #   free-form POSTGRES_EXTRA_OPTS works without a shell wrapper.
+    command: >-
+      postgres
+      ${POSTGRES_MAX_CONNECTIONS:+-c max_connections=${POSTGRES_MAX_CONNECTIONS}}
+      ${POSTGRES_SHARED_BUFFERS:+-c shared_buffers=${POSTGRES_SHARED_BUFFERS}}
+      ${POSTGRES_TEMP_BUFFERS:+-c temp_buffers=${POSTGRES_TEMP_BUFFERS}}
+      ${POSTGRES_WORK_MEM:+-c work_mem=${POSTGRES_WORK_MEM}}
+      ${POSTGRES_MAX_STACK_DEPTH:+-c max_stack_depth=${POSTGRES_MAX_STACK_DEPTH}}
+      ${POSTGRES_EXTRA_OPTS:-}
+    # Docker caps /dev/shm at 64MB - the one PostgreSQL-adjacent knob a -c flag cannot
+    #   reach. Raise it together with shared_buffers/work_mem, otherwise parallel query
+    #   workers can fail with "could not resize shared memory segment".
+    shm_size: ${POSTGRES_SHM_SIZE:-64mb}
     volumes:
       - postgresql-data:/var/lib/postgresql/data
     configs:
