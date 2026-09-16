@@ -6,21 +6,26 @@
 #
 # This file is for changing settings of the services that docker-compose.yml already
 #   defines. Optional scenarios are not loaded here - set COMPOSE_FILE in .env for
-#   that, see .env.dist. Compose's `include:` looks like it would do the same job, but
-#   it is not an override mechanism: it copies a scenario's resources into the stack
-#   instead of layering them on top, so a scenario cannot undo anything
-#   docker-compose.yml sets. The reverse proxy scenarios would silently keep nginx
-#   published on the host, and relative paths inside a scenario would resolve against
-#   scenarios/ rather than against this directory.
+#   that, see .env.dist. If you do, append this file to that list as well: setting
+#   COMPOSE_FILE turns off the automatic pickup of docker-compose.override.yml, so
+#   your changes here would otherwise go unused without any warning.
+#
+# Compose's `include:` looks like it would do the same job as COMPOSE_FILE, but it is
+#   not an override mechanism: it copies a scenario's resources into the stack instead
+#   of layering them on top, so a scenario cannot undo anything docker-compose.yml
+#   sets. The reverse proxy scenarios would silently keep nginx published on the host,
+#   and relative paths inside a scenario would resolve against scenarios/ rather than
+#   against this directory.
 #
 # Everything below is an inactive example - uncomment what you need. The x- key is only
-#   there to keep this file valid YAML while nothing else is uncommented, Compose
-#   ignores it.
+#   there to keep this file valid while nothing else is uncommented, Compose ignores
+#   it. Do not drop it: a file with nothing but comments is accepted by current Compose
+#   versions, but fails on the 2.23.1 this stack supports.
 
 x-local-overrides: Placeholder, so that this file stays valid while everything below is commented out.
 
 # Override single service settings:
-#
+
 # services:
 #   zammad-elasticsearch:
 #     environment:
