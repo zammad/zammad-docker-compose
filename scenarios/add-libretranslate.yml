@@ -3,7 +3,7 @@
 # Adds a LibreTranslate service to the stack, for usage as a local translation service.
 #
 #   Note that starting this service for the first time will take a while (multiple minutes),
-#   as it needs to download the translation models.
+#   as it needs to download the language models.
 #
 
 services:
@@ -12,19 +12,17 @@ services:
 
     environment:
       - LT_LOAD_ONLY # Load only the specified languages, e.g. "en,de,fr". If unset, all languages are loaded.
-      - LT_UPDATE_MODELS=${LT_UPDATE_MODELS:-false} # Set to `true` to enable model updates on startup.
-      - LT_API_KEYS=${LT_API_KEYS:-false} # Set to `true` to enable API key support.
-      - LT_REQUIRE_API_KEY_SECRET=${LT_REQUIRE_API_KEY_SECRET:-false} # Set to `true` to require an API key for usage.
+      - LT_UPDATE_MODELS=${LT_UPDATE_MODELS:-false}
+      - LT_API_KEYS=${LT_API_KEYS:-false}
+      - LT_REQUIRE_API_KEY_SECRET=${LT_REQUIRE_API_KEY_SECRET:-false}
 
     volumes:
       # Keep the models in a docker volume, to avoid re-downloading on startup.
       - libretranslate-data:/home/libretranslate/.local:rw
-      # Uncomment the following line to persist API keys in a docker volume.
-      # - libretranslate-api-keys:/app/db
+      - libretranslate-api-keys:/app/db
 
-    # To issue an API key, first uncomment relevant lines above, then you can use the container's CLI:
-    #   docker compose -f docker-compose.yml -f scenarios/add-libretranslate.yml \
-    #     exec -it libretranslate ltmanage keys add 120
+    # To issue an API key, you can use the container's CLI:
+    #   ltmanage keys add 120
 
     # Do not expose ports, in-stack connectivity from Zammad via 'http://libretranslate:5000' is sufficient.
     restart: ${RESTART:-always}
@@ -46,5 +44,5 @@ services:
 volumes:
   libretranslate-data:
     driver: local
-  # libretranslate-api-keys:
-  #   driver: local
+  libretranslate-api-keys:
+    driver: local
