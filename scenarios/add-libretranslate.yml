@@ -1,0 +1,50 @@
+---
+#
+# Adds a LibreTranslate service to the stack, for usage as a local translation service.
+#
+#   Note that starting this service for the first time will take a while (multiple minutes),
+#   as it needs to download the language models.
+#
+
+services:
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+
+    environment:
+      - LT_LOAD_ONLY # Load only the specified languages, e.g. "en,de,fr". If unset, all languages are loaded.
+      - LT_UPDATE_MODELS=${LT_UPDATE_MODELS:-false}
+      - LT_API_KEYS=${LT_API_KEYS:-false}
+      - LT_REQUIRE_API_KEY_SECRET=${LT_REQUIRE_API_KEY_SECRET:-false}
+
+    volumes:
+      # Keep the models in a docker volume, to avoid re-downloading on startup.
+      - libretranslate-data:/home/libretranslate/.local:rw
+      - libretranslate-api-keys:/app/db
+
+    # To issue an API key, set LT_API_KEYS=true, start the service, then run:
+    #   docker compose exec libretranslate ltmanage keys add 120
+
+    # Do not expose ports, in-stack connectivity from Zammad via 'http://libretranslate:5000' is sufficient.
+    restart: ${RESTART:-always}
+
+    # Report the service as healthy only once its API answers. On startup the service first
+    #   downloads and loads the translation models, and only then starts the HTTP server, so
+    #   probes which fail during a generous start period are not counted.
+    healthcheck:
+      test:
+        - CMD
+        - ./venv/bin/python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:5000/health', timeout=5)"
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      # Fine for limited number of loaded language models in CI, but the downloading of all models can exceed 15m
+      # on a slow link. Change this according to your needs, as the start period assumes a restricted LT_LOAD_ONLY.
+      start_period: 15m
+
+volumes:
+  libretranslate-data:
+    driver: local
+  libretranslate-api-keys:
+    driver: local

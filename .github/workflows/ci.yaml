@@ -52,6 +52,7 @@ jobs:
           - add-external-network-to-elasticsearch
           - add-external-network-to-nginx
           - add-hostport-to-elasticsearch
+          - add-libretranslate
           - add-nginx-proxy-manager
           - add-ollama
           - apply-resource-limits
