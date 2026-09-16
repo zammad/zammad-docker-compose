@@ -12,9 +12,9 @@ services:
 
     environment:
       - LT_LOAD_ONLY # Load only the specified languages, e.g. "en,de,fr". If unset, all languages are loaded.
-      - LT_UPDATE_MODELS=false # Set to `true` to enable model updates on startup.
-      - LT_API_KEYS=false # Set to `true` to enable API key support.
-      - LT_REQUIRE_API_KEY_SECRET=false # Set to `true` to require an API key for usage.
+      - LT_UPDATE_MODELS=${LT_UPDATE_MODELS:-false} # Set to `true` to enable model updates on startup.
+      - LT_API_KEYS=${LT_API_KEYS:-false} # Set to `true` to enable API key support.
+      - LT_REQUIRE_API_KEY_SECRET=${LT_REQUIRE_API_KEY_SECRET:-false} # Set to `true` to require an API key for usage.
 
     volumes:
       # Keep the models in a docker volume, to avoid re-downloading on startup.
