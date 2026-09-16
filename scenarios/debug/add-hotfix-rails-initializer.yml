@@ -28,12 +28,12 @@
 # Usage:
 #   docker compose -f docker-compose.yml -f scenarios/debug/add-hotfix-rails-initializer.yml up -d
 #
-# When pulled in via include: from docker-compose.override.yml, relative paths resolve
-#   against the scenarios/ directory, so set the project directory explicitly -
-#   otherwise Docker silently mounts an empty directory and Rails fails to boot:
-#   include:
-#     - path: scenarios/debug/add-hotfix-rails-initializer.yml
-#       project_directory: .
+# Or, to avoid repeating that on every command, in .env:
+#   COMPOSE_FILE=docker-compose.yml:scenarios/debug/add-hotfix-rails-initializer.yml
+#
+# Do not pull this in with include: from docker-compose.override.yml - relative paths
+#   would resolve against the scenarios/debug/ directory, so Docker silently mounts an
+#   empty directory and Rails fails to boot.
 #
 
 x-hotfix-volumes: &hotfix-volumes
