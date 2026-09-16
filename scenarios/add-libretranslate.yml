@@ -21,8 +21,8 @@ services:
       - libretranslate-data:/home/libretranslate/.local:rw
       - libretranslate-api-keys:/app/db
 
-    # To issue an API key, you can use the container's CLI:
-    #   ltmanage keys add 120
+    # To issue an API key, set LT_API_KEYS=true, start the service, then run:
+    #   docker compose exec libretranslate ltmanage keys add 120
 
     # Do not expose ports, in-stack connectivity from Zammad via 'http://libretranslate:5000' is sufficient.
     restart: ${RESTART:-always}
@@ -39,6 +39,8 @@ services:
       interval: 10s
       timeout: 10s
       retries: 3
+      # Fine for limited number of loaded language models in CI, but the downloading of all models can exceed 15m
+      # on a slow link. Change this according to your needs, as the start period assumes a restricted LT_LOAD_ONLY.
       start_period: 15m
 
 volumes:
