@@ -240,7 +240,7 @@ services:
       retries: 3
 
   zammad-redis:
-    image: redis:${REDIS_VERSION:-8.10.1-alpine}
+    image: redis:${REDIS_VERSION:-8.10.2-alpine}
     restart: ${RESTART:-always}
     volumes:
       - redis-data:/data
