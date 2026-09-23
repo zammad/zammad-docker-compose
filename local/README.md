@@ -8,4 +8,4 @@ the instance and `git pull` neither reports nor touches them.
 Nothing here is loaded automatically. Wire the files into the stack yourself, via
 `docker-compose.override.yml` or `COMPOSE_FILE` in `.env`. Relative paths in those
 resolve against the folder of `docker-compose.yml`, so refer to files here as
-`./local/...`.
+`./local/...` - this also applies inside your own scenario files in this folder.
