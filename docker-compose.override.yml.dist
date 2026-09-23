@@ -10,6 +10,10 @@
 #   COMPOSE_FILE turns off the automatic pickup of docker-compose.override.yml, so
 #   your changes here would otherwise go unused without any warning.
 #
+# Files that this override points at - certificates, config snippets, scripts - can live
+#   in local/, which git ignores as well (see local/README.md). Refer to them as
+#   ./local/...; relative paths resolve against this directory.
+#
 # Compose's `include:` looks like it would do the same job as COMPOSE_FILE, but it is
 #   not an override mechanism: it copies a scenario's resources into the stack instead
 #   of layering them on top, so a scenario cannot undo anything docker-compose.yml
