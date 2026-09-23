@@ -6,7 +6,7 @@
 #   Zammad code. The zzz_ prefix makes sure it loads after Zammad's own initializers.
 #
 # HOTFIX_FILE in .env selects the host file to mount, e.g.:
-#   HOTFIX_FILE=./hotfixes/my_hotfix.rb
+#   HOTFIX_FILE=./local/my_hotfix.rb
 #
 # Always patch inside a to_prepare block - initializers run before the models are
 #   loaded, patching a model at the top level breaks production eager loading.
