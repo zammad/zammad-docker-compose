@@ -1,6 +1,6 @@
 # Instance-specific files
 
-Everything in this folder except this README is ignored by git. Keep the files that
+Everything in this folder except this readme is ignored by Git. Keep the files that
 belong to this particular instance here - configuration snippets you mount into the
 stack, your own scenario files, scripts, notes, certificates - so that they stay with
 the instance and `git pull` neither reports nor touches them.
