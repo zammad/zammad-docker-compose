@@ -104,7 +104,7 @@ x-shared:
       LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL:
 
-    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.2.1-0000}
+    image: ${IMAGE_REPO:-ghcr.io/zammad/zammad}:${VERSION:-7.2.2-0000}
     init: true
     restart: ${RESTART:-always}
     volumes:
@@ -128,7 +128,7 @@ services:
     user: 0:0
 
   zammad-elasticsearch:
-    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.5.3}
+    image: elasticsearch:${ELASTICSEARCH_VERSION:-9.5.5}
     restart: ${RESTART:-always}
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
