@@ -12,11 +12,13 @@ services:
     <<: *zammad-volumes
   zammad-railsserver:
     <<: *zammad-volumes
+    mem_limit: 1200m
   zammad-scheduler:
     <<: *zammad-volumes
+    mem_limit: 1g
   zammad-websocket:
     <<: *zammad-volumes
-
+    mem_limit: 256m
   zammad-nginx:
     <<: *zammad-volumes
     # The host's nginx terminates TLS and proxies here over plain http. Without this, Rails
@@ -68,3 +70,6 @@ services:
     image: elasticsearch:${ELASTICSEARCH_VERSION:-8.19.4}
     volumes:
       - ./data/elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    mem_limit: 1g
